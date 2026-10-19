@@ -69,7 +69,8 @@ export function createApp() {
   app.post("/mcp", auth, async (req, res) => {
     const customer = (req as Request & { customer: string }).customer;
     const server = createMcpServer({ customer });
-    const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+    // stateless + JSON-Antworten statt SSE: läuft zuverlässig auf Serverless-Functions (Vercel)
+    const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined, enableJsonResponse: true });
     res.on("close", () => {
       transport.close();
       server.close();
