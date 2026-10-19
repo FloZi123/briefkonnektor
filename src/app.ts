@@ -66,21 +66,26 @@ export function createApp() {
     next();
   };
 
+  app.get("/", (_req, res) => {
+    res.json({ name: "briefkonnektor", mcp: "/mcp", health: "/health" });
+  });
+
   app.post("/mcp", auth, async (req, res) => {
     const customer = (req as Request & { customer: string }).customer;
-    const server = createMcpServer({ customer });
-    // stateless + JSON-Antworten statt SSE: läuft zuverlässig auf Serverless-Functions (Vercel)
-    const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined, enableJsonResponse: true });
-    res.on("close", () => {
-      transport.close();
-      server.close();
-    });
     try {
+      const server = createMcpServer({ customer });
+      // stateless + JSON-Antworten statt SSE: läuft zuverlässig auf Serverless-Functions (Vercel)
+      const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined, enableJsonResponse: true });
+      res.on("close", () => {
+        transport.close();
+        server.close();
+      });
       await server.connect(transport);
       await transport.handleRequest(req, res, req.body);
     } catch (e) {
-      console.error("MCP error", e);
-      if (!res.headersSent) res.status(500).json({ error: "internal" });
+      const msg = e instanceof Error ? e.message : String(e);
+      console.error("MCP error:", msg);
+      if (!res.headersSent) res.status(500).json({ error: "server_misconfigured", message: msg });
     }
   });
 
@@ -90,3 +95,7 @@ export function createApp() {
 
   return app;
 }
+
+// Vercel (Framework-Preset "Express") erwartet die App als Default-Export dieses Moduls.
+const app = createApp();
+export default app;
