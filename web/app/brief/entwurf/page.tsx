@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ScreenHead, Disclaimer } from "@/components/ui";
+import { useDictation, DictateButton, appendText } from "@/components/dictate";
 import { useDraft } from "@/lib/store";
 import { subjectLine } from "@/lib/subject";
 
@@ -17,6 +18,8 @@ export default function EntwurfScreen() {
   const { draft, update, ready } = useDraft();
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string>();
+  const [wish, setWish] = useState("");
+  const dictate = useDictation((t) => setWish((w) => appendText(w, t)));
   const router = useRouter();
 
   async function generate(instruction?: string) {
@@ -31,6 +34,7 @@ export default function EntwurfScreen() {
       if (!res.ok) throw new Error((await res.json()).error ?? "Entwurf konnte nicht erstellt werden");
       const { body } = (await res.json()) as { body: string };
       update({ body });
+      if (instruction) setWish("");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Entwurf konnte nicht erstellt werden");
     } finally {
@@ -91,6 +95,27 @@ export default function EntwurfScreen() {
               {c.label}
             </button>
           ))}
+        </div>
+
+        <div className="field" style={{ marginTop: 6 }}>
+          <label className="label" htmlFor="wish">
+            Oder sagen Sie, was anders sein soll – tippen oder diktieren
+          </label>
+          <textarea
+            id="wish"
+            className="input"
+            style={{ minHeight: 72 }}
+            value={wish}
+            onChange={(e) => setWish(e.target.value)}
+            placeholder="z. B. „Erwähne, dass ich seit 2019 nie zu spät gezahlt habe, und bitte um Ratenzahlung.“"
+            disabled={busy !== null}
+          />
+          <div className="row" style={{ gap: 10, alignItems: "center", justifyContent: "space-between" }}>
+            <DictateButton {...dictate} onClick={dictate.toggle} />
+            <button type="button" className="chip" style={{ borderColor: "var(--flink)", color: "var(--flink)" }} disabled={busy !== null || !draft.body || !wish.trim()} onClick={() => generate(wish.trim())}>
+              {busy === "chip" ? "Wird angepasst …" : "Entwurf anpassen"}
+            </button>
+          </div>
         </div>
       </div>
 

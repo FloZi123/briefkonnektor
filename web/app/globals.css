@@ -117,3 +117,11 @@ textarea.input { min-height: 160px; line-height: 1.5; resize: vertical; }
 .footer { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; padding: 36px 0 24px; font-size: 13px; }
 .footer a { color: var(--ink-muted); text-decoration: none; }
 .footer a:hover { color: var(--flink); }
+
+/* Diktat */
+.dictate { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
+.dictate-btn { display: inline-flex; align-items: center; gap: 7px; min-height: 36px; padding: 0 12px; border-radius: var(--radius-pill); border: 1px solid var(--line); background: var(--paper-100); font: inherit; font-size: 13px; font-weight: 500; color: var(--ink); cursor: pointer; }
+.dictate-btn:hover { border-color: var(--ink); }
+.dictate-btn.is-on { border-color: var(--fehler); color: var(--fehler); background: var(--fehler-soft); animation: dictate-pulse 1.2s ease-in-out infinite; }
+.dictate-interim { font-size: 13px; color: var(--ink-muted); font-style: italic; }
+@keyframes dictate-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(185, 28, 28, 0.25); } 50% { box-shadow: 0 0 0 6px rgba(185, 28, 28, 0); } }

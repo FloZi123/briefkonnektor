@@ -2,6 +2,7 @@
 import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ScreenHead, Fristbox, Field, Disclaimer } from "@/components/ui";
+import { useDictation, DictateButton, appendText } from "@/components/dictate";
 import { useDraft } from "@/lib/store";
 import { LETTER_KINDS, type LetterKind } from "@/lib/types";
 import { widerspruchsfrist, daysUntil } from "@/lib/dates";
@@ -16,6 +17,8 @@ function DatenScreen() {
     if (k && LETTER_KINDS[k] && ready && draft.kind !== k) update({ kind: k });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready, params]);
+
+  const dictate = useDictation((t) => update((d) => ({ reason: appendText(d.reason, t) })));
 
   if (!ready) return null;
   const kind = LETTER_KINDS[draft.kind];
@@ -98,8 +101,16 @@ function DatenScreen() {
         <Field label="Worum geht es?" id="subject">
           <input id="subject" className="input" value={draft.subject} onChange={(e) => update({ subject: e.target.value })} placeholder="z. B. Rückforderung Leistungen Juli–Sept. 2026" required />
         </Field>
-        <Field label="Was möchten Sie sagen? (Stichpunkte reichen)" id="reason">
-          <textarea id="reason" className="input" style={{ minHeight: 110 }} value={draft.reason} onChange={(e) => update({ reason: e.target.value })} placeholder="z. B. Einkünfte wurden bereits im Juni gemeldet und berücksichtigt; bitte Akteneinsicht und Begründung der Berechnung" />
+        <Field label="Was möchten Sie sagen? Tippen oder diktieren – Stichpunkte reichen" id="reason">
+          <textarea
+            id="reason"
+            className="input"
+            style={{ minHeight: 130 }}
+            value={draft.reason}
+            onChange={(e) => update({ reason: e.target.value })}
+            placeholder="z. B. „Ich war an dem Tag gar nicht in München, mein Chef kann das bestätigen. Ich will Akteneinsicht und dass der Bescheid aufgehoben wird.“"
+          />
+          <DictateButton {...dictate} onClick={dictate.toggle} />
         </Field>
 
         <span className="label" style={{ marginTop: 8 }}>

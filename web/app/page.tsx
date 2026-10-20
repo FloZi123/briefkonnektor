@@ -34,7 +34,7 @@ export default function Home() {
       </div>
 
       <div className="stack" style={{ gap: 10 }}>
-        <span className="label">Oder Briefart wählen</span>
+        <span className="label">Oder ohne Foto: Briefart wählen, dann tippen oder diktieren, worum es geht</span>
         {(Object.keys(LETTER_KINDS) as Array<keyof typeof LETTER_KINDS>).map((k) => (
           <Link key={k} href={`/brief/daten?kind=${k}`} className="tile">
             <span>{LETTER_KINDS[k].label}</span>

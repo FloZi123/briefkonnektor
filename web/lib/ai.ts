@@ -46,7 +46,7 @@ export async function draftLetter(d: Draft, instruction?: string): Promise<strin
     d.documentDate && `Datum des Schreibens, auf das geantwortet wird: ${d.documentDate}`,
     `Betreff: ${subjectLine(d.kind, d.subject, d.documentDate)}`,
     d.subject && `Worum es geht: ${d.subject}`,
-    d.reason && `Angaben des Absenders (Stichpunkte): ${d.reason}`,
+    d.reason && `Angaben des Absenders (frei gesprochen oder getippt, ggf. umgangssprachlich und ungeordnet – daraus den Sachverhalt und das Anliegen herausarbeiten): ${d.reason}`,
     d.deadline && `Berechnete Frist (nur zur Info, nicht in den Brief schreiben): ${d.deadline}`,
     `Absender: ${d.sender.name}`,
   ]
@@ -61,13 +61,14 @@ export async function draftLetter(d: Draft, instruction?: string): Promise<strin
     "Bei Widerspruch: Widerspruch einlegen, Begründung aus den Angaben, um Überprüfung, Akteneinsicht und schriftliche Begründung bitten, bis zur Entscheidung um Aussetzung der Vollziehung/Aufrechnung bitten. " +
     "Bei Mängelanzeige: Mangel konkret, Frist zur Beseitigung von 14 Tagen ab Zugang setzen, Mietminderung vorbehalten. " +
     "Bei Mahnung: Forderung, Grund, Zahlungsfrist 14 Tage, Ankündigung weiterer Schritte ohne Drohung. " +
+    "Die Angaben des Absenders können diktiert, umgangssprachlich oder ungeordnet sein (z. B. 'ich war da gar nicht, mein Chef kann das bestätigen'): Inhalt übernehmen, in sachliche Briefsprache übersetzen, Wichtiges zuerst, nichts weglassen. " +
     "Fehlende Fakten nie erfinden – stattdessen Platzhalter in eckigen Klammern wie [Datum] oder [Betrag]. Länge: 120–260 Wörter.";
 
   const messages: Anthropic.MessageParam[] = instruction && d.body
     ? [
         { role: "user", content: `Angaben:\n${facts}\n\nBisheriger Brief:\n${d.body}` },
         { role: "assistant", content: d.body },
-        { role: "user", content: `Überarbeite den Brief: ${instruction} Gib nur den vollständigen neuen Brieftext aus.` },
+        { role: "user", content: `Überarbeite den Brief nach diesem Wunsch (kann diktiert/umgangssprachlich sein): ${instruction}\nGib nur den vollständigen neuen Brieftext aus.` },
       ]
     : [{ role: "user", content: `Angaben:\n${facts}\n\nSchreibe den Brief.` }];
 
