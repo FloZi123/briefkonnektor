@@ -1,5 +1,5 @@
 import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from "pdf-lib";
-import type { Address, Sender } from "../types.js";
+import type { Address, Sender } from "../types";
 
 /**
  * Rendert einen Geschäftsbrief nach DIN 5008 Form B (A4, Anschriftfeld im
@@ -35,6 +35,10 @@ export interface RenderInput {
   date: string;
   /** optionale Zeilen für den Infoblock, z. B. "Kundennr. 4711" */
   infoLines?: string[];
+  /** Unterschrift als PNG (Bytes), wird über dem Namen unter der Grußformel eingesetzt */
+  signaturePng?: Uint8Array;
+  /** Name unter der Unterschrift; Standard: sender.name */
+  signatoryName?: string;
 }
 
 export interface RenderOutput {
@@ -164,14 +168,33 @@ export async function renderLetter(input: RenderInput): Promise<RenderOutput> {
   const lines = wrap(input.body, font, fs, textWidth);
   y = A4.h - LAYOUT.bodyTop;
   let pages = 1;
+  const breakPage = () => {
+    page = newPage();
+    pages++;
+    y = A4.h - LAYOUT.followTop;
+    page.drawText(`– Seite ${pages} –`, { x: LAYOUT.marginLeft, y: A4.h - mm(15), size: 8, font, color: grey });
+  };
   for (const line of lines) {
-    if (y < LAYOUT.bodyBottom) {
-      page = newPage();
-      pages++;
-      y = A4.h - LAYOUT.followTop;
-      page.drawText(`– Seite ${pages} –`, { x: LAYOUT.marginLeft, y: A4.h - mm(15), size: 8, font, color: grey });
-    }
+    if (y < LAYOUT.bodyBottom) breakPage();
     if (line) page.drawText(line, { x: LAYOUT.marginLeft, y, size: fs, font, color: black });
+    y -= lh;
+  }
+
+  // --- Unterschrift + Name unter der Grußformel ---
+  if (input.signaturePng || input.signatoryName) {
+    const sigH = input.signaturePng ? mm(18) : 0;
+    const need = sigH + lh * 2;
+    if (y - need < LAYOUT.bodyBottom) breakPage();
+    if (input.signaturePng) {
+      const img = await doc.embedPng(input.signaturePng);
+      const scale = Math.min(mm(55) / img.width, sigH / img.height);
+      const w = img.width * scale;
+      const h = img.height * scale;
+      page.drawImage(img, { x: LAYOUT.marginLeft, y: y - h + lh * 0.3, width: w, height: h });
+      y -= h + lh * 0.2;
+    }
+    const name = input.signatoryName ?? input.sender.name;
+    page.drawText(name, { x: LAYOUT.marginLeft, y, size: fs, font, color: black });
     y -= lh;
   }
 

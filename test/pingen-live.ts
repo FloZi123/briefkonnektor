@@ -105,3 +105,4 @@ if (letters.status === 200) {
 }
 
 console.log("\nLive-Check abgeschlossen – nichts angelegt, nichts versendet.");
+export {};

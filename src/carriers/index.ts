@@ -1,6 +1,6 @@
-import type { Carrier } from "../types.js";
-import { MockCarrier } from "./mock.js";
-import { PingenCarrier } from "./pingen.js";
+import type { Carrier } from "../types";
+import { MockCarrier } from "./mock";
+import { PingenCarrier } from "./pingen";
 
 let instance: Carrier | undefined;
 

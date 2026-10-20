@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import type { Letter } from "./types.js";
+import type { Letter } from "./types";
 
 /**
  * In-Memory-Ablage für Briefe.

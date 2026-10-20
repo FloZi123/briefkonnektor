@@ -1,11 +1,11 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { AddressSchema, SenderSchema, type Letter } from "./types.js";
-import { store } from "./store.js";
-import { getCarrier } from "./carriers/index.js";
-import { PingenCarrier } from "./carriers/pingen.js";
-import { renderLetter } from "./letter/render.js";
-import { allClasses, pickClass, pingenCost, singlePrice } from "./pricing.js";
+import { AddressSchema, SenderSchema, type Letter } from "./types";
+import { store } from "./store";
+import { getCarrier } from "./carriers/index";
+import { PingenCarrier } from "./carriers/pingen";
+import { renderLetter } from "./letter/render";
+import { allClasses, pickClass, pingenCost, singlePrice } from "./pricing";
 
 export interface Context {
   /** Kunden-ID aus der Authentifizierung – trennt die Mandanten. */

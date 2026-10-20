@@ -1,6 +1,6 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
-import { pingenCost } from "../pricing.js";
-import type { Carrier, Letter, LetterStatus, SendOptions, SendResult, StatusResult } from "../types.js";
+import { pingenCost } from "../pricing";
+import type { Carrier, Letter, LetterStatus, SendOptions, SendResult, StatusResult } from "../types";
 
 /**
  * Pingen API v2 – Endpunkte verifiziert gegen das offizielle SDK

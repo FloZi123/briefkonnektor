@@ -1,9 +1,9 @@
 import express, { type Request, type Response, type NextFunction } from "express";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
-import { createMcpServer } from "./mcp.js";
-import { getCarrier } from "./carriers/index.js";
-import { PingenCarrier } from "./carriers/pingen.js";
-import { store } from "./store.js";
+import { createMcpServer } from "./mcp";
+import { getCarrier } from "./carriers/index";
+import { PingenCarrier } from "./carriers/pingen";
+import { store } from "./store";
 
 /**
  * Express-App mit Streamable-HTTP-Endpunkt /mcp (stateless: pro Request ein Server).

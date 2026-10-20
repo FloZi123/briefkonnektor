@@ -1,5 +1,5 @@
-import { PingenCarrier } from "../src/carriers/pingen.js";
-import type { Letter } from "../src/types.js";
+import { PingenCarrier } from "../src/carriers/pingen";
+import type { Letter } from "../src/types";
 
 /** Adapter-Test mit gefaketem fetch: prüft Endpunkte, Header und Body-Struktur gegen das offizielle SDK. */
 const calls: Array<{ url: string; method: string; headers: Record<string, string>; body?: string }> = [];

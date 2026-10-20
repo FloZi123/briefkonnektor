@@ -1,5 +1,5 @@
-import { pingenCost } from "../pricing.js";
-import type { Carrier, Letter, SendOptions, SendResult, StatusResult } from "../types.js";
+import { pingenCost } from "../pricing";
+import type { Carrier, Letter, SendOptions, SendResult, StatusResult } from "../types";
 
 /** Simuliert einen Carrier – kein Versand, Status wandert zeitgesteuert. */
 export class MockCarrier implements Carrier {

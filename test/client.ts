@@ -1,7 +1,7 @@
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { writeFileSync } from "node:fs";
-import { createApp } from "../src/app.js";
+import { createApp } from "../src/app";
 
 /** End-to-End-Test: Server starten, alle Tools über einen echten MCP-Client aufrufen. */
 process.env.API_KEYS ??= "test-token:testkunde";
@@ -48,7 +48,7 @@ try {
   };
   const pdfPart = preview.content.find((c) => c.type === "resource")!.resource!;
   if (pdfPart.mimeType !== "application/pdf") throw new Error("PDF fehlt");
-  const out = new URL("../../test-output.pdf", import.meta.url);
+  const out = new URL("../test-output.pdf", import.meta.url);
   writeFileSync(out, Buffer.from(pdfPart.blob, "base64"));
   console.log("✓ preview_letter: PDF gespeichert →", out.pathname);
 
