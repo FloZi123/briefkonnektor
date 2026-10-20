@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-12 4 64 44" width="69" height="48" role="img" aria-label="Flinkbrief">
+  <rect x="4" y="12" width="40" height="28" rx="5" fill="none" stroke="#16203A" stroke-width="3.2"/>
+  <path d="M4 17l20 13 20-13" fill="none" stroke="#16203A" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round"/>
+  <path d="M30 40l10-10M40 30h-7M40 30v7" fill="none" stroke="#2F5BEA" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M-6 20h7M-9 26h10M-6 32h7" fill="none" stroke="#2F5BEA" stroke-width="3.2" stroke-linecap="round"/>
+</svg>

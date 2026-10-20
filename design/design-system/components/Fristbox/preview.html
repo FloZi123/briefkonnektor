@@ -1,0 +1,32 @@
+<!-- @dsCard group="Hinweise" height=120 -->
+<!doctype html>
+<html lang="de"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+body{margin:0;padding:16px;background:var(--paper-000);color:var(--ink);font-family:var(--font-sans);font-size:16px;line-height:1.55}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border-radius:var(--radius-m);font:inherit;font-weight:600;border:1.5px solid transparent;cursor:pointer;text-decoration:none}
+.btn:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.btn-primary{background:var(--flink);color:var(--flink-ink)}
+.btn-secondary{background:var(--paper-100);color:var(--ink);border-color:var(--line)}
+.btn-link{background:transparent;color:var(--flink);padding:0;min-height:0;text-decoration:underline;text-underline-offset:3px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.pill{display:inline-flex;align-items:center;gap:6px;min-height:28px;padding:0 10px;border-radius:var(--radius-pill);font-size:14px;font-weight:600}
+.pill::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.fristbox{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:var(--radius-l);background:var(--frist-soft);border:1px solid var(--frist);color:var(--ink);max-width:420px}
+.fristbox svg{flex-shrink:0;margin-top:2px;stroke:var(--frist)}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1.5px solid var(--line);border-radius:var(--radius-m);background:var(--paper-100);max-width:420px;cursor:pointer}
+.opt.sel{border-color:var(--flink);background:var(--flink-soft)}
+.opt input{margin-top:3px;accent-color:var(--flink)}
+.opt .t{display:flex;justify-content:space-between;gap:12px;font-weight:600}
+.opt .h{font-size:14px;color:var(--ink-muted)}
+.mono{font-family:var(--font-mono);font-weight:500;font-size:14px}
+.muted{color:var(--ink-muted)}
+.letter{width:220px;padding:22px 20px;background:var(--paper-100);border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow-card);font-size:10px;line-height:1.45;display:flex;flex-direction:column;gap:8px}
+.letter .h{font-family:var(--font-display);font-weight:700;font-size:12px}
+.ln{display:block;height:5px;border-radius:3px;background:var(--paper-200)}
+</style></head><body>
+<div class="fristbox" role="status">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+  <span><strong>Widerspruchsfrist laut Bescheid: 1 Monat.</strong> Bescheid vom 14.10.2026 → Eingang bei der Behörde bis spätestens <strong>16.11.2026</strong>.</span>
+</div></body></html>

@@ -1,0 +1,49 @@
+<!-- @dsCard height=300 -->
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@700;800&family=Source+Sans+3:wght@400&display=swap" rel="stylesheet">
+<style>
+  html,body{margin:0;height:100%}
+  body{background:var(--paper-000);color:var(--ink);font-family:var(--font-sans);position:relative;width:960px;height:300px;overflow:hidden}
+  .name{position:absolute;left:40px;bottom:44px;max-width:440px;font-family:var(--font-display);font-weight:800;font-size:104px;line-height:.92;letter-spacing:-0.03em;color:var(--ink)}
+  .name b{color:var(--flink);font-weight:800}
+  .tag{position:absolute;left:42px;bottom:22px;font-size:14px;color:var(--ink-muted)}
+  svg{position:absolute;left:480px;top:0;width:480px;height:300px}
+  .flink{fill:var(--flink)} .ink{fill:var(--ink)} .soft{fill:var(--flink-soft)} .ok{fill:var(--zugestellt)} .frist{fill:var(--frist)}
+  .paper{fill:var(--paper-000)}
+</style>
+</head>
+<body>
+<!--
+blocks: flink 232×168 (space-8 multiples), ink 120×168, frist 96×72, zugestellt 96×72, flink-soft 232×96 – zusammen ~45 % der Fläche
+arrangement: ein breiter Slab (flink) oben links mit Satelliten rechts (ink hoch, frist/zugestellt klein gestapelt), flink-soft als Band darunter – bleedet rechts aus
+pattern: Pfeil-Motiv aus dem Logo (Kuvert-Ecke, aus der ein Pfeil ausbricht) – "flink" ist Bewegung, der Pfeil ist das einzige Zeichen der Marke; Pfeile in Block-Farben, aus dem Grund ausgeschnitten
+scales: Blockseiten aus space-8 (32)/space-12 (48)/space-16 (64), Ecken radius-l (14), Pfeilstrich 8 = space-2
+-->
+<svg viewBox="480 0 480 300" aria-hidden="true">
+  <rect x="512" y="32" width="232" height="168" rx="14" class="flink"/>
+  <rect x="760" y="32" width="120" height="168" rx="14" class="ink"/>
+  <rect x="896" y="32" width="96" height="72" rx="14" class="frist"/>
+  <rect x="896" y="128" width="96" height="72" rx="14" class="ok"/>
+  <rect x="512" y="216" width="480" height="96" rx="14" class="soft"/>
+  <!-- Pfeile: aus den Blöcken ausgeschnitten (Grundfarbe) -->
+  <g class="paper">
+    <path d="M700 168l-44-44v-8h8l44 44z"/><path d="M700 112v56h-56z" transform="translate(0,0)"/>
+  </g>
+  <g class="paper">
+    <path d="M856 168l-32-32v-6h6l32 32z"/><path d="M856 128v40h-40z"/>
+  </g>
+  <!-- Pfeile im Band in flink -->
+  <g class="flink">
+    <path d="M600 288l-24-24v-6h6l24 24z"/><path d="M600 258v30h-30z"/>
+    <path d="M720 288l-24-24v-6h6l24 24z"/><path d="M720 258v30h-30z"/>
+    <path d="M840 288l-24-24v-6h6l24 24z"/><path d="M840 258v30h-30z"/>
+    <path d="M960 288l-24-24v-6h6l24 24z"/><path d="M960 258v30h-30z"/>
+  </g>
+</svg>
+<div class="name">flink<b>brief</b></div>
+<div class="tag">Richtig geschrieben. Nachweisbar angekommen.</div>
+</body>
+</html>
