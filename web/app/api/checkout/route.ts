@@ -15,8 +15,7 @@ export async function POST(req: Request) {
 
   // PDF sofort rendern und an der Bestellung speichern – so ist es nach der Zahlung ohne Browser da
   const { pdf } = await renderDraft(draft);
-  const order = await createOrder(draft, price.cents, euro(price.cents));
-  order.pdf = pdf;
+  const order = await createOrder(draft, price.cents, euro(price.cents), pdf);
 
   // Ohne Stripe-Key (lokal/Preview): Zahlung simulieren
   if (!process.env.STRIPE_SECRET_KEY) {

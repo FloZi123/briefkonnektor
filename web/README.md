@@ -34,9 +34,17 @@ Ohne `STRIPE_SECRET_KEY` wird die Zahlung simuliert (Bestellung sofort „bezahl
 
 Eigenes Projekt, Root Directory `web`, Framework Next.js. Env-Vars wie in `.env.example`; `NEXT_PUBLIC_BASE_URL` auf die Produktions-Domain. Stripe-Webhook auf `https://<domain>/api/webhooks/stripe`, Event `checkout.session.completed`.
 
+## Supabase (Bestellungen + PDFs)
+
+1. `supabase/migrations/0001_orders.sql` im SQL-Editor des Projekts ausführen (Tabelle `orders`, privater Bucket `letters`).
+2. Env-Vars `SUPABASE_URL` und `SUPABASE_SERVICE_ROLE_KEY` setzen (Vercel + `.env.local`). Ohne die beiden bleibt `lib/orders.ts` im In-Memory-Modus.
+3. Zugriff läuft nur serverseitig über den Service-Role-Key; RLS ist aktiv ohne Policies, der Browser sieht nichts.
+
+Aufräumen: `delete from orders where expires_at < now()` + Objekte im Bucket – als Supabase-Cron (pg_cron) oder Vercel-Cron nachziehen.
+
 ## Offen vor Launch
 
-- Bestellungen liegen im Speicher (`lib/orders.ts`) → Supabase (Tabelle + Storage, 30 Tage TTL)
+- Cron für abgelaufene Bestellungen (30 Tage) inkl. Storage-Objekte
 - Status-/Bestätigungs-Mails (Resend o. ä.)
 - Einschreiben: Pingen-`delivery_product` für Einwurf-Einschreiben verifizieren (`lib/letter.ts`)
 - Rechtstexte: AGB, Widerruf, Datenschutz, Impressum, AVV

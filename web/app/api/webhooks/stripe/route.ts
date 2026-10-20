@@ -20,7 +20,9 @@ export async function POST(req: Request) {
 
   if (event.type === "checkout.session.completed") {
     const session = event.data.object as Stripe.Checkout.Session;
-    const order = (session.metadata?.orderId && (await getOrder(session.metadata.orderId))) || (await findByStripeSession(session.id));
+    const order =
+      (session.metadata?.orderId && (await getOrder(session.metadata.orderId, { withPdf: true }))) ||
+      (await findByStripeSession(session.id, { withPdf: true }));
     if (order && order.status === "pending") {
       order.status = "paid";
       await updateOrder(await dispatchOrder(order));
