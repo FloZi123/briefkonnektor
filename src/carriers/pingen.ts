@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
+import { pingenCost } from "../pricing.js";
 import type { Carrier, Letter, LetterStatus, SendOptions, SendResult, StatusResult } from "../types.js";
 
 /**
@@ -173,9 +174,7 @@ export class PingenCarrier implements Carrier {
   }
 
   estimatePrice(pages: number, opts: SendOptions, country: string): number {
-    const base = country === "DE" ? 0.86 : 1.4;
-    const sheets = opts.duplex ? Math.ceil(pages / 2) : pages;
-    return +(base + Math.max(0, sheets - 1) * 0.1 + (opts.color ? 0.1 * pages : 0)).toFixed(2);
+    return pingenCost({ country, pages, duplex: opts.duplex, color: opts.color });
   }
 
   /** Webhook bei Pingen registrieren (einmalig je Umgebung). event_category z. B. "issues". */

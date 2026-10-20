@@ -5,7 +5,7 @@ import { store } from "./store.js";
 import { getCarrier } from "./carriers/index.js";
 import { PingenCarrier } from "./carriers/pingen.js";
 import { renderLetter } from "./letter/render.js";
-import { allClasses, pickClass } from "./pricing.js";
+import { allClasses, pickClass, pingenCost, singlePrice } from "./pricing.js";
 
 export interface Context {
   /** Kunden-ID aus der Authentifizierung – trennt die Mandanten. */
@@ -89,11 +89,14 @@ export function createMcpServer(ctx: Context): McpServer {
         pages,
       });
       const opts = { color: args.color, duplex: args.duplex };
+      const costInput = { country: args.recipient.country, pages, duplex: args.duplex, color: args.color };
       const live = carrier instanceof PingenCarrier ? await carrier.quote(args.recipient.country, opts) : undefined;
-      const price = live ?? carrier.estimatePrice(pages, opts, args.recipient.country);
+      const cost = live ?? pingenCost(costInput);
+      const price = singlePrice(costInput);
       return json({
         ...summary(letter, price),
-        price_source: live !== undefined ? "carrier_live" : "estimate",
+        price_source: live !== undefined ? "carrier_live" : "table",
+        ...(process.env.EXPOSE_COST === "true" ? { cost_eur_net: cost } : {}),
         next_step: "Zeige dem Nutzer die Vorschau (preview_letter) und hole eine ausdrückliche Freigabe ein, bevor du send_letter aufrufst.",
       });
     },
