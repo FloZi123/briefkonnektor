@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Logo } from "@/components/ui";
 import { LETTER_KINDS, PRICES, euro } from "@/lib/types";
 import { Uploader } from "@/components/uploader";
+import { Footer } from "@/components/legal";
 
 export default function Home() {
   return (
@@ -48,6 +49,7 @@ export default function Home() {
         </span>
         <span className="muted">inkl. MwSt.</span>
       </div>
+      <Footer />
     </main>
   );
 }

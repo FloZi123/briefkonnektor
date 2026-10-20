@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/ui";
+import { Footer } from "@/components/legal";
 import { getOrder } from "@/lib/orders";
 import { PRICES } from "@/lib/types";
 
@@ -76,6 +77,7 @@ export default async function FertigScreen({ searchParams }: { searchParams: Pro
         <Link href="/" className="btn btn-secondary">Weiteren Brief schreiben</Link>
         <span className="muted" style={{ fontSize: 11, textAlign: "center" }}>{PRICES[order.shipping].label} · {order.priceLabel}</span>
       </div>
+      <Footer />
     </main>
   );
 }

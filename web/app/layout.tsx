@@ -1,5 +1,11 @@
 import type { Metadata, Viewport } from "next";
+import { Sora, Source_Sans_3, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+
+// Schriften werden beim Build geladen und von der eigenen Domain ausgeliefert – kein Request an Google zur Laufzeit.
+const sora = Sora({ subsets: ["latin"], weight: ["600", "700", "800"], variable: "--font-display-src", display: "swap" });
+const sourceSans = Source_Sans_3({ subsets: ["latin"], weight: ["400", "500", "600"], variable: "--font-sans-src", display: "swap" });
+const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["500"], variable: "--font-mono-src", display: "swap" });
 
 export const metadata: Metadata = {
   title: { default: "Flinkbrief", template: "%s – Flinkbrief" },
@@ -11,15 +17,7 @@ export const viewport: Viewport = { themeColor: "#2f5bea", width: "device-width"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="de">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Source+Sans+3:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="de" className={`${sora.variable} ${sourceSans.variable} ${mono.variable}`}>
       <body>{children}</body>
     </html>
   );
