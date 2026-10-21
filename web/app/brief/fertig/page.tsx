@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Logo } from "@/components/ui";
 import { Footer } from "@/components/legal";
 import { ClearDraftOnDone } from "@/components/resume";
+import { LiveStatus } from "@/components/live-status";
 import { getOrder } from "@/lib/orders";
 import { reconcileWithStripe } from "@/lib/finalize";
 import { PRICES } from "@/lib/types";
@@ -45,6 +46,7 @@ export default async function FertigScreen({ searchParams }: { searchParams: Pro
   return (
     <main className="screen">
       {paid && <ClearDraftOnDone />}
+      <LiveStatus id={order.id} token={order.token} status={order.status} />
       <div className="screen-head"><Logo /></div>
       <div className="stack" style={{ paddingTop: 32, alignItems: "center", textAlign: "center", gap: 14 }}>
         <span style={{ width: 64, height: 64, borderRadius: "50%", background: paid ? "var(--zugestellt)" : "var(--paper-200)", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
@@ -52,7 +54,8 @@ export default async function FertigScreen({ searchParams }: { searchParams: Pro
             {paid ? <path d="M20 6L9 17l-5-5" /> : <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>}
           </svg>
         </span>
-        <h1 style={{ fontSize: 26 }}>{paid ? (isDownload ? "Ihr PDF ist fertig." : "Ihr Brief geht raus.") : "Zahlung wird geprüft …"}</h1>
+        <h1 style={{ fontSize: 26 }}>{paid ? (isDownload ? "Ihr PDF ist fertig." : "Ihr Brief geht raus.") : "Zahlung wird bestätigt …"}</h1>
+        {!paid && <p className="muted" style={{ fontSize: 13, marginTop: -6 }}>Das dauert meist nur wenige Sekunden – die Seite aktualisiert sich von selbst.</p>}
         <p className="muted" style={{ fontSize: 14 }}>
           {order.subject} an {order.recipientName}. Bestätigung und Rechnung gehen an {order.email}.
         </p>
