@@ -5,7 +5,7 @@ import { ScreenHead, Fristbox, Field, Disclaimer } from "@/components/ui";
 import { useDictation, DictateButton, appendText } from "@/components/dictate";
 import { useDraft } from "@/lib/store";
 import { LETTER_KINDS, type LetterKind } from "@/lib/types";
-import { widerspruchsfrist, daysUntil } from "@/lib/dates";
+import { widerspruchsfrist, einspruchsfrist, daysUntil } from "@/lib/dates";
 
 function DatenScreen() {
   const { draft, update, ready } = useDraft();
@@ -22,7 +22,9 @@ function DatenScreen() {
 
   if (!ready) return null;
   const kind = LETTER_KINDS[draft.kind];
-  const frist = draft.kind === "widerspruch" ? widerspruchsfrist(draft.documentDate) : undefined;
+  const frist = draft.kind === "widerspruch" ? widerspruchsfrist(draft.documentDate) : draft.kind === "einspruch" ? einspruchsfrist(draft.documentDate) : undefined;
+  const remedyMismatch =
+    draft.remedy && draft.remedy !== "keine" && ((draft.remedy === "einspruch" && draft.kind === "widerspruch") || (draft.remedy === "widerspruch" && draft.kind === "einspruch") || (draft.remedy === "klage" && (draft.kind === "widerspruch" || draft.kind === "einspruch")));
   const days = frist ? daysUntil(frist) : undefined;
   const fromPhoto = params.get("from") === "photo";
 
@@ -44,10 +46,17 @@ function DatenScreen() {
       {frist && (
         <div style={{ paddingTop: 14 }}>
           <Fristbox>
-            <strong>Widerspruchsfrist laut Bescheid: 1 Monat.</strong> Bescheid vom {draft.documentDate} → Eingang bei der Behörde bis spätestens <strong>{frist}</strong>
+            <strong>{draft.kind === "einspruch" ? "Einspruchsfrist: 2 Wochen ab Zustellung." : "Widerspruchsfrist: 1 Monat ab Bekanntgabe."}</strong> Bescheid vom {draft.documentDate} → Eingang bei der Behörde bis spätestens <strong>{frist}</strong>
             {days !== undefined && days >= 0 && ` (noch ${days} Tage)`}
             {days !== undefined && days < 0 && " – Frist vermutlich abgelaufen; bitte prüfen."}
           </Fristbox>
+        </div>
+      )}
+
+      {remedyMismatch && (
+        <div className="errorbox" style={{ marginTop: 12 }}>
+          <strong>Rechtsbehelf prüfen:</strong> Laut Belehrung auf dem Bescheid ist „{{ einspruch: "Einspruch", widerspruch: "Widerspruch", klage: "Klage", beschwerde: "Beschwerde" }[draft.remedy as "einspruch" | "widerspruch" | "klage" | "beschwerde"]}“ vorgesehen
+          {draft.remedyText ? ` („${draft.remedyText}“)` : ""}. {draft.remedy === "klage" ? "Ein Brief reicht dann in der Regel nicht – bitte Belehrung lesen oder beraten lassen." : "Bitte die passende Briefart oben wählen."}
         </div>
       )}
 

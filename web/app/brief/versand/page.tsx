@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { ScreenHead } from "@/components/ui";
 import { useDraft } from "@/lib/store";
+import { needsWrittenForm } from "@/lib/formcheck";
 import { PRICES, euro, type Shipping } from "@/lib/types";
 import { subjectLine } from "@/lib/subject";
 
@@ -60,6 +61,12 @@ export default function VersandScreen() {
           </button>
         </div>
       </div>
+
+      {needsWrittenForm(draft) && (
+        <div className="errorbox" style={{ marginTop: 16 }}>
+          <strong>Eigenhändige Unterschrift nötig.</strong> Bei der Kündigung eines Miet-, Pacht- oder Arbeitsvertrags gilt nur die Unterschrift von Hand – ein gedruckter Brief ist unwirksam. Wählen Sie „Nur PDF-Download“, drucken Sie aus und unterschreiben Sie selbst.
+        </div>
+      )}
 
       <div className="stack" style={{ paddingTop: 18, gap: 10 }}>
         <span className="label">Versandart</span>

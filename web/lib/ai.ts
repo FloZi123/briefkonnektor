@@ -25,7 +25,9 @@ export async function extractFromDocument(bytes: Buffer, mime: string): Promise<
       "recipient (die Stelle, die das Dokument geschickt hat – also der künftige Empfänger des Antwortbriefs: name, name2, street, zip, city, country ISO-2), " +
       "sender (der Adressat des Dokuments, falls im Anschriftfeld lesbar: name, street, zip, city), " +
       "reference (Aktenzeichen, Kunden-, Vertrags- oder Geschäftszeichen), documentDate (TT.MM.JJJJ), subject (worum es geht, ein Satz, deutsch), " +
-      "deadlineHint (Frist laut Rechtsbehelfsbelehrung oder Text, wörtlich), amount (Betrag falls genannt), confidence (high|medium|low). " +
+      "deadlineHint (Frist laut Rechtsbehelfsbelehrung oder Text, wörtlich), " +
+      "remedy (Rechtsbehelf laut Rechtsbehelfsbelehrung: widerspruch | einspruch | klage | beschwerde | keine – bei Bußgeldbescheiden ist es 'einspruch', dann auch kind='einspruch'), " +
+      "remedyText (Kernsatz der Rechtsbehelfsbelehrung, max. 160 Zeichen), amount (Betrag falls genannt), confidence (high|medium|low). " +
       "Unlesbare oder fehlende Felder weglassen, nie raten. Bei Adressen Straße und Hausnummer in street, PLZ fünfstellig in zip.",
     messages: [{ role: "user", content: [source, { type: "text", text: "Extrahiere die Felder als JSON." }] }],
   });
@@ -57,7 +59,9 @@ export async function draftLetter(d: Draft, instruction?: string): Promise<strin
     "Du formulierst für Privatpersonen in Deutschland Briefe an Behörden, Vermieter und Unternehmen. " +
     "Regeln: Deutsch, Sie-Form, sachlich, höflich-bestimmt, klar gegliederte Absätze, keine Floskeln, keine Emotionen. " +
     "Nur Anrede bis Grußformel ausgeben – KEINE Adressen, KEIN Betreff, KEIN Datum, KEIN Name unter der Grußformel (das setzt das Briefpapier). " +
-    "Grußformel: 'Mit freundlichen Grüßen'. Keine Rechtsberatung, keine Paragraphen zitieren außer bei Widerspruch den Satz 'lege ich fristgerecht Widerspruch ein'. " +
+    "Grußformel: 'Mit freundlichen Grüßen'. " +
+    "Verboten (Rechtsdienstleistungsgesetz): Erfolgsaussichten bewerten, Paragraphen oder Urteile zitieren, Fristen berechnen, rechtliche Behauptungen aufstellen, die nicht aus den Angaben stammen. Erlaubt: die Erklärung selbst ('lege ich fristgerecht Widerspruch ein'), Bitten (Überprüfung, Akteneinsicht, Begründung), Fristen setzen bei Mängelanzeige/Mahnung. " +
+    "Bei Einspruch gegen Bußgeldbescheid: 'lege ich Einspruch ein', Begründung nur wenn Angaben vorhanden (sonst ankündigen, dass sie nach Akteneinsicht folgt), um Akteneinsicht bitten. " +
     "Bei Widerspruch: Widerspruch einlegen, Begründung aus den Angaben, um Überprüfung, Akteneinsicht und schriftliche Begründung bitten, bis zur Entscheidung um Aussetzung der Vollziehung/Aufrechnung bitten. " +
     "Bei Mängelanzeige: Mangel konkret, Frist zur Beseitigung von 14 Tagen ab Zugang setzen, Mietminderung vorbehalten. " +
     "Bei Mahnung: Forderung, Grund, Zahlungsfrist 14 Tage, Ankündigung weiterer Schritte ohne Drohung. " +
@@ -96,7 +100,7 @@ export async function reviewLetter(d: Draft): Promise<ReviewPoint[]> {
       "anlage = Dokument, das beigelegt werden sollte; widerspruch = Angaben passen nicht zusammen; hinweis = sonst Wichtiges (kein Rechtsrat). " +
       "Kontext: Absender- und Empfängeranschrift, Datum, Betreff, Aktenzeichen und die eigenhändige Unterschrift setzt das Briefpapier automatisch – diese NIE bemängeln. " +
       "Platzhalter in eckigen Klammern werden dem Nutzer bereits separat angezeigt – NICHT nennen; nur echte inhaltliche Lücken, die kein Platzhalter markiert. " +
-      "Das Briefdatum ist heute; Fristen nicht kommentieren. " +
+      "Das Briefdatum ist heute; Fristen nicht kommentieren. Keine rechtliche Bewertung (keine Erfolgsaussichten, keine Paragraphen, keine Urteile, keine Fristberechnung) – nur Vollständigkeit, Belege, Anlagen, Widersprüche in den Angaben. " +
       "Jeder Text ein kurzer, konkreter Satz in Sie-Form, max. 110 Zeichen. Nichts erfinden, keine Paragraphen, keine Allgemeinplätze. " +
       "Lieber 0–2 treffende Punkte als 5 schwache. Wenn nichts zu beanstanden ist, antworte mit [].",
     messages: [

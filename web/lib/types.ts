@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const LETTER_KINDS = {
   widerspruch: { label: "Widerspruch gegen Bescheid", hint: "1 Monat Frist", deadlineDays: 30 },
+  einspruch: { label: "Einspruch gegen Bußgeldbescheid", hint: "2 Wochen Frist", deadlineDays: 14 },
   maengel: { label: "Mängelanzeige an Vermieter", hint: "mit Frist zur Beseitigung", deadlineDays: null },
   nebenkosten: { label: "Widerspruch Nebenkostenabrechnung", hint: "12 Monate ab Zugang", deadlineDays: 365 },
   mahnung: { label: "Zahlungsaufforderung / Mahnung", hint: "mit Zahlungsfrist", deadlineDays: null },
@@ -29,6 +30,8 @@ export const ExtractedSchema = z.object({
   documentDate: z.string().optional().describe("Datum des Bescheids/Schreibens, TT.MM.JJJJ"),
   subject: z.string().optional().describe("Worum es geht, in einem Satz"),
   deadlineHint: z.string().optional().describe("Frist laut Dokument, falls genannt"),
+  remedy: z.enum(["widerspruch", "einspruch", "klage", "beschwerde", "keine"]).optional().describe("Rechtsbehelf laut Rechtsbehelfsbelehrung"),
+  remedyText: z.string().optional().describe("Rechtsbehelfsbelehrung in einem Satz, wörtlich gekürzt"),
   amount: z.string().optional().describe("Betrag, falls genannt"),
   confidence: z.enum(["high", "medium", "low"]).optional(),
 });
@@ -45,6 +48,8 @@ export interface Draft {
   subject: string;
   reason: string;
   body: string;
+  remedy?: Extracted["remedy"]; // aus der Rechtsbehelfsbelehrung des Fotos
+  remedyText?: string;
   signature?: string; // data:image/png;base64
   shipping: Shipping;
   email: string;

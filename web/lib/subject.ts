@@ -3,6 +3,8 @@ export function subjectLine(kind: string, subject: string, date: string): string
   switch (kind) {
     case "widerspruch":
       return `Widerspruch gegen den Bescheid${d}${subject ? ` – ${subject}` : ""}`;
+    case "einspruch":
+      return `Einspruch gegen den Bußgeldbescheid${d}${subject ? ` – ${subject}` : ""}`;
     case "nebenkosten":
       return `Widerspruch gegen die Nebenkostenabrechnung${d}`;
     case "maengel":

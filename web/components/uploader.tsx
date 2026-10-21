@@ -36,6 +36,8 @@ export function Uploader() {
         reference: x.reference ?? d.reference,
         documentDate: x.documentDate ?? d.documentDate,
         subject: x.subject ?? d.subject,
+        remedy: x.remedy,
+        remedyText: x.remedyText,
       });
       router.push("/brief/daten?from=photo");
     } catch (e) {

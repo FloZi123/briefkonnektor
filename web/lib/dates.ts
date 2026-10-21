@@ -40,3 +40,16 @@ export function daysUntil(dateDE: string): number | undefined {
   now.setHours(0, 0, 0, 0);
   return Math.round((d.getTime() - now.getTime()) / 86_400_000);
 }
+
+/**
+ * Einspruchsfrist gegen Bußgeldbescheid: 2 Wochen ab Zustellung (§ 67 OWiG). Zustellung meist per Postzustellungsurkunde;
+ * wir rechnen konservativ Bescheiddatum + 3 Tage, Ende = +14 Tage, Wochenende → Montag. Feiertage nicht berücksichtigt.
+ */
+export function einspruchsfrist(documentDate: string): string | undefined {
+  const d = parseDE(documentDate);
+  if (!d) return undefined;
+  const end = new Date(d);
+  end.setDate(end.getDate() + 3 + 14);
+  while (end.getDay() === 0 || end.getDay() === 6) end.setDate(end.getDate() + 1);
+  return fmtDE(end);
+}

@@ -134,3 +134,5 @@ textarea.input { min-height: 160px; line-height: 1.5; resize: vertical; }
 .reviewbox li.ph { color: var(--frist); font-weight: 600; }
 .reviewbox .tag { display: inline-block; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--flink); margin-right: 6px; }
 .reviewbox.ok { background: var(--zugestellt-soft); border-color: #a9dcc6; }
+.reviewbox li.warn { color: var(--frist); }
+.reviewbox li.warn .tag { color: var(--frist); }

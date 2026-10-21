@@ -6,9 +6,10 @@ import { useDictation, DictateButton, appendText } from "@/components/dictate";
 import { useDraft } from "@/lib/store";
 import { subjectLine } from "@/lib/subject";
 import { findPlaceholders } from "@/lib/placeholders";
+import { formCheck } from "@/lib/formcheck";
 import type { ReviewPoint } from "@/lib/ai";
 
-const TAG: Record<ReviewPoint["kind"], string> = { fehlt: "fehlt", beleg: "Beleg", anlage: "Anlage", widerspruch: "prüfen", hinweis: "Hinweis" };
+const TAG: Record<ReviewPoint["kind"] | "form" | "rechtsbehelf" | "schriftform", string> = { fehlt: "fehlt", beleg: "Beleg", anlage: "Anlage", widerspruch: "prüfen", hinweis: "Hinweis", form: "Form", rechtsbehelf: "Rechtsbehelf", schriftform: "Schriftform" };
 
 const CHIPS: Array<{ label: string; instruction: string }> = [
   { label: "Sachlicher", instruction: "Formuliere nüchterner und sachlicher, ohne Emotionen." },
@@ -73,6 +74,8 @@ export default function EntwurfScreen() {
 
   if (!ready) return null;
   const placeholders = findPlaceholders(draft.body);
+  const form = formCheck(draft);
+  const complete = placeholders.length === 0 && form.length === 0 && review && review.length === 0;
 
   return (
     <main className="screen">
@@ -115,17 +118,23 @@ export default function EntwurfScreen() {
             </button>
           </div>
         )}
-        {busy === null && draft.body && (placeholders.length > 0 || reviewing || review !== null) && (
-          <div className={`reviewbox${placeholders.length === 0 && review && review.length === 0 ? " ok" : ""}`} aria-live="polite">
+        {busy === null && draft.body && (placeholders.length > 0 || form.length > 0 || reviewing || review !== null) && (
+          <div className={`reviewbox${complete ? " ok" : ""}`} aria-live="polite">
             <div className="title">
-              {placeholders.length === 0 && review && review.length === 0 ? "Sieht vollständig aus" : "Vor der Unterschrift prüfen"}
+              {complete ? "Sieht vollständig aus" : "Vor der Unterschrift prüfen"}
               {reviewing && <span className="muted" style={{ fontWeight: 400, fontSize: 12 }}>· wird geprüft …</span>}
             </div>
-            {(placeholders.length > 0 || (review && review.length > 0)) && (
+            {(placeholders.length > 0 || form.length > 0 || (review && review.length > 0)) && (
               <ul>
                 {placeholders.map((p) => (
                   <li key={p} className="ph">
                     Platzhalter {p} im Text ersetzen
+                  </li>
+                ))}
+                {form.map((f, i) => (
+                  <li key={"f" + i} className={f.severity === "warn" ? "warn" : ""}>
+                    <span className="tag">{TAG[f.kind]}</span>
+                    {f.text}
                   </li>
                 ))}
                 {review?.map((r, i) => (
