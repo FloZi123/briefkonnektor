@@ -94,8 +94,11 @@ export async function reviewLetter(d: Draft): Promise<ReviewPoint[]> {
       '{"kind": "fehlt"|"beleg"|"anlage"|"widerspruch"|"hinweis", "text": "…"}. ' +
       "fehlt = eine für die Briefart wichtige Angabe fehlt oder ist nur Platzhalter; beleg = eine Behauptung, die mit Nachweis stärker wäre; " +
       "anlage = Dokument, das beigelegt werden sollte; widerspruch = Angaben passen nicht zusammen; hinweis = sonst Wichtiges (kein Rechtsrat). " +
+      "Kontext: Absender- und Empfängeranschrift, Datum, Betreff, Aktenzeichen und die eigenhändige Unterschrift setzt das Briefpapier automatisch – diese NIE bemängeln. " +
+      "Platzhalter in eckigen Klammern werden dem Nutzer bereits separat angezeigt – NICHT nennen; nur echte inhaltliche Lücken, die kein Platzhalter markiert. " +
+      "Das Briefdatum ist heute; Fristen nicht kommentieren. " +
       "Jeder Text ein kurzer, konkreter Satz in Sie-Form, max. 110 Zeichen. Nichts erfinden, keine Paragraphen, keine Allgemeinplätze. " +
-      "Wenn nichts zu beanstanden ist, antworte mit [].",
+      "Lieber 0–2 treffende Punkte als 5 schwache. Wenn nichts zu beanstanden ist, antworte mit [].",
     messages: [
       {
         role: "user",
