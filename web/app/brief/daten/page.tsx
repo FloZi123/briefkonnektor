@@ -3,6 +3,7 @@ import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ScreenHead, Fristbox, Field, Disclaimer } from "@/components/ui";
 import { useDictation, DictateButton, appendText } from "@/components/dictate";
+import { AddressLookup, useZipToCity } from "@/components/address";
 import { useDraft } from "@/lib/store";
 import { LETTER_KINDS, type LetterKind } from "@/lib/types";
 import { widerspruchsfrist, einspruchsfrist, daysUntil } from "@/lib/dates";
@@ -19,6 +20,8 @@ function DatenScreen() {
   }, [ready, params]);
 
   const dictate = useDictation((t) => update((d) => ({ reason: appendText(d.reason, t) })));
+  useZipToCity(draft.recipient.zip, draft.recipient.city, (c) => update((d) => ({ recipient: { ...d.recipient, city: c } })));
+  useZipToCity(draft.sender.zip, draft.sender.city, (c) => update((d) => ({ sender: { ...d.sender, city: c } })));
 
   if (!ready) return null;
   const kind = LETTER_KINDS[draft.kind];
@@ -85,6 +88,9 @@ function DatenScreen() {
         <Field label="Behörde / Firma / Person" id="rname">
           <input id="rname" className="input" value={draft.recipient.name} onChange={(e) => setR("name", e.target.value)} placeholder="z. B. Jobcenter Schwandorf" required />
         </Field>
+        {!draft.recipient.street && (
+          <AddressLookup query={draft.recipient.name} hint={draft.recipient.city} onPick={(a) => update((d) => ({ recipient: { ...d.recipient, ...a } }))} />
+        )}
         <Field label="Zusatz (optional)" id="rname2">
           <input id="rname2" className="input" value={draft.recipient.name2 ?? ""} onChange={(e) => setR("name2", e.target.value)} placeholder="Abteilung, z. Hd." />
         </Field>

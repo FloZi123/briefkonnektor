@@ -131,3 +131,65 @@ export async function reviewLetter(d: Draft): Promise<ReviewPoint[]> {
     return [];
   }
 }
+
+/** Postanschrift einer Behörde/Firma per Websuche – Fallback, wenn OpenStreetMap nichts Brauchbares liefert. */
+export async function lookupAddressWeb(q: string): Promise<Array<{ name: string; street: string; zip: string; city: string; source?: string }>> {
+  const res = await client().messages.create({
+    model: MODEL,
+    max_tokens: 600,
+    tools: [{ type: "web_search_20250305", name: "web_search", max_uses: 3 } as unknown as Anthropic.Tool],
+    system:
+      "Du suchst die aktuelle Postanschrift (Hausanschrift oder Postfach) einer deutschen Behörde, Stelle oder Firma. Nutze die Websuche und bevorzuge die offizielle Website. " +
+      'Antworte am Ende ausschließlich mit einem JSON-Array (max. 3 Einträge): [{"name":"…","street":"Straße Hausnummer oder Postfach","zip":"PLZ","city":"Ort","source":"URL"}]. ' +
+      "Nur Adressen, die du tatsächlich gefunden hast – nichts raten. Wenn nichts gefunden: [].",
+    messages: [{ role: "user", content: `Postanschrift von: ${q}` }],
+  });
+  const text = res.content.filter((c) => c.type === "text").map((c) => (c as { text: string }).text).join("\n");
+  const m = text.match(/\[[\s\S]*\]/);
+  if (!m) return [];
+  try {
+    const arr = JSON.parse(m[0]) as Array<{ name?: string; street?: string; zip?: string; city?: string; source?: string }>;
+    return arr.filter((a) => a.street && a.zip && a.city).map((a) => ({ name: a.name ?? q, street: a.street!, zip: a.zip!, city: a.city!, source: a.source })).slice(0, 3);
+  } catch {
+    return [];
+  }
+}
+
+export interface FillSuggestion {
+  placeholder: string; // inkl. eckiger Klammern, z. B. "[Datum der Zustellung]"
+  question: string; // verständliche Frage an den Nutzer
+  suggestions: string[]; // max. 3 Vorschläge zum Antippen
+}
+
+/** Für jeden Platzhalter im Brief: Frage + Vorschläge aus den Angaben des Absenders (nichts erfinden, was nicht in den Angaben steht). */
+export async function suggestFills(d: Draft, placeholders: string[]): Promise<FillSuggestion[]> {
+  if (!placeholders.length) return [];
+  const res = await client().messages.create({
+    model: MODEL,
+    max_tokens: 800,
+    system:
+      "Du hilfst einer Privatperson, Platzhalter in ihrem Brief auszufüllen. Antworte ausschließlich mit einem JSON-Array: " +
+      '[{"placeholder":"[…]","question":"…","suggestions":["…"]}] – ein Objekt je Platzhalter, in der gegebenen Reihenfolge. ' +
+      "question: kurze, konkrete Frage in Sie-Form (max. 70 Zeichen), die erklärt, was eingetragen werden soll. " +
+      "suggestions: 0–3 konkrete Werte, die sich aus den Angaben, dem Aktenzeichen, den Daten oder dem Brieftext ableiten lassen (z. B. ein Datum, das in den Angaben steht, oder 'Kontoauszüge Juli–September'). " +
+      "Keine erfundenen Namen, Beträge oder Daten. Wenn nichts ableitbar ist: leeres Array. Formatiere Daten als TT.MM.JJJJ.",
+    messages: [
+      {
+        role: "user",
+        content: `Heute: ${new Date().toLocaleDateString("de-DE")}\nAktenzeichen: ${d.reference || "–"}\nDatum des Schreibens: ${d.documentDate || "–"}\nFrist (berechnet): ${d.deadline || "–"}\nAngaben des Absenders: ${d.reason || "–"}\nAbsender: ${d.sender.name}, ${d.sender.street}, ${d.sender.zip} ${d.sender.city}\n\nPlatzhalter: ${JSON.stringify(placeholders)}\n\nBrief:\n${d.body}`,
+      },
+    ],
+  });
+  const text = res.content.find((c) => c.type === "text")?.text ?? "[]";
+  const m = text.match(/\[[\s\S]*\]/);
+  if (!m) return [];
+  try {
+    const arr = JSON.parse(m[0]) as Array<Partial<FillSuggestion>>;
+    return placeholders.map((p) => {
+      const hit = arr.find((a) => a.placeholder === p) ?? arr.find((a) => a.placeholder && p.includes(a.placeholder.replace(/^\[|\]$/g, "")));
+      return { placeholder: p, question: hit?.question?.slice(0, 120) || `Was soll bei ${p} stehen?`, suggestions: (hit?.suggestions ?? []).filter((s): s is string => typeof s === "string" && !!s.trim()).slice(0, 3) };
+    });
+  } catch {
+    return placeholders.map((p) => ({ placeholder: p, question: `Was soll bei ${p} stehen?`, suggestions: [] }));
+  }
+}

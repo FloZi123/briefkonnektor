@@ -3,11 +3,13 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ScreenHead, Disclaimer } from "@/components/ui";
 import { useDictation, DictateButton, appendText } from "@/components/dictate";
+import { Progress } from "@/components/progress";
+import { FillAssistant } from "@/components/fills";
 import { useDraft } from "@/lib/store";
 import { subjectLine } from "@/lib/subject";
 import { findPlaceholders } from "@/lib/placeholders";
 import { formCheck } from "@/lib/formcheck";
-import type { ReviewPoint } from "@/lib/ai";
+import type { ReviewPoint, FillSuggestion } from "@/lib/ai";
 
 const TAG: Record<ReviewPoint["kind"] | "form" | "rechtsbehelf" | "schriftform", string> = { fehlt: "fehlt", beleg: "Beleg", anlage: "Anlage", widerspruch: "prüfen", hinweis: "Hinweis", form: "Form", rechtsbehelf: "Rechtsbehelf", schriftform: "Schriftform" };
 
@@ -19,14 +21,19 @@ const CHIPS: Array<{ label: string; instruction: string }> = [
   { label: "Akteneinsicht", instruction: "Ergänze die Bitte um Akteneinsicht." },
 ];
 
+const GEN_STEPS = ["Angaben werden gelesen", "Brief wird formuliert", "Entwurf wird geprüft"];
+const EDIT_STEPS = ["Wunsch wird eingearbeitet", "Brief wird überarbeitet"];
+
 export default function EntwurfScreen() {
   const { draft, update, ready } = useDraft();
-  const [busy, setBusy] = useState<string | null>(null);
+  const [busy, setBusy] = useState<"init" | "chip" | null>(null);
   const [error, setError] = useState<string>();
   const [wish, setWish] = useState("");
   const [review, setReview] = useState<ReviewPoint[] | null>(null);
+  const [fills, setFills] = useState<FillSuggestion[]>([]);
   const [reviewing, setReviewing] = useState(false);
   const [reviewedBody, setReviewedBody] = useState("");
+  const [adjustOpen, setAdjustOpen] = useState(false);
   const dictate = useDictation((t) => setWish((w) => appendText(w, t)));
   const router = useRouter();
 
@@ -34,15 +41,14 @@ export default function EntwurfScreen() {
     setBusy(instruction ? "chip" : "init");
     setError(undefined);
     try {
-      const res = await fetch("/api/draft", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ draft, instruction }),
-      });
+      const res = await fetch("/api/draft", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ draft, instruction }) });
       if (!res.ok) throw new Error((await res.json()).error ?? "Entwurf konnte nicht erstellt werden");
       const { body } = (await res.json()) as { body: string };
       update({ body });
-      if (instruction) setWish("");
+      if (instruction) {
+        setWish("");
+        setAdjustOpen(false);
+      }
       void runReview(body);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Entwurf konnte nicht erstellt werden");
@@ -56,14 +62,22 @@ export default function EntwurfScreen() {
     setReviewing(true);
     try {
       const res = await fetch("/api/review", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ draft: { ...draft, body } }) });
-      const { points } = (await res.json()) as { points: ReviewPoint[] };
-      setReview(points ?? []);
+      const data = (await res.json()) as { points?: ReviewPoint[]; fills?: FillSuggestion[] };
+      setReview(data.points ?? []);
+      setFills(data.fills ?? []);
       setReviewedBody(body);
     } catch {
       setReview([]);
     } finally {
       setReviewing(false);
     }
+  }
+
+  /** Platzhalter im Text durch den Wert ersetzen (alle Vorkommen). */
+  function fill(placeholder: string, value: string) {
+    const v = value.trim();
+    if (!v) return;
+    update((d) => ({ body: d.body.split(placeholder).join(v) }));
   }
 
   useEffect(() => {
@@ -75,7 +89,8 @@ export default function EntwurfScreen() {
   if (!ready) return null;
   const placeholders = findPlaceholders(draft.body);
   const form = formCheck(draft);
-  const complete = placeholders.length === 0 && form.length === 0 && review && review.length === 0;
+  const hints = [...form.map((f) => ({ tag: TAG[f.kind], text: f.text, warn: f.severity === "warn" })), ...(review ?? []).map((r) => ({ tag: TAG[r.kind], text: r.text, warn: false }))];
+  const complete = placeholders.length === 0 && hints.length === 0 && review !== null && !reviewing;
 
   return (
     <main className="screen">
@@ -83,7 +98,7 @@ export default function EntwurfScreen() {
       <div className="stack" style={{ gap: 6, paddingTop: 8 }}>
         <h1 style={{ fontSize: 24 }}>Ihr Entwurf</h1>
         <p className="muted" style={{ fontSize: 13 }}>
-          Text direkt ändern, oder unten anpassen lassen.
+          {placeholders.length > 0 ? "Erst die fehlenden Angaben ergänzen, dann den Text prüfen." : "Text direkt im Feld ändern oder unten anpassen lassen."}
         </p>
       </div>
 
@@ -100,16 +115,9 @@ export default function EntwurfScreen() {
           </span>
           <strong>{subjectLine(draft.kind, draft.subject, draft.documentDate)}</strong>
         </div>
-        <textarea
-          id="body"
-          className="input"
-          style={{ minHeight: 320, fontSize: 15 }}
-          value={busy === "init" ? "Entwurf wird geschrieben …" : draft.body}
-          onChange={(e) => update({ body: e.target.value })}
-          onBlur={() => void runReview(draft.body)}
-          disabled={busy !== null}
-          aria-busy={busy !== null}
-        />
+
+        {busy && <Progress steps={busy === "init" ? GEN_STEPS : EDIT_STEPS} seconds={busy === "init" ? 18 : 12} />}
+
         {error && (
           <div className="errorbox">
             {error}{" "}
@@ -118,29 +126,32 @@ export default function EntwurfScreen() {
             </button>
           </div>
         )}
-        {busy === null && draft.body && (placeholders.length > 0 || form.length > 0 || reviewing || review !== null) && (
+
+        {!busy && draft.body && placeholders.length > 0 && <FillAssistant placeholders={placeholders} fills={fills} loading={reviewing && fills.length === 0} onFill={fill} />}
+
+        {!busy && draft.body && (
+          <textarea
+            id="body"
+            className="input"
+            style={{ minHeight: 300, fontSize: 15 }}
+            value={draft.body}
+            onChange={(e) => update({ body: e.target.value })}
+            onBlur={() => void runReview(draft.body)}
+          />
+        )}
+
+        {!busy && draft.body && placeholders.length === 0 && (hints.length > 0 || reviewing || review !== null) && (
           <div className={`reviewbox${complete ? " ok" : ""}`} aria-live="polite">
             <div className="title">
               {complete ? "Sieht vollständig aus" : "Vor der Unterschrift prüfen"}
               {reviewing && <span className="muted" style={{ fontWeight: 400, fontSize: 12 }}>· wird geprüft …</span>}
             </div>
-            {(placeholders.length > 0 || form.length > 0 || (review && review.length > 0)) && (
+            {hints.length > 0 && (
               <ul>
-                {placeholders.map((p) => (
-                  <li key={p} className="ph">
-                    Platzhalter {p} im Text ersetzen
-                  </li>
-                ))}
-                {form.map((f, i) => (
-                  <li key={"f" + i} className={f.severity === "warn" ? "warn" : ""}>
-                    <span className="tag">{TAG[f.kind]}</span>
-                    {f.text}
-                  </li>
-                ))}
-                {review?.map((r, i) => (
-                  <li key={i}>
-                    <span className="tag">{TAG[r.kind]}</span>
-                    {r.text}
+                {hints.map((h, i) => (
+                  <li key={i} className={h.warn ? "warn" : ""}>
+                    <span className="tag">{h.tag}</span>
+                    {h.text}
                   </li>
                 ))}
               </ul>
@@ -148,39 +159,39 @@ export default function EntwurfScreen() {
           </div>
         )}
 
-        <div className="row" style={{ gap: 8 }}>
-          {CHIPS.map((c) => (
-            <button key={c.label} type="button" className="chip" disabled={busy !== null || !draft.body} onClick={() => generate(c.instruction)}>
-              {c.label}
-            </button>
-          ))}
-        </div>
-
-        <div className="field" style={{ marginTop: 6 }}>
-          <label className="label" htmlFor="wish">
-            Oder sagen Sie, was anders sein soll – tippen oder diktieren
-          </label>
-          <textarea
-            id="wish"
-            className="input"
-            style={{ minHeight: 72 }}
-            value={wish}
-            onChange={(e) => setWish(e.target.value)}
-            placeholder="z. B. „Erwähne, dass ich seit 2019 nie zu spät gezahlt habe, und bitte um Ratenzahlung.“"
-            disabled={busy !== null}
-          />
-          <div className="row" style={{ gap: 10, alignItems: "center", justifyContent: "space-between" }}>
-            <DictateButton {...dictate} onClick={dictate.toggle} />
-            <button type="button" className="chip" style={{ borderColor: "var(--flink)", color: "var(--flink)" }} disabled={busy !== null || !draft.body || !wish.trim()} onClick={() => generate(wish.trim())}>
-              {busy === "chip" ? "Wird angepasst …" : "Entwurf anpassen"}
-            </button>
-          </div>
-        </div>
+        {!busy && draft.body && (
+          <details className="adjust" open={adjustOpen} onToggle={(e) => setAdjustOpen((e.target as HTMLDetailsElement).open)}>
+            <summary>Entwurf anpassen lassen</summary>
+            <div className="stack" style={{ gap: 10, paddingTop: 10 }}>
+              <div className="row" style={{ gap: 8 }}>
+                {CHIPS.map((c) => (
+                  <button key={c.label} type="button" className="chip" onClick={() => generate(c.instruction)}>
+                    {c.label}
+                  </button>
+                ))}
+              </div>
+              <textarea
+                id="wish"
+                className="input"
+                style={{ minHeight: 72 }}
+                value={wish}
+                onChange={(e) => setWish(e.target.value)}
+                placeholder="Oder in eigenen Worten, tippen oder diktieren: „Erwähne, dass ich seit 2019 nie zu spät gezahlt habe, und bitte um Ratenzahlung.“"
+              />
+              <div className="row" style={{ gap: 10, alignItems: "center", justifyContent: "space-between" }}>
+                <DictateButton {...dictate} onClick={dictate.toggle} />
+                <button type="button" className="chip" style={{ borderColor: "var(--flink)", color: "var(--flink)" }} disabled={!wish.trim()} onClick={() => generate(wish.trim())}>
+                  Anpassen
+                </button>
+              </div>
+            </div>
+          </details>
+        )}
       </div>
 
       <div className="screen-foot">
         <button className="btn btn-primary" disabled={!draft.body || busy !== null || placeholders.length > 0} onClick={() => router.push("/brief/unterschrift")}>
-          {placeholders.length > 0 ? `Noch ${placeholders.length} Platzhalter ersetzen` : "Weiter zur Unterschrift"}
+          {placeholders.length > 0 ? `Noch ${placeholders.length} Angabe${placeholders.length > 1 ? "n" : ""} ergänzen` : "Weiter zur Unterschrift"}
         </button>
         <Disclaimer />
       </div>
