@@ -5,6 +5,12 @@ export function subjectLine(kind: string, subject: string, date: string): string
       return `Widerspruch gegen den Bescheid${d}${subject ? ` – ${subject}` : ""}`;
     case "einspruch":
       return `Einspruch gegen den Bußgeldbescheid${d}${subject ? ` – ${subject}` : ""}`;
+    case "unterlagen":
+      return `Ihr Schreiben${d} – Nachreichung von Unterlagen${subject ? `: ${subject}` : ""}`;
+    case "nachfrage":
+      return `Ihr Schreiben${d} – Rückfrage und Stellungnahme${subject ? `: ${subject}` : ""}`;
+    case "fristverlaengerung":
+      return `Ihr Schreiben${d} – Bitte um Fristverlängerung${subject ? `: ${subject}` : ""}`;
     case "nebenkosten":
       return `Widerspruch gegen die Nebenkostenabrechnung${d}`;
     case "maengel":

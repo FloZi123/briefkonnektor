@@ -15,10 +15,11 @@ export default function Home() {
       </div>
 
       <div className="stack" style={{ gap: 10, paddingTop: 16 }}>
-        <span className="eyebrow">Behördenbrief in 2 Minuten</span>
-        <h1 style={{ fontSize: 30 }}>Bescheid fotografieren. Widerspruch fertig.</h1>
+        <span className="eyebrow">Behördenpost verstehen und beantworten</span>
+        <h1 style={{ fontSize: 30 }}>Bescheid bekommen? Verstehen, antworten, abschicken.</h1>
         <p className="muted" style={{ fontSize: 14 }}>
-          Wir lesen Behörde, Aktenzeichen und Frist aus dem Foto und schreiben den Brief nach Ihren Angaben.
+          Foto machen – wir erklären in einfachen Worten, was drinsteht und bis wann Sie reagieren sollten. Dann schreiben wir die Antwort nach Ihren
+          Angaben und schicken sie per Post. Auf Wunsch als Einschreiben.
         </p>
       </div>
 
@@ -32,6 +33,21 @@ export default function Home() {
           Foto wird nach der Erkennung sofort gelöscht
         </p>
       </div>
+
+      <ol className="steps">
+        <li>
+          <strong>Brief fotografieren</strong>
+          <span>Behörde, Aktenzeichen, Frist und Inhalt werden erkannt – nichts abtippen.</span>
+        </li>
+        <li>
+          <strong>Verstehen und entscheiden</strong>
+          <span>Kurze Erklärung in einfacher Sprache. Sie wählen: Widerspruch, Unterlagen nachreichen, Nachfrage, mehr Zeit.</span>
+        </li>
+        <li>
+          <strong>Prüfen, unterschreiben, abschicken</strong>
+          <span>Entwurf anpassen, mit dem Finger unterschreiben, als Brief oder Einschreiben versenden – oder als PDF laden.</span>
+        </li>
+      </ol>
 
       <div className="stack" style={{ gap: 10 }}>
         <span className="label">Oder ohne Foto: Briefart wählen, dann tippen oder diktieren, worum es geht</span>

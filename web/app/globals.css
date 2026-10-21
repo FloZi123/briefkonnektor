@@ -136,3 +136,10 @@ textarea.input { min-height: 160px; line-height: 1.5; resize: vertical; }
 .reviewbox.ok { background: var(--zugestellt-soft); border-color: #a9dcc6; }
 .reviewbox li.warn { color: var(--frist); }
 .reviewbox li.warn .tag { color: var(--frist); }
+
+/* Drei Schritte auf der Startseite */
+.steps { list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 10px; counter-reset: step; }
+.steps li { display: grid; grid-template-columns: 28px 1fr; column-gap: 12px; align-items: start; counter-increment: step; }
+.steps li::before { content: counter(step); width: 28px; height: 28px; border-radius: 50%; background: var(--flink); color: var(--flink-ink); font-family: var(--font-mono); font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center; grid-row: span 2; }
+.steps strong { font-family: var(--font-display); font-weight: 700; font-size: 15px; }
+.steps span { display: block; font-size: 13px; color: var(--ink-muted); line-height: 1.45; }

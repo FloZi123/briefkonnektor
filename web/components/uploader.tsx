@@ -38,8 +38,9 @@ export function Uploader() {
         subject: x.subject ?? d.subject,
         remedy: x.remedy,
         remedyText: x.remedyText,
+        understanding: { documentType: x.documentType, summary: x.summary, demand: x.demand, deadlineHint: x.deadlineHint, options: x.options },
       });
-      router.push("/brief/daten?from=photo");
+      router.push(x.summary ? "/brief/verstehen" : "/brief/daten?from=photo");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Erkennung fehlgeschlagen");
     } finally {

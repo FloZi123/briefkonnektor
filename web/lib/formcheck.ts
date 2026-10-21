@@ -64,6 +64,17 @@ export function formCheck(d: Draft): FormPoint[] {
       if (!has(b, /iban|konto|überweis/i)) out.push({ kind: "form", text: "Bankverbindung (IBAN) angeben, damit gezahlt werden kann.", severity: "info" });
       if (!has(b, DATE_RE)) out.push({ kind: "form", text: "Datum der ursprünglichen Rechnung bzw. Fälligkeit nennen.", severity: "info" });
       break;
+    case "unterlagen":
+      if (!has(b, /anlage|anbei|beigefügt|beiliegend|im anhang/i)) out.push({ kind: "form", text: "Beigefügte Unterlagen im Brief benennen („Anlagen: …“) – sonst kann die Stelle den Eingang nicht zuordnen.", severity: "warn" });
+      if (!d.reference) out.push({ kind: "form", text: "Aktenzeichen bzw. Kunden-/Vorgangsnummer eintragen, damit die Unterlagen zur Akte kommen.", severity: "warn" });
+      break;
+    case "nachfrage":
+      if (!has(b, /\?/) && !has(b, /bitte (teilen|erläutern|erklären|nennen)/i)) out.push({ kind: "form", text: "Die Frage bzw. Bitte um Auskunft sollte klar erkennbar sein.", severity: "info" });
+      break;
+    case "fristverlaengerung":
+      if (!has(b, DATE_RE)) out.push({ kind: "form", text: "Neuen Termin nennen, bis zu dem Sie liefern – ein konkretes Datum.", severity: "warn" });
+      if (!d.reference) out.push({ kind: "form", text: "Aktenzeichen eintragen, damit die Verlängerung zum Vorgang kommt.", severity: "warn" });
+      break;
     case "beschwerde":
       if (!has(b, DATE_RE)) out.push({ kind: "form", text: "Datum des Vorfalls nennen, auf den sich die Beschwerde bezieht.", severity: "info" });
       break;

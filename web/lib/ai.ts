@@ -18,7 +18,7 @@ export async function extractFromDocument(bytes: Buffer, mime: string): Promise<
 
   const res = await client().messages.create({
     model: MODEL,
-    max_tokens: 1200,
+    max_tokens: 1600,
     system:
       "Du extrahierst Felder aus einem fotografierten deutschen Behörden- oder Geschäftsschreiben. Antworte ausschließlich mit einem JSON-Objekt, ohne Erklärung. " +
       "Felder: kind (eine der Briefarten: " + KINDS + " – die Briefart, die der Empfänger des Dokuments jetzt vermutlich schreiben will; bei Bescheiden mit Rechtsbehelfsbelehrung 'widerspruch'), " +
@@ -27,7 +27,11 @@ export async function extractFromDocument(bytes: Buffer, mime: string): Promise<
       "reference (Aktenzeichen, Kunden-, Vertrags- oder Geschäftszeichen), documentDate (TT.MM.JJJJ), subject (worum es geht, ein Satz, deutsch), " +
       "deadlineHint (Frist laut Rechtsbehelfsbelehrung oder Text, wörtlich), " +
       "remedy (Rechtsbehelf laut Rechtsbehelfsbelehrung: widerspruch | einspruch | klage | beschwerde | keine – bei Bußgeldbescheiden ist es 'einspruch', dann auch kind='einspruch'), " +
-      "remedyText (Kernsatz der Rechtsbehelfsbelehrung, max. 160 Zeichen), amount (Betrag falls genannt), confidence (high|medium|low). " +
+      "remedyText (Kernsatz der Rechtsbehelfsbelehrung, max. 160 Zeichen), amount (Betrag falls genannt), confidence (high|medium|low), " +
+      "documentType (Art des Schreibens in 1–2 Wörtern: Bescheid, Aufforderung, Anhörung, Mahnung, Mitteilung, Rechnung, Vertrag …), " +
+      "summary (3–5 kurze Sätze in einfacher Sprache für Laien: wer schreibt, was wurde entschieden oder verlangt, was passiert, wenn man nichts tut – nur was im Dokument steht, keine Bewertung, keine Empfehlung), " +
+      "demand (was konkret vom Empfänger verlangt wird, ein Satz; weglassen, wenn nichts verlangt wird), " +
+      "options (Array der passenden Briefarten aus der Liste, beste zuerst, max. 3 – z. B. bei einer Aufforderung zur Mitwirkung: unterlagen, fristverlaengerung, nachfrage; bei einem ablehnenden Bescheid: widerspruch, nachfrage). " +
       "Unlesbare oder fehlende Felder weglassen, nie raten. Bei Adressen Straße und Hausnummer in street, PLZ fünfstellig in zip.",
     messages: [{ role: "user", content: [source, { type: "text", text: "Extrahiere die Felder als JSON." }] }],
   });
@@ -62,6 +66,9 @@ export async function draftLetter(d: Draft, instruction?: string): Promise<strin
     "Grußformel: 'Mit freundlichen Grüßen'. " +
     "Verboten (Rechtsdienstleistungsgesetz): Erfolgsaussichten bewerten, Paragraphen oder Urteile zitieren, Fristen berechnen, rechtliche Behauptungen aufstellen, die nicht aus den Angaben stammen. Erlaubt: die Erklärung selbst ('lege ich fristgerecht Widerspruch ein'), Bitten (Überprüfung, Akteneinsicht, Begründung), Fristen setzen bei Mängelanzeige/Mahnung. " +
     "Bei Einspruch gegen Bußgeldbescheid: 'lege ich Einspruch ein', Begründung nur wenn Angaben vorhanden (sonst ankündigen, dass sie nach Akteneinsicht folgt), um Akteneinsicht bitten. " +
+    "Bei Unterlagen nachreichen: Bezug auf die Aufforderung, beigefügte Unterlagen als Aufzählung (nur die aus den Angaben), fehlende Unterlagen mit Grund und Nachreichtermin nennen, um Eingangsbestätigung bitten. " +
+    "Bei Nachfrage/Stellungnahme: Fragen nummeriert und konkret, Stellungnahme sachlich zu den Punkten des Schreibens, um schriftliche Antwort bitten; nichts einräumen, was der Absender nicht angegeben hat. " +
+    "Bei Fristverlängerung: Bezug, bisherige Frist, Grund aus den Angaben, konkreter neuer Termin (sonst Platzhalter), Bitte um kurze Bestätigung; Zusicherung, bis dahin zu liefern. " +
     "Bei Widerspruch: Widerspruch einlegen, Begründung aus den Angaben, um Überprüfung, Akteneinsicht und schriftliche Begründung bitten, bis zur Entscheidung um Aussetzung der Vollziehung/Aufrechnung bitten. " +
     "Bei Mängelanzeige: Mangel konkret, Frist zur Beseitigung von 14 Tagen ab Zugang setzen, Mietminderung vorbehalten. " +
     "Bei Mahnung: Forderung, Grund, Zahlungsfrist 14 Tage, Ankündigung weiterer Schritte ohne Drohung. " +

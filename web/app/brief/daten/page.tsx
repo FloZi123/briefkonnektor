@@ -35,7 +35,7 @@ function DatenScreen() {
 
   return (
     <main className="screen">
-      <ScreenHead step={2} back="/" />
+      <ScreenHead step={2} back={fromPhoto && draft.understanding?.summary ? "/brief/verstehen" : "/"} />
       <div className="stack" style={{ gap: 6, paddingTop: 8 }}>
         <h1 style={{ fontSize: 24 }}>{fromPhoto ? "Das haben wir erkannt" : kind.label}</h1>
         <p className="muted" style={{ fontSize: 13 }}>
