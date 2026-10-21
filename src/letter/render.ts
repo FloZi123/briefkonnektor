@@ -45,6 +45,8 @@ export interface RenderInput {
 export interface RenderOutput {
   pdf: Uint8Array;
   pages: number;
+  /** Layout-Prüfung nach dem Rendern – leer = alles innerhalb der DIN-5008-Zonen */
+  warnings: string[];
 }
 
 function countryName(code: string): string | undefined {
@@ -94,7 +96,20 @@ function wrap(text: string, font: PDFFont, size: number, maxWidth: number): stri
   return out;
 }
 
+/**
+ * Layout-Prüfung: jede gezeichnete Zeile wird gegen den rechten Rand gemessen, die Anschrift gegen die Fensterzone,
+ * der Betreff gegen die 2-Zeilen-Grenze. Verstöße werden gesammelt, nicht geworfen – der Aufrufer entscheidet.
+ */
+class LayoutCheck {
+  warnings: string[] = [];
+  line(label: string, text: string, font: PDFFont, size: number, x: number, maxRight: number) {
+    const w = font.widthOfTextAtSize(text, size);
+    if (x + w > maxRight + 0.5) this.warnings.push(`${label}: Zeile ragt ${((x + w - maxRight) / 2.834645669).toFixed(1)} mm über den Rand: „${text.slice(0, 40)}…“`);
+  }
+}
+
 export async function renderLetter(input: RenderInput): Promise<RenderOutput> {
+  const check = new LayoutCheck();
   const doc = await PDFDocument.create();
   doc.setTitle(input.subject);
   doc.setAuthor(input.sender.name);
@@ -149,23 +164,32 @@ export async function renderLetter(input: RenderInput): Promise<RenderOutput> {
     color: grey,
   });
   y = A4.h - LAYOUT.addrZoneTop - fs; // erste Zeile der Anschriftzone
-  for (const line of addressLines(input.recipient, true)) {
+  const recipientLines = addressLines(input.recipient, true);
+  if (recipientLines.length > 6) check.warnings.push(`Anschrift hat ${recipientLines.length} Zeilen (max. 6 in der Anschriftzone)`);
+  for (const line of recipientLines) {
+    check.line("Anschrift", line, font, fs, LAYOUT.addrLeft, LAYOUT.addrLeft + LAYOUT.addrWidth);
     page.drawText(line, { x: LAYOUT.addrLeft, y, size: fs, font, color: black });
     y -= lh;
   }
+  if (A4.h - y > mm(90)) check.warnings.push("Anschrift reicht über die Fensterzone (90 mm) hinaus");
 
   // --- Informationsblock rechts ---
   y = A4.h - LAYOUT.infoTop;
-  const info = [`Datum: ${input.date}`, ...(input.infoLines ?? [])];
+  const infoWidth = A4.w - mm(10) - LAYOUT.infoLeft; // bis 10 mm vor der Blattkante
+  const info = [`Datum: ${input.date}`, ...(input.infoLines ?? [])].flatMap((l) => wrap(l, font, 9.5, infoWidth));
   for (const line of info) {
+    check.line("Infoblock", line, font, 9.5, LAYOUT.infoLeft, A4.w - mm(10));
     page.drawText(line, { x: LAYOUT.infoLeft, y, size: 9.5, font, color: black });
     y -= 9.5 * 1.4;
   }
 
   // --- Betreff (fett, max. 2 Zeilen, Umbruch am rechten Rand) ---
-  const subjectLines = wrap(input.subject, bold, fs, textWidth).slice(0, 2);
+  const subjectAll = wrap(input.subject, bold, fs, textWidth);
+  const subjectLines = subjectAll.slice(0, 2);
+  if (subjectAll.length > 2) check.warnings.push(`Betreff braucht ${subjectAll.length} Zeilen, nur 2 werden gedruckt`);
   y = A4.h - LAYOUT.subjectTop;
   for (const line of subjectLines) {
+    check.line("Betreff", line, bold, fs, LAYOUT.marginLeft, A4.w - LAYOUT.marginRight);
     page.drawText(line, { x: LAYOUT.marginLeft, y, size: fs, font: bold, color: black });
     y -= lh;
   }
@@ -182,7 +206,10 @@ export async function renderLetter(input: RenderInput): Promise<RenderOutput> {
   };
   for (const line of lines) {
     if (y < LAYOUT.bodyBottom) breakPage();
-    if (line) page.drawText(line, { x: LAYOUT.marginLeft, y, size: fs, font, color: black });
+    if (line) {
+      check.line("Text", line, font, fs, LAYOUT.marginLeft, A4.w - LAYOUT.marginRight);
+      page.drawText(line, { x: LAYOUT.marginLeft, y, size: fs, font, color: black });
+    }
     y -= lh;
   }
 
@@ -204,6 +231,7 @@ export async function renderLetter(input: RenderInput): Promise<RenderOutput> {
     y -= lh;
   }
 
+  if (pages > 4) check.warnings.push(`Brief hat ${pages} Seiten`);
   const pdf = await doc.save();
-  return { pdf, pages };
+  return { pdf, pages, warnings: check.warnings };
 }

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { createOrder, updateOrder } from "@/lib/orders";
-import { renderDraft } from "@/lib/letter";
+import { renderDraft, layoutProblem } from "@/lib/letter";
 import { PRICES, euro, type Draft } from "@/lib/types";
 
 export const runtime = "nodejs";
@@ -15,7 +15,10 @@ export async function POST(req: Request) {
   const price = PRICES[draft.shipping] ?? PRICES.post;
 
   // PDF sofort rendern und an der Bestellung speichern – so ist es nach der Zahlung ohne Browser da
-  const { pdf } = await renderDraft(draft);
+  const { pdf, warnings } = await renderDraft(draft);
+  if (warnings.length) console.warn("layout", warnings);
+  const problem = layoutProblem(warnings);
+  if (problem) return NextResponse.json({ error: problem }, { status: 422 });
   const order = await createOrder(draft, price.cents, euro(price.cents), pdf);
 
   // Ohne Stripe-Key (lokal/Preview): Zahlung simulieren

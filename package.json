@@ -10,7 +10,7 @@
     "build": "npm run typecheck",
     "start": "tsx src/server.ts",
     "dev": "tsx watch src/server.ts",
-    "test": "npm run typecheck && tsx test/client.ts && tsx test/pingen.ts",
+    "test": "npm run typecheck && tsx test/client.ts && tsx test/pingen.ts && tsx test/render.ts",
     "pingen:check": "tsx test/pingen-live.ts",
     "web": "npm --prefix web run dev",
     "web:build": "npm --prefix web run build"

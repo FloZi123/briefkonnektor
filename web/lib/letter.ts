@@ -7,8 +7,16 @@ import { today } from "./dates";
 import type { Draft } from "./types";
 import type { Order } from "./orders";
 
+/** Aus Layout-Warnungen des Renderers eine Meldung für den Nutzer machen – oder null, wenn nur Hinweise. */
+export function layoutProblem(warnings: string[]): string | null {
+  if (warnings.some((w) => w.startsWith("Anschrift"))) return "Die Empfängeranschrift ist zu lang für das Adressfenster – bitte den Zusatz kürzen oder weglassen.";
+  if (warnings.some((w) => w.startsWith("Betreff braucht"))) return "Der Betreff ist zu lang – bitte „Worum geht es?“ kürzer fassen (max. zwei Zeilen).";
+  if (warnings.some((w) => w.startsWith("Text") || w.startsWith("Infoblock"))) return "Ein Wort oder eine Angabe ist zu lang für die Zeile – bitte Text bzw. Aktenzeichen prüfen.";
+  return null;
+}
+
 /** DIN-5008-PDF aus dem Entwurf, inkl. Unterschrift. */
-export async function renderDraft(d: Draft): Promise<{ pdf: Uint8Array; pages: number }> {
+export async function renderDraft(d: Draft): Promise<{ pdf: Uint8Array; pages: number; warnings: string[] }> {
   const sig = d.signature?.startsWith("data:image/png;base64,") ? Buffer.from(d.signature.slice("data:image/png;base64,".length), "base64") : undefined;
   return renderLetter({
     sender: d.sender,
