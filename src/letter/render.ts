@@ -14,7 +14,8 @@ const LAYOUT = {
   marginLeft: mm(25),
   marginRight: mm(20),
   addrLeft: mm(20),
-  addrTop: mm(45), // Beginn Anschriftfeld (Form B)
+  addrTop: mm(45), // Beginn Anschriftfeld (Form B): Zusatz-/Vermerkzone 45–62,7 mm mit Rücksendeangabe
+  addrZoneTop: mm(62.7), // Anschriftzone 62,7–90 mm (6 Zeilen) – sichtbar im Fenster von DL/C6-5-Umschlägen
   addrWidth: mm(85),
   infoLeft: mm(125), // Informationsblock
   infoTop: mm(50),
@@ -147,7 +148,7 @@ export async function renderLetter(input: RenderInput): Promise<RenderOutput> {
     thickness: 0.3,
     color: grey,
   });
-  y = A4.h - LAYOUT.addrTop - mm(9);
+  y = A4.h - LAYOUT.addrZoneTop - fs; // erste Zeile der Anschriftzone
   for (const line of addressLines(input.recipient, true)) {
     page.drawText(line, { x: LAYOUT.addrLeft, y, size: fs, font, color: black });
     y -= lh;
@@ -161,12 +162,17 @@ export async function renderLetter(input: RenderInput): Promise<RenderOutput> {
     y -= 9.5 * 1.4;
   }
 
-  // --- Betreff ---
-  page.drawText(input.subject, { x: LAYOUT.marginLeft, y: A4.h - LAYOUT.subjectTop, size: fs, font: bold, color: black });
+  // --- Betreff (fett, max. 2 Zeilen, Umbruch am rechten Rand) ---
+  const subjectLines = wrap(input.subject, bold, fs, textWidth).slice(0, 2);
+  y = A4.h - LAYOUT.subjectTop;
+  for (const line of subjectLines) {
+    page.drawText(line, { x: LAYOUT.marginLeft, y, size: fs, font: bold, color: black });
+    y -= lh;
+  }
 
-  // --- Text mit Seitenumbruch ---
+  // --- Text mit Seitenumbruch: 2 Leerzeilen unter dem Betreff ---
   const lines = wrap(input.body, font, fs, textWidth);
-  y = A4.h - LAYOUT.bodyTop;
+  y = Math.min(A4.h - LAYOUT.bodyTop, y - lh);
   let pages = 1;
   const breakPage = () => {
     page = newPage();
@@ -182,7 +188,7 @@ export async function renderLetter(input: RenderInput): Promise<RenderOutput> {
 
   // --- Unterschrift + Name unter der Grußformel ---
   if (input.signaturePng || input.signatoryName) {
-    const sigH = input.signaturePng ? mm(18) : 0;
+    const sigH = input.signaturePng ? mm(18) : mm(14); // ohne Bild: Platz für die handschriftliche Unterschrift
     const need = sigH + lh * 2;
     if (y - need < LAYOUT.bodyBottom) breakPage();
     if (input.signaturePng) {
