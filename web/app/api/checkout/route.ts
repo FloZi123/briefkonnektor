@@ -57,6 +57,8 @@ async function handle(req: Request) {
       },
     ],
     metadata: { orderId: order.id },
+    // Kontoauszug des Kunden: "FLINKBRIEF FB-2026-…" statt des Stripe-Kontonamens (Konto wird mit anderen Projekten geteilt)
+    payment_intent_data: { statement_descriptor_suffix: "FLINKBRIEF", description: `Flinkbrief ${order.id}` },
     success_url: `${base()}/brief/fertig?order=${order.id}&t=${order.token}`,
     cancel_url: `${base()}/brief/versand`,
     // Widerrufsrecht erlischt mit Ausführungsbeginn (§ 312g BGB) – Zustimmung im Checkout
