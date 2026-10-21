@@ -6,9 +6,10 @@ import { PRICES } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
-export default async function FertigScreen({ searchParams }: { searchParams: Promise<{ order?: string }> }) {
-  const { order: id } = await searchParams;
-  const order = id ? await getOrder(id) : undefined;
+export default async function FertigScreen({ searchParams }: { searchParams: Promise<{ order?: string; t?: string }> }) {
+  const { order: id, t } = await searchParams;
+  const found = id ? await getOrder(id) : undefined;
+  const order = found && t && found.token === t ? found : undefined; // ohne passendes Token keine Daten
 
   if (!order) {
     return (
@@ -16,8 +17,9 @@ export default async function FertigScreen({ searchParams }: { searchParams: Pro
         <div className="screen-head"><Logo /></div>
         <div className="stack" style={{ paddingTop: 40, alignItems: "center", textAlign: "center" }}>
           <h1 style={{ fontSize: 24 }}>Bestellung nicht gefunden</h1>
-          <p className="muted">Der Link ist ungültig oder abgelaufen. Prüfen Sie die Bestätigungs-E-Mail.</p>
-          <Link href="/" className="btn btn-secondary" style={{ marginTop: 16 }}>Zur Startseite</Link>
+          <p className="muted">Der Link ist ungültig oder abgelaufen. Prüfen Sie die Bestätigungs-E-Mail oder rufen Sie den Status mit Bestellnummer und E-Mail ab.</p>
+          <Link href="/status" className="btn btn-primary" style={{ marginTop: 16 }}>Status abrufen</Link>
+          <Link href="/" className="btn btn-secondary">Zur Startseite</Link>
         </div>
       </main>
     );

@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     await updateOrder(order);
     const { dispatchOrder } = await import("@/lib/letter");
     await updateOrder(await dispatchOrder(order));
-    return NextResponse.json({ url: `${base()}/brief/fertig?order=${order.id}`, simulated: true });
+    return NextResponse.json({ url: `${base()}/brief/fertig?order=${order.id}&t=${order.token}`, simulated: true });
   }
 
   const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
       },
     ],
     metadata: { orderId: order.id },
-    success_url: `${base()}/brief/fertig?order=${order.id}`,
+    success_url: `${base()}/brief/fertig?order=${order.id}&t=${order.token}`,
     cancel_url: `${base()}/brief/versand`,
     // Widerrufsrecht erlischt mit Ausführungsbeginn (§ 312g BGB) – Zustimmung im Checkout
     consent_collection: { terms_of_service: "required" },
