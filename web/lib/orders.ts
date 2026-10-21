@@ -89,6 +89,16 @@ interface Row {
   last_error: string | null;
 }
 
+/** TT.MM.JJJJ ↔ ISO (Postgres date) */
+const toIsoDate = (de?: string) => {
+  const m = de?.trim().match(/^(\d{1,2})\.(\d{1,2})\.(\d{4})$/);
+  return m ? `${m[3]}-${m[2].padStart(2, "0")}-${m[1].padStart(2, "0")}` : null;
+};
+const fromIsoDate = (iso?: string | null) => {
+  const m = iso?.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  return m ? `${m[3]}.${m[2]}.${m[1]}` : undefined;
+};
+
 const toRow = (o: Order): Omit<Row, "created_at"> & { created_at?: string } => ({
   id: o.id,
   token: o.token,
@@ -100,7 +110,7 @@ const toRow = (o: Order): Omit<Row, "created_at"> & { created_at?: string } => (
   email: o.email,
   subject: o.subject,
   recipient_name: o.recipientName,
-  deadline: o.deadline ?? null,
+  deadline: toIsoDate(o.deadline),
   draft: o.draft,
   pdf_path: o.pdf ? `${o.id}.pdf` : null,
   carrier_ref: o.carrierRef ?? null,
@@ -121,7 +131,7 @@ const fromRow = (r: Row): Order => ({
   email: r.email,
   subject: r.subject,
   recipientName: r.recipient_name,
-  deadline: r.deadline ?? undefined,
+  deadline: fromIsoDate(r.deadline),
   draft: r.draft,
   carrierRef: r.carrier_ref ?? undefined,
   carrierStatus: r.carrier_status ?? undefined,

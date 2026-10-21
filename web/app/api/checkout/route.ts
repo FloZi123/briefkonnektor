@@ -9,6 +9,15 @@ export const runtime = "nodejs";
 const base = () => process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3001";
 
 export async function POST(req: Request) {
+  try {
+    return await handle(req);
+  } catch (e) {
+    console.error("checkout failed", e);
+    return NextResponse.json({ error: "Die Bestellung konnte nicht angelegt werden. Bitte noch einmal versuchen – Ihr Entwurf bleibt erhalten." }, { status: 500 });
+  }
+}
+
+async function handle(req: Request) {
   const { draft } = (await req.json()) as { draft: Draft };
   const missing = !draft?.body ? "Brieftext fehlt" : !draft.recipient?.name ? "Empfänger fehlt" : !draft.email ? "E-Mail-Adresse fehlt" : null;
   if (missing) return NextResponse.json({ error: `${missing} – bitte zum entsprechenden Schritt zurückgehen.` }, { status: 400 });
