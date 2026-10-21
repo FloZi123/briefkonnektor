@@ -14,8 +14,13 @@ export default function VersandScreen() {
 
   const price = PRICES[draft.shipping];
   const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(draft.email);
+  const missing = !draft.body ? { text: "Der Brieftext fehlt – bitte den Entwurf noch einmal erstellen.", href: "/brief/entwurf", label: "Zum Entwurf" } : !draft.recipient.name || !draft.recipient.street || !draft.sender.name ? { text: "Empfänger- oder Absenderangaben fehlen.", href: "/brief/daten", label: "Zu den Angaben" } : null;
 
   async function pay() {
+    if (missing) {
+      setError(missing.text);
+      return;
+    }
     setBusy(true);
     setError(undefined);
     try {
@@ -61,6 +66,13 @@ export default function VersandScreen() {
           </button>
         </div>
       </div>
+
+      {missing && (
+        <div className="errorbox" style={{ marginTop: 16, display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+          <span style={{ flex: 1 }}>{missing.text}</span>
+          <a href={missing.href} className="chip" style={{ textDecoration: "none" }}>{missing.label}</a>
+        </div>
+      )}
 
       {needsWrittenForm(draft) && (
         <div className="errorbox" style={{ marginTop: 16 }}>

@@ -17,24 +17,54 @@ const empty: Draft = {
   email: "",
 };
 
+const TTL_MS = 24 * 60 * 60 * 1000; // Entwurf bleibt 24 h erhalten (auch bei Tab-Wechsel, Kamera, Stripe, Neustart des Browsers)
+
+function storage(): Storage | undefined {
+  try {
+    return window.localStorage;
+  } catch {
+    try {
+      return window.sessionStorage;
+    } catch {
+      return undefined;
+    }
+  }
+}
+
 export function loadDraft(): Draft {
   try {
-    const raw = sessionStorage.getItem(KEY);
-    return raw ? { ...empty, ...(JSON.parse(raw) as Partial<Draft>) } : { ...empty };
+    const st = storage();
+    const raw = st?.getItem(KEY);
+    if (!raw) return { ...empty };
+    const parsed = JSON.parse(raw) as Partial<Draft> & { savedAt?: number };
+    if (parsed.savedAt && Date.now() - parsed.savedAt > TTL_MS) {
+      st?.removeItem(KEY);
+      return { ...empty };
+    }
+    const { savedAt: _ignored, ...d } = parsed;
+    void _ignored;
+    return { ...empty, ...d };
   } catch {
     return { ...empty };
   }
 }
 export function saveDraft(d: Draft) {
   try {
-    sessionStorage.setItem(KEY, JSON.stringify(d));
+    storage()?.setItem(KEY, JSON.stringify({ ...d, savedAt: Date.now() }));
   } catch {
     /* privater Modus o. ä. – Flow läuft trotzdem im State weiter */
   }
 }
+/** Gibt es einen angefangenen Brief? (für „Entwurf fortsetzen“ auf der Startseite) */
+export function hasDraft(): { step: string; label: string } | null {
+  const d = loadDraft();
+  if (d.body) return { step: d.signature ? "/brief/versand" : "/brief/entwurf", label: d.recipient.name ? `${d.recipient.name}` : "Ihr Entwurf" };
+  if (d.recipient.name || d.subject || d.reason) return { step: "/brief/daten", label: d.recipient.name || "Ihre Angaben" };
+  return null;
+}
 export function clearDraft() {
   try {
-    sessionStorage.removeItem(KEY);
+    storage()?.removeItem(KEY);
   } catch {}
 }
 

@@ -10,7 +10,8 @@ const base = () => process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3001";
 
 export async function POST(req: Request) {
   const { draft } = (await req.json()) as { draft: Draft };
-  if (!draft?.body || !draft.email || !draft.recipient?.name) return NextResponse.json({ error: "Entwurf unvollständig" }, { status: 400 });
+  const missing = !draft?.body ? "Brieftext fehlt" : !draft.recipient?.name ? "Empfänger fehlt" : !draft.email ? "E-Mail-Adresse fehlt" : null;
+  if (missing) return NextResponse.json({ error: `${missing} – bitte zum entsprechenden Schritt zurückgehen.` }, { status: 400 });
   const price = PRICES[draft.shipping] ?? PRICES.post;
 
   // PDF sofort rendern und an der Bestellung speichern – so ist es nach der Zahlung ohne Browser da

@@ -3,6 +3,7 @@ import { Logo } from "@/components/ui";
 import { LETTER_KINDS, PRICES, euro } from "@/lib/types";
 import { Uploader } from "@/components/uploader";
 import { Footer } from "@/components/legal";
+import { ResumeDraft } from "@/components/resume";
 
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
       </div>
 
       <div style={{ paddingBlock: 20 }}>
+        <ResumeDraft />
         <Uploader />
         <p className="muted" style={{ marginTop: 10, fontSize: 12, textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">

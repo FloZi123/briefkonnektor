@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/ui";
 import { Footer } from "@/components/legal";
+import { ClearDraftOnDone } from "@/components/resume";
 import { getOrder } from "@/lib/orders";
 import { PRICES } from "@/lib/types";
 
@@ -41,6 +42,7 @@ export default async function FertigScreen({ searchParams }: { searchParams: Pro
 
   return (
     <main className="screen">
+      {paid && <ClearDraftOnDone />}
       <div className="screen-head"><Logo /></div>
       <div className="stack" style={{ paddingTop: 32, alignItems: "center", textAlign: "center", gap: 14 }}>
         <span style={{ width: 64, height: 64, borderRadius: "50%", background: paid ? "var(--zugestellt)" : "var(--paper-200)", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>
