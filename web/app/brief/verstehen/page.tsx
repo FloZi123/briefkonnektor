@@ -47,7 +47,7 @@ export default function VerstehenScreen() {
         </p>
       </div>
 
-      <div className="card" style={{ padding: "14px 16px", marginTop: 14, fontSize: 15, lineHeight: 1.55 }}>
+      <div className="letter" style={{ marginTop: 14, fontSize: 15, lineHeight: 1.55, gap: 0 }}>
         {u.summary.split(/\n+/).map((p, i) => (
           <p key={i} style={{ margin: i ? "8px 0 0" : 0 }}>
             {p}
@@ -87,9 +87,11 @@ export default function VerstehenScreen() {
       )}
 
       <div className="stack" style={{ gap: 10, paddingTop: 22 }}>
-        <span className="label">Was möchten Sie tun?</span>
+        <h2 className="section-title" style={{ marginTop: 0 }}>
+          Was möchten Sie tun?
+        </h2>
         {suggested.map((k, i) => (
-          <button key={k} type="button" className="tile" style={i === 0 ? { borderColor: "var(--flink)", boxShadow: "0 0 0 2px var(--flink-soft)" } : undefined} onClick={() => choose(k)}>
+          <button key={k} type="button" className={`tile${i === 0 ? " tile-best" : ""}`} onClick={() => choose(k)}>
             <span>{LETTER_KINDS[k].label}</span>
             <span className="hint">{i === 0 ? "passt am besten" : LETTER_KINDS[k].hint}</span>
           </button>

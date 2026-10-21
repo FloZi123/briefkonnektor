@@ -81,7 +81,9 @@ export default function VersandScreen() {
       )}
 
       <div className="stack" style={{ paddingTop: 18, gap: 10 }}>
-        <span className="label">Versandart</span>
+        <h2 className="section-title" style={{ marginTop: 0 }}>
+          Wie soll der Brief raus?
+        </h2>
         {(Object.keys(PRICES) as Shipping[]).map((s) => (
           <label key={s} className={`opt${draft.shipping === s ? " sel" : ""}`}>
             <input type="radio" name="ship" checked={draft.shipping === s} onChange={() => update({ shipping: s })} />

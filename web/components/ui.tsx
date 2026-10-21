@@ -7,28 +7,49 @@ export function Logo({ height = 24 }: { height?: number }) {
   return <img src="/flinkbrief-lockup.svg" alt="Flinkbrief" style={{ height, width: "auto" }} />;
 }
 
+const STEPS = ["Verstehen", "Angaben", "Entwurf", "Unterschrift", "Versand"];
+
 export function ScreenHead({ step, back }: { step?: number; back?: string }) {
   const router = useRouter();
   return (
-    <div className="screen-head">
-      {back !== undefined ? (
-        <button className="btn-icon" aria-label="Zurück" onClick={() => (back ? router.push(back) : router.back())}>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M15 18l-6-6 6-6" />
-          </svg>
-        </button>
-      ) : (
-        <Link href="/" aria-label="Zur Startseite" style={{ display: "inline-flex" }}>
-          <Logo />
-        </Link>
+    <>
+      <div className="screen-head">
+        {back !== undefined ? (
+          <button className="btn-icon" aria-label="Zurück" onClick={() => (back ? router.push(back) : router.back())}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M15 18l-6-6 6-6" />
+            </svg>
+          </button>
+        ) : (
+          <Link href="/" aria-label="Zur Startseite" style={{ display: "inline-flex" }}>
+            <Logo />
+          </Link>
+        )}
+        {back !== undefined && (
+          <Link href="/" style={{ marginLeft: "auto", display: "inline-flex" }} aria-label="Zur Startseite">
+            <Logo height={20} />
+          </Link>
+        )}
+      </div>
+      {step !== undefined && (
+        <div className="stepbar" aria-label={`Schritt ${step} von ${STEPS.length}: ${STEPS[step - 1]}`}>
+          <div className="segs" aria-hidden="true">
+            {STEPS.map((s, i) => (
+              <i key={s} className={i + 1 < step ? "done" : i + 1 === step ? "now" : ""} />
+            ))}
+          </div>
+          <div className="meta">
+            <span>
+              <b>{STEPS[step - 1]}</b>
+              {step < STEPS.length && <span className="muted"> · dann {STEPS[step]}</span>}
+            </span>
+            <span>
+              {step} / {STEPS.length}
+            </span>
+          </div>
+        </div>
       )}
-      {step !== undefined && <span className="mono muted">Schritt {step} von 5</span>}
-      {back !== undefined && (
-        <Link href="/" style={{ marginLeft: "auto", display: "inline-flex" }} aria-label="Zur Startseite">
-          <Logo height={20} />
-        </Link>
-      )}
-    </div>
+    </>
   );
 }
 

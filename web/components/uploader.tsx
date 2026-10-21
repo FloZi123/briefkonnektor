@@ -72,10 +72,8 @@ export function Uploader() {
               <circle cx="12" cy="12.5" r="3.5" />
             </svg>
           </span>
-          <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 17, color: "var(--ink)" }}>Bescheid oder Vertrag fotografieren</span>
-          <span className="muted" style={{ fontSize: 13 }}>
-            oder PDF hochladen
-          </span>
+          <span className="title">Brief fotografieren</span>
+          <span className="sub">Bescheid, Rechnung, Vertrag – oder PDF hochladen</span>
         </button>
       )}
       <input

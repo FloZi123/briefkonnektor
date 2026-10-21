@@ -82,9 +82,7 @@ function DatenScreen() {
           </select>
         </Field>
 
-        <span className="label" style={{ marginTop: 8 }}>
-          Empfänger
-        </span>
+        <h2 className="section-title">Empfänger</h2>
         <Field label="Behörde / Firma / Person" id="rname">
           <input id="rname" className="input" value={draft.recipient.name} onChange={(e) => setR("name", e.target.value)} placeholder="z. B. Jobcenter Schwandorf" required />
         </Field>
@@ -113,6 +111,7 @@ function DatenScreen() {
             <input id="date" className="input" value={draft.documentDate} onChange={(e) => update({ documentDate: e.target.value })} placeholder="TT.MM.JJJJ" />
           </Field>
         </div>
+        <h2 className="section-title">Worum es geht</h2>
         <Field label="Betrag laut Schreiben (falls genannt)" id="amount">
           <input id="amount" className="input" value={draft.amount ?? ""} onChange={(e) => update({ amount: e.target.value })} placeholder="z. B. 94,00 €" inputMode="decimal" />
         </Field>
@@ -126,10 +125,10 @@ function DatenScreen() {
             </ul>
           </div>
         )}
-        <Field label="Worum geht es?" id="subject">
+        <Field label="Thema in einem Satz" id="subject">
           <input id="subject" className="input" value={draft.subject} onChange={(e) => update({ subject: e.target.value })} placeholder="z. B. Rückforderung Leistungen Juli–Sept. 2026" required />
         </Field>
-        <Field label="Was möchten Sie sagen? Tippen oder diktieren – Stichpunkte reichen" id="reason">
+        <Field label="Was möchten Sie sagen? Stichpunkte reichen, tippen oder diktieren" id="reason">
           <textarea
             id="reason"
             className="input"
@@ -141,9 +140,7 @@ function DatenScreen() {
           <DictateButton {...dictate} onClick={dictate.toggle} />
         </Field>
 
-        <span className="label" style={{ marginTop: 8 }}>
-          Ihre Angaben (Absender)
-        </span>
+        <h2 className="section-title">Ihre Adresse als Absender</h2>
         <Field label="Ihr Name" id="sname">
           <input id="sname" className="input" value={draft.sender.name} onChange={(e) => setS("name", e.target.value)} required autoComplete="name" />
         </Field>

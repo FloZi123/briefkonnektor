@@ -1,72 +1,194 @@
 import Link from "next/link";
 import { Logo } from "@/components/ui";
-import { LETTER_KINDS, PRICES, euro } from "@/lib/types";
+import { LETTER_KINDS, PRICES, euro, type LetterKind } from "@/lib/types";
 import { Uploader } from "@/components/uploader";
 import { Footer } from "@/components/legal";
 import { ResumeDraft } from "@/components/resume";
 
+const GROUPS: Array<{ title: string; kinds: LetterKind[] }> = [
+  { title: "Behörde und Amt", kinds: ["widerspruch", "einspruch", "unterlagen", "fristverlaengerung", "nachfrage"] },
+  { title: "Wohnung", kinds: ["nebenkosten", "maengel"] },
+  { title: "Geld und Sonstiges", kinds: ["mahnung", "beschwerde", "frei"] },
+];
+
+const Tick = () => (
+  <svg viewBox="0 0 24 24" fill="none" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M20 6L9 17l-5-5" />
+  </svg>
+);
+
+/** Beispiel-Bescheid als gerendertes Blatt – zeigt, was die Erkennung aus einem Foto holt. */
+function DemoLetter() {
+  return (
+    <div className="demo" aria-label="Beispiel: Was Flinkbrief in einem Bescheid erkennt">
+      <div className="sheet">
+        <span className="fold" style={{ top: "33%" }} />
+        <span className="fold" style={{ top: "66%" }} />
+        <div className="hd">
+          <div>
+            <b>Landratsamt Schwandorf</b>
+            <div className="ls">Straßenverkehrsamt · Bußgeldstelle</div>
+          </div>
+          <div className="ls" style={{ textAlign: "right" }}>
+            Az. <span className="mark">SAD-78/4412-26</span>
+            <br />
+            <span className="mark">14.10.2026</span>
+          </div>
+        </div>
+        <div className="adr">
+          Frau
+          <br />
+          Lena Hartmann
+          <br />
+          Bergstraße 12
+          <br />
+          92421 Schwandorf
+        </div>
+        <div className="subj">Bußgeldbescheid – Überschreitung der zulässigen Höchstgeschwindigkeit</div>
+        <p>
+          am 29.09.2026 um 17:42 Uhr wurde mit dem Fahrzeug SAD-LH 311 auf der B 85 die zulässige Höchstgeschwindigkeit außerhalb geschlossener Ortschaften um 24 km/h
+          überschritten.
+        </p>
+        <p>
+          Gegen Sie wird eine Geldbuße von <span className="mark">115,00 €</span> zuzüglich Gebühren und Auslagen in Höhe von 28,50 € festgesetzt.
+        </p>
+        <p>
+          Gegen diesen Bescheid können Sie <span className="mark">innerhalb von zwei Wochen</span> nach Zustellung schriftlich Einspruch einlegen.
+        </p>
+        <div className="ls" style={{ marginTop: 10 }}>Rechtsbehelfsbelehrung · Seite 1 von 2</div>
+      </div>
+      <div className="notes">
+        <div className="note n1">
+          <b>Einspruch bis 2. Nov.</b>
+          <small>Frist aus dem Bescheid berechnet</small>
+        </div>
+        <div className="note n2">
+          <b>143,50 € gesamt</b>
+          <small>Betrag erkannt</small>
+        </div>
+        <div className="note n3">
+          <b>Einspruch formuliert</b>
+          <small>mit Aktenzeichen, fertig zur Unterschrift</small>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   return (
-    <main className="screen">
-      <div className="screen-head" style={{ justifyContent: "space-between" }}>
+    <main className="home">
+      <div className="home-head">
         <Logo height={24} />
-        <Link href="/status" className="muted" style={{ fontSize: 13, textDecoration: "none" }}>
+        <Link href="/status" className="quiet">
           Meine Briefe
         </Link>
       </div>
 
-      <div className="stack" style={{ gap: 10, paddingTop: 16 }}>
-        <span className="eyebrow">Behördenpost verstehen und beantworten</span>
-        <h1 style={{ fontSize: 30 }}>Bescheid bekommen? Verstehen, antworten, abschicken.</h1>
-        <p className="muted" style={{ fontSize: 14 }}>
-          Foto machen – wir erklären in einfachen Worten, was drinsteht und bis wann Sie reagieren sollten. Dann schreiben wir die Antwort nach Ihren
-          Angaben und schicken sie per Post. Auf Wunsch als Einschreiben.
-        </p>
-      </div>
+      <section className="hero">
+        <div className="hero-copy">
+          <h1>Bescheid bekommen? Die Antwort ist in fünf Minuten in der Post.</h1>
+          <p className="lead">
+            Brief fotografieren. Flinkbrief erklärt in einfachen Worten, was drinsteht und bis wann Sie reagieren müssen, schreibt den Widerspruch nach Ihren
+            Angaben und schickt ihn per Post – unterschrieben mit dem Finger.
+          </p>
+          <div className="hero-cta">
+            <ResumeDraft />
+            <Uploader />
+            <div className="trust">
+              <span>
+                <Tick /> Kein Konto nötig
+              </span>
+              <span>
+                <Tick /> Foto wird nach der Erkennung gelöscht
+              </span>
+              <span>
+                <Tick /> Ab {euro(PRICES.post.cents)} inkl. Porto
+              </span>
+            </div>
+          </div>
+        </div>
+        <DemoLetter />
+      </section>
 
-      <div style={{ paddingBlock: 20 }}>
-        <ResumeDraft />
-        <Uploader />
-        <p className="muted" style={{ marginTop: 10, fontSize: 12, textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-            <rect x="4" y="10" width="16" height="11" rx="2" />
-            <path d="M8 10V7a4 4 0 0 1 8 0v3" />
-          </svg>
-          Foto wird nach der Erkennung sofort gelöscht
-        </p>
-      </div>
+      <section className="how">
+        <h2>So läuft es</h2>
+        <ol className="steps">
+          <li>
+            <strong>Fotografieren</strong>
+            <span>Behörde, Aktenzeichen, Frist und Betrag werden erkannt. Nichts abtippen.</span>
+          </li>
+          <li>
+            <strong>Verstehen und entscheiden</strong>
+            <span>Kurze Erklärung, was der Brief bedeutet. Sie wählen: Widerspruch, Unterlagen nachreichen, Nachfrage oder mehr Zeit.</span>
+          </li>
+          <li>
+            <strong>Unterschreiben und abschicken</strong>
+            <span>Entwurf prüfen, mit dem Finger unterschreiben, als Brief oder Einschreiben versenden. Oder als PDF selbst einwerfen.</span>
+          </li>
+        </ol>
+      </section>
 
-      <ol className="steps">
-        <li>
-          <strong>Brief fotografieren</strong>
-          <span>Behörde, Aktenzeichen, Frist und Inhalt werden erkannt – nichts abtippen.</span>
-        </li>
-        <li>
-          <strong>Verstehen und entscheiden</strong>
-          <span>Kurze Erklärung in einfacher Sprache. Sie wählen: Widerspruch, Unterlagen nachreichen, Nachfrage, mehr Zeit.</span>
-        </li>
-        <li>
-          <strong>Prüfen, unterschreiben, abschicken</strong>
-          <span>Entwurf anpassen, mit dem Finger unterschreiben, als Brief oder Einschreiben versenden – oder als PDF laden.</span>
-        </li>
-      </ol>
+      <section className="kinds">
+        <h2>Ohne Foto anfangen</h2>
+        <p className="sub">Briefart wählen, dann tippen oder diktieren, worum es geht. Den Rest formuliert Flinkbrief.</p>
+        <div className="kind-groups">
+          {GROUPS.map((g) => (
+            <div className="kind-group" key={g.title}>
+              <h3>{g.title}</h3>
+              {g.kinds.map((k) => (
+                <Link key={k} href={`/brief/daten?kind=${k}`} className="kind">
+                  <span>{LETTER_KINDS[k].label}</span>
+                  {LETTER_KINDS[k].hint && <small>{LETTER_KINDS[k].hint}</small>}
+                </Link>
+              ))}
+            </div>
+          ))}
+        </div>
+      </section>
 
-      <div className="stack" style={{ gap: 10 }}>
-        <span className="label">Oder ohne Foto: Briefart wählen, dann tippen oder diktieren, worum es geht</span>
-        {(Object.keys(LETTER_KINDS) as Array<keyof typeof LETTER_KINDS>).map((k) => (
-          <Link key={k} href={`/brief/daten?kind=${k}`} className="tile">
-            <span>{LETTER_KINDS[k].label}</span>
-            {LETTER_KINDS[k].hint && <span className="hint">{LETTER_KINDS[k].hint}</span>}
-          </Link>
-        ))}
-      </div>
+      <section className="prices" aria-label="Preise">
+        <div className="price hi">
+          <span className="amt">
+            {euro(PRICES.post.cents)}
+            <small>inkl. MwSt.</small>
+          </span>
+          <span className="nm">Brief per Post</span>
+          <span className="ds">Druck, Umschlag und Porto. An Werktagen bis 12 Uhr noch am selben Tag bei der Post.</span>
+        </div>
+        <div className="price">
+          <span className="amt">
+            {euro(PRICES.registered.cents)}
+            <small>inkl. MwSt.</small>
+          </span>
+          <span className="nm">Einschreiben Einwurf</span>
+          <span className="ds">Mit Zustellnachweis. Empfohlen, wenn eine Frist läuft.</span>
+        </div>
+        <div className="price">
+          <span className="amt">
+            {euro(PRICES.download.cents)}
+            <small>inkl. MwSt.</small>
+          </span>
+          <span className="nm">Nur PDF</span>
+          <span className="ds">Selbst drucken, unterschreiben und einwerfen. Nötig bei Miet- und Arbeitsvertrag.</span>
+        </div>
+      </section>
 
-      <div className="screen-foot" style={{ flexDirection: "row", justifyContent: "space-between", fontSize: 12 }}>
-        <span className="muted">
-          Versand ab {euro(PRICES.post.cents)} · Download {euro(PRICES.download.cents)}
-        </span>
-        <span className="muted">inkl. MwSt.</span>
-      </div>
+      <section className="honest">
+        <div>
+          <b>Keine Rechtsberatung</b>
+          Flinkbrief formuliert nach Ihren Angaben und prüft die Form. Ob ein Widerspruch Erfolg hat, kann nur ein Anwalt beurteilen.
+        </div>
+        <div>
+          <b>Fristen bleiben Ihre Sache</b>
+          Wir rechnen die Frist aus dem Bescheid aus und zeigen sie an. Verantwortlich für den rechtzeitigen Versand sind Sie.
+        </div>
+        <div>
+          <b>Daten nur so lange wie nötig</b>
+          Das Foto wird nach der Erkennung gelöscht, Brief und Bestellung nach 30 Tagen. Kein Konto, kein Newsletter.
+        </div>
+      </section>
+
       <Footer />
     </main>
   );
