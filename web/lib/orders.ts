@@ -8,7 +8,7 @@ import type { Draft, Shipping } from "./types";
  *  - sonst In-Memory (lokale Entwicklung, Preview ohne Datenbank)
  * Der Entwurf wird beim Checkout gespeichert, damit der Stripe-Webhook ihn ohne Browser verarbeiten kann.
  */
-export type OrderStatus = "pending" | "paid" | "queued" | "sent" | "delivered" | "failed";
+export type OrderStatus = "pending" | "paid" | "queued" | "sent" | "delivered" | "failed" | "cancelled";
 
 export interface Order {
   id: string;

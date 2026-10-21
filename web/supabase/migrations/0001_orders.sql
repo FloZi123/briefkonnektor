@@ -50,3 +50,7 @@ on conflict (id) do nothing;
 alter table public.orders add column if not exists carrier_status text;
 alter table public.orders add column if not exists tracking_number text;
 create index if not exists orders_carrier_ref_idx on public.orders (carrier_ref);
+
+-- 0003: Status "cancelled" (Stornierung beim Carrier)
+alter table public.orders drop constraint if exists orders_status_check;
+alter table public.orders add constraint orders_status_check check (status in ('pending','paid','queued','sent','delivered','failed','cancelled'));

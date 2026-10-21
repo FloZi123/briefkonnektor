@@ -30,3 +30,25 @@ export async function reconcileWithStripe(o: Order): Promise<Order> {
   }
   return o;
 }
+
+import { getCarrier } from "@core/carriers/index";
+
+/** Carrier-Status nachladen (für übergebene Briefe): sent / delivered / failed / cancelled. */
+export async function syncCarrierStatus(o: Order): Promise<Order> {
+  if (!o.carrierRef || !(o.status === "queued" || o.status === "sent")) return o;
+  try {
+    const s = await getCarrier().status(o.carrierRef);
+    const mapped = s.status === "sent" ? "sent" : s.status === "delivered" ? "delivered" : s.status === "failed" ? "failed" : s.status === "cancelled" ? "cancelled" : null;
+    const changed = (mapped && mapped !== o.status) || s.carrierStatus !== o.carrierStatus || (s.trackingNumber && s.trackingNumber !== o.trackingNumber);
+    if (!changed) return o;
+    const before = o.status;
+    if (mapped) o.status = mapped;
+    o.carrierStatus = s.carrierStatus;
+    if (s.trackingNumber) o.trackingNumber = s.trackingNumber;
+    await updateOrder(o);
+    if (before !== o.status && (o.status === "sent" || o.status === "failed")) await sendStatusMail(o, o.status);
+  } catch (e) {
+    console.error("carrier sync failed", o.id, e);
+  }
+  return o;
+}

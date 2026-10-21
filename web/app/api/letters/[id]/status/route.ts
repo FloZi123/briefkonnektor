@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getOrder } from "@/lib/orders";
-import { reconcileWithStripe } from "@/lib/finalize";
+import { reconcileWithStripe, syncCarrierStatus } from "@/lib/finalize";
 
 export const runtime = "nodejs";
 
@@ -11,5 +11,6 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
   let o = await getOrder(id);
   if (!o || !t || t !== o.token) return NextResponse.json({ error: "not found" }, { status: 404 });
   if (o.status === "pending") o = await reconcileWithStripe(o);
-  return NextResponse.json({ status: o.status }, { headers: { "cache-control": "no-store" } });
+  else if (o.status === "queued" || o.status === "sent") o = await syncCarrierStatus(o);
+  return NextResponse.json({ status: o.status, carrierStatus: o.carrierStatus, trackingNumber: o.trackingNumber }, { headers: { "cache-control": "no-store" } });
 }

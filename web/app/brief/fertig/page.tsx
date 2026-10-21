@@ -4,7 +4,7 @@ import { Footer } from "@/components/legal";
 import { ClearDraftOnDone } from "@/components/resume";
 import { LiveStatus } from "@/components/live-status";
 import { getOrder } from "@/lib/orders";
-import { reconcileWithStripe } from "@/lib/finalize";
+import { reconcileWithStripe, syncCarrierStatus } from "@/lib/finalize";
 import { PRICES } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +14,7 @@ export default async function FertigScreen({ searchParams }: { searchParams: Pro
   const found = id ? await getOrder(id) : undefined;
   let order = found && t && found.token === t ? found : undefined; // ohne passendes Token keine Daten
   if (order?.status === "pending") order = await reconcileWithStripe(order); // Webhook verspätet oder nicht angekommen
+  else if (order && (order.status === "queued" || order.status === "sent")) order = await syncCarrierStatus(order); // Stornierung/Einlieferung beim Carrier
 
   if (!order) {
     return (
@@ -30,6 +31,7 @@ export default async function FertigScreen({ searchParams }: { searchParams: Pro
   }
 
   const paid = order.status !== "pending";
+  const stopped = order.status === "cancelled" || order.status === "failed";
   const isDownload = order.shipping === "download";
   const steps = isDownload
     ? [
@@ -38,7 +40,7 @@ export default async function FertigScreen({ searchParams }: { searchParams: Pro
       ]
     : [
         { t: "Bezahlt", s: paid ? "done" : "now" },
-        { t: "An Druckzentrum übergeben", s: order.status === "queued" || order.status === "sent" || order.status === "delivered" ? "done" : paid ? "now" : "" },
+        { t: stopped ? (order.status === "cancelled" ? "Storniert" : "Versand fehlgeschlagen") : "An Druckzentrum übergeben", s: order.status === "queued" || order.status === "sent" || order.status === "delivered" ? "done" : paid && !stopped ? "now" : stopped ? "now" : "" },
         { t: "Gedruckt & bei der Post eingeliefert", s: order.status === "sent" || order.status === "delivered" ? "done" : order.status === "queued" ? "now" : "" },
         { t: "Zugestellt", s: order.status === "delivered" ? "done" : "" },
       ];
@@ -54,7 +56,14 @@ export default async function FertigScreen({ searchParams }: { searchParams: Pro
             {paid ? <path d="M20 6L9 17l-5-5" /> : <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>}
           </svg>
         </span>
-        <h1 style={{ fontSize: 26 }}>{paid ? (isDownload ? "Ihr PDF ist fertig." : "Ihr Brief geht raus.") : "Zahlung wird bestätigt …"}</h1>
+        <h1 style={{ fontSize: 26 }}>
+          {order.status === "cancelled" ? "Versand storniert." : order.status === "failed" ? "Versand hat nicht geklappt." : paid ? (isDownload ? "Ihr PDF ist fertig." : "Ihr Brief geht raus.") : "Zahlung wird bestätigt …"}
+        </h1>
+        {stopped && (
+          <p className="muted" style={{ fontSize: 13, marginTop: -6 }}>
+            {order.status === "cancelled" ? "Der Brief wurde vor dem Druck gestoppt und nicht verschickt." : "Wir kümmern uns darum und melden uns per E-Mail. Das PDF können Sie jederzeit herunterladen."}
+          </p>
+        )}
         {!paid && <p className="muted" style={{ fontSize: 13, marginTop: -6 }}>Das dauert meist nur wenige Sekunden – die Seite aktualisiert sich von selbst.</p>}
         <p className="muted" style={{ fontSize: 14 }}>
           {order.subject} an {order.recipientName}. Bestätigung und Rechnung gehen an {order.email}.

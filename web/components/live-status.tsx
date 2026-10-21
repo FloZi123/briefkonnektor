@@ -6,20 +6,21 @@ import { useRouter } from "next/navigation";
 export function LiveStatus({ id, token, status }: { id: string; token: string; status: string }) {
   const router = useRouter();
   useEffect(() => {
-    if (status !== "pending") return;
+    if (status !== "pending" && status !== "queued") return;
+    const interval = status === "pending" ? 2000 : 15000;
     let stop = false;
     let tries = 0;
     const tick = async () => {
-      if (stop || tries++ > 45) return; // max. ~90 s
+      if (stop || tries++ > (status === "pending" ? 45 : 20)) return; // pending: ~90 s, queued: ~5 min
       try {
         const r = await fetch(`/api/letters/${id}/status?t=${token}`, { cache: "no-store" });
         const d = (await r.json()) as { status?: string };
-        if (d.status && d.status !== "pending") {
+        if (d.status && d.status !== status) {
           router.refresh();
           return;
         }
       } catch {}
-      setTimeout(tick, 2000);
+      setTimeout(tick, interval);
     };
     const h = setTimeout(tick, 1500);
     return () => {
