@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { saveDraft, loadDraft } from "@/lib/store";
 import type { Extracted } from "@/lib/types";
 import { validateFile, prepareFile } from "@/lib/upload";
+import { Progress } from "@/components/progress";
 
 /** Foto/PDF aufnehmen oder hochladen → /api/extract → Entwurf vorbefüllen → Schritt 2 */
 export function Uploader() {
@@ -51,32 +52,32 @@ export function Uploader() {
 
   return (
     <div className="stack" style={{ gap: 8 }}>
-      <button
-        type="button"
-        className={`dropzone${busy ? " busy" : ""}`}
-        onClick={() => input.current?.click()}
-        onDragOver={(e) => e.preventDefault()}
-        onDrop={(e) => {
-          e.preventDefault();
-          const f = e.dataTransfer.files?.[0];
-          if (f) void onFile(f);
-        }}
-        disabled={busy}
-        aria-busy={busy}
-      >
-        <span className="camera">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M4 8a2 2 0 0 1 2-2h2l1.5-2h5L16 6h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z" />
-            <circle cx="12" cy="12.5" r="3.5" />
-          </svg>
-        </span>
-        <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 17, color: "var(--ink)" }}>
-          {busy ? "Wird erkannt …" : "Bescheid oder Vertrag fotografieren"}
-        </span>
-        <span className="muted" style={{ fontSize: 13 }}>
-          oder PDF hochladen
-        </span>
-      </button>
+      {busy ? (
+        <Progress steps={["Foto wird vorbereitet", "Schreiben wird gelesen", "Absender, Aktenzeichen, Frist werden erkannt", "Zusammenfassung wird erstellt"]} seconds={20} />
+      ) : (
+        <button
+          type="button"
+          className="dropzone"
+          onClick={() => input.current?.click()}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={(e) => {
+            e.preventDefault();
+            const f = e.dataTransfer.files?.[0];
+            if (f) void onFile(f);
+          }}
+        >
+          <span className="camera">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M4 8a2 2 0 0 1 2-2h2l1.5-2h5L16 6h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z" />
+              <circle cx="12" cy="12.5" r="3.5" />
+            </svg>
+          </span>
+          <span style={{ fontFamily: "var(--font-display)", fontWeight: 700, fontSize: 17, color: "var(--ink)" }}>Bescheid oder Vertrag fotografieren</span>
+          <span className="muted" style={{ fontSize: 13 }}>
+            oder PDF hochladen
+          </span>
+        </button>
+      )}
       <input
         ref={input}
         type="file"
