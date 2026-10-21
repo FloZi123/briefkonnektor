@@ -113,6 +113,19 @@ function DatenScreen() {
             <input id="date" className="input" value={draft.documentDate} onChange={(e) => update({ documentDate: e.target.value })} placeholder="TT.MM.JJJJ" />
           </Field>
         </div>
+        <Field label="Betrag laut Schreiben (falls genannt)" id="amount">
+          <input id="amount" className="input" value={draft.amount ?? ""} onChange={(e) => update({ amount: e.target.value })} placeholder="z. B. 94,00 €" inputMode="decimal" />
+        </Field>
+        {draft.understanding?.keyFacts && draft.understanding.keyFacts.length > 0 && (
+          <div className="notice" style={{ flexDirection: "column", gap: 4 }}>
+            <strong style={{ fontSize: 13 }}>Aus dem Schreiben erkannt – wird im Brief verwendet</strong>
+            <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13 }}>
+              {draft.understanding.keyFacts.map((f, i) => (
+                <li key={i}>{f}</li>
+              ))}
+            </ul>
+          </div>
+        )}
         <Field label="Worum geht es?" id="subject">
           <input id="subject" className="input" value={draft.subject} onChange={(e) => update({ subject: e.target.value })} placeholder="z. B. Rückforderung Leistungen Juli–Sept. 2026" required />
         </Field>

@@ -31,7 +31,8 @@ export async function extractFromDocument(bytes: Buffer, mime: string): Promise<
       "documentType (Art des Schreibens in 1–2 Wörtern: Bescheid, Aufforderung, Anhörung, Mahnung, Mitteilung, Rechnung, Vertrag …), " +
       "summary (3–5 kurze Sätze in einfacher Sprache für Laien: wer schreibt, was wurde entschieden oder verlangt, was passiert, wenn man nichts tut – nur was im Dokument steht, keine Bewertung, keine Empfehlung), " +
       "demand (was konkret vom Empfänger verlangt wird, ein Satz; weglassen, wenn nichts verlangt wird), " +
-      "options (Array der passenden Briefarten aus der Liste, beste zuerst, max. 3 – z. B. bei einer Aufforderung zur Mitwirkung: unterlagen, fristverlaengerung, nachfrage; bei einem ablehnenden Bescheid: widerspruch, nachfrage). " +
+      "options (Array der passenden Briefarten aus der Liste, beste zuerst, max. 3 – z. B. bei einer Aufforderung zur Mitwirkung: unterlagen, fristverlaengerung, nachfrage; bei einem ablehnenden Bescheid: widerspruch, nachfrage), " +
+      "keyFacts (Array, max. 8: alle konkreten Angaben, die man zum Antworten braucht – Beträge mit Währung, Zeiträume, Fristen, Leistungs-/Vertragsart, Nummern, geforderte Unterlagen – je ein kurzer Satz wie 'Offener Betrag: 94,00 EUR' oder 'Zahlungsfrist: 30.10.2026'). " +
       "Unlesbare oder fehlende Felder weglassen, nie raten. Bei Adressen Straße und Hausnummer in street, PLZ fünfstellig in zip.",
     messages: [{ role: "user", content: [source, { type: "text", text: "Extrahiere die Felder als JSON." }] }],
   });
@@ -40,6 +41,17 @@ export async function extractFromDocument(bytes: Buffer, mime: string): Promise<
   const parsed = ExtractedSchema.safeParse(JSON.parse(json));
   if (!parsed.success) throw new Error("Erkennung lieferte kein gültiges Ergebnis");
   return parsed.data;
+}
+
+/** Fakten aus dem fotografierten Schreiben – damit Betrag, Zeitraum usw. im Brief und in den Vorschlägen ankommen. */
+function documentFacts(d: Draft): string[] {
+  const out: string[] = [];
+  if (d.amount) out.push(`Betrag laut Schreiben: ${d.amount}`);
+  const kf = d.understanding?.keyFacts ?? [];
+  if (kf.length) out.push("Weitere Angaben aus dem Schreiben:\n" + kf.map((f) => `- ${f}`).join("\n"));
+  if (d.understanding?.demand) out.push(`Was das Schreiben verlangt: ${d.understanding.demand}`);
+  if (d.understanding?.deadlineHint) out.push(`Frist laut Schreiben: ${d.understanding.deadlineHint}`);
+  return out;
 }
 
 /** Brieftext aus Briefart + Angaben; optional mit Anpassungsanweisung auf einen bestehenden Text. */
@@ -52,6 +64,7 @@ export async function draftLetter(d: Draft, instruction?: string): Promise<strin
     d.documentDate && `Datum des Schreibens, auf das geantwortet wird: ${d.documentDate}`,
     `Betreff: ${subjectLine(d.kind, d.subject, d.documentDate)}`,
     d.subject && `Worum es geht: ${d.subject}`,
+    ...documentFacts(d),
     d.reason && `Angaben des Absenders (frei gesprochen oder getippt, ggf. umgangssprachlich und ungeordnet – daraus den Sachverhalt und das Anliegen herausarbeiten): ${d.reason}`,
     d.deadline && `Berechnete Frist (nur zur Info, nicht in den Brief schreiben): ${d.deadline}`,
     `Absender: ${d.sender.name}`,
@@ -73,6 +86,7 @@ export async function draftLetter(d: Draft, instruction?: string): Promise<strin
     "Bei Mängelanzeige: Mangel konkret, Frist zur Beseitigung von 14 Tagen ab Zugang setzen, Mietminderung vorbehalten. " +
     "Bei Mahnung: Forderung, Grund, Zahlungsfrist 14 Tage, Ankündigung weiterer Schritte ohne Drohung. " +
     "Die Angaben des Absenders können diktiert, umgangssprachlich oder ungeordnet sein (z. B. 'ich war da gar nicht, mein Chef kann das bestätigen'): Inhalt übernehmen, in sachliche Briefsprache übersetzen, Wichtiges zuerst, nichts weglassen. " +
+    "Angaben aus dem Schreiben (Betrag, Zeitraum, Frist, Nummern) direkt verwenden – dafür KEINE Platzhalter setzen. " +
     "Fehlende Fakten nie erfinden – stattdessen Platzhalter in eckigen Klammern wie [Datum] oder [Betrag]. Länge: 120–260 Wörter.";
 
   const messages: Anthropic.MessageParam[] = instruction && d.body
@@ -113,7 +127,7 @@ export async function reviewLetter(d: Draft): Promise<ReviewPoint[]> {
     messages: [
       {
         role: "user",
-        content: `Briefart: ${kind.label}\nEmpfänger: ${d.recipient.name}\nAktenzeichen: ${d.reference || "–"}\nDatum des Schreibens: ${d.documentDate || "–"}\nAngaben des Absenders: ${d.reason || "–"}\n\nBrief:\n${d.body}`,
+        content: `Briefart: ${kind.label}\nEmpfänger: ${d.recipient.name}\nAktenzeichen: ${d.reference || "–"}\nDatum des Schreibens: ${d.documentDate || "–"}\n${documentFacts(d).join("\n")}\nAngaben des Absenders: ${d.reason || "–"}\n\nBrief:\n${d.body}`,
       },
     ],
   });
@@ -176,7 +190,7 @@ export async function suggestFills(d: Draft, placeholders: string[]): Promise<Fi
     messages: [
       {
         role: "user",
-        content: `Heute: ${new Date().toLocaleDateString("de-DE")}\nAktenzeichen: ${d.reference || "–"}\nDatum des Schreibens: ${d.documentDate || "–"}\nFrist (berechnet): ${d.deadline || "–"}\nAngaben des Absenders: ${d.reason || "–"}\nAbsender: ${d.sender.name}, ${d.sender.street}, ${d.sender.zip} ${d.sender.city}\n\nPlatzhalter: ${JSON.stringify(placeholders)}\n\nBrief:\n${d.body}`,
+        content: `Heute: ${new Date().toLocaleDateString("de-DE")}\nAktenzeichen: ${d.reference || "–"}\nDatum des Schreibens: ${d.documentDate || "–"}\nFrist (berechnet): ${d.deadline || "–"}\n${documentFacts(d).join("\n")}\nAngaben des Absenders: ${d.reason || "–"}\nAbsender: ${d.sender.name}, ${d.sender.street}, ${d.sender.zip} ${d.sender.city}\n\nPlatzhalter: ${JSON.stringify(placeholders)}\n\nBrief:\n${d.body}`,
       },
     ],
   });

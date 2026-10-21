@@ -38,7 +38,8 @@ export function Uploader() {
         subject: x.subject ?? d.subject,
         remedy: x.remedy,
         remedyText: x.remedyText,
-        understanding: { documentType: x.documentType, summary: x.summary, demand: x.demand, deadlineHint: x.deadlineHint, options: x.options },
+        amount: x.amount ?? d.amount,
+        understanding: { documentType: x.documentType, summary: x.summary, demand: x.demand, deadlineHint: x.deadlineHint, options: x.options, keyFacts: x.keyFacts },
       });
       router.push(x.summary ? "/brief/verstehen" : "/brief/daten?from=photo");
     } catch (e) {

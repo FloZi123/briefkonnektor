@@ -39,6 +39,7 @@ export const ExtractedSchema = z.object({
   summary: z.string().optional().describe("3–5 Sätze in einfacher Sprache: wer schreibt, was entschieden oder verlangt wird, was passiert, wenn man nichts tut"),
   demand: z.string().optional().describe("Was konkret vom Empfänger verlangt wird, ein Satz; leer, wenn nichts verlangt wird"),
   options: z.array(z.enum(Object.keys(LETTER_KINDS) as [LetterKind, ...LetterKind[]])).optional().describe("Passende Briefarten, beste zuerst, max. 3"),
+  keyFacts: z.array(z.string()).optional().describe("Wichtige Fakten aus dem Schreiben: Beträge, Zeiträume, Fristen, Leistungsart, Vertragsnummern – je ein kurzer Satz"),
   amount: z.string().optional().describe("Betrag, falls genannt"),
   confidence: z.enum(["high", "medium", "low"]).optional(),
 });
@@ -57,7 +58,8 @@ export interface Draft {
   body: string;
   remedy?: Extracted["remedy"]; // aus der Rechtsbehelfsbelehrung des Fotos
   remedyText?: string;
-  understanding?: { documentType?: string; summary?: string; demand?: string; deadlineHint?: string; options?: LetterKind[] };
+  amount?: string; // Betrag laut Schreiben, falls genannt
+  understanding?: { documentType?: string; summary?: string; demand?: string; deadlineHint?: string; options?: LetterKind[]; keyFacts?: string[] };
   signature?: string; // data:image/png;base64
   shipping: Shipping;
   email: string;
