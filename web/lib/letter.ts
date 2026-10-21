@@ -1,6 +1,5 @@
 import { renderLetter } from "@core/letter/render";
 import { getCarrier } from "@core/carriers/index";
-import { PingenCarrier } from "@core/carriers/pingen";
 import type { Letter as CoreLetter } from "@core/types";
 import { subjectLine } from "./subject";
 import { today } from "./dates";
@@ -51,9 +50,7 @@ export async function dispatchOrder(o: Order): Promise<Order> {
     status: "draft",
   };
   try {
-    // Einschreiben: Pingen-Produktcode noch zu verifizieren – bis dahin "cheap" + Hinweis im Log
-    if (o.shipping === "registered" && carrier instanceof PingenCarrier) console.warn("registered mail requested – delivery_product for Einschreiben not yet mapped, sending as standard");
-    const r = await carrier.send(letter, { color: false, duplex: false });
+    const r = await carrier.send(letter, { color: false, duplex: false, product: o.shipping === "registered" ? "registered" : "cheap" });
     o.carrierRef = r.carrierRef;
     o.status = "queued";
   } catch (e) {

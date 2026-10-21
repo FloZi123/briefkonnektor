@@ -54,6 +54,8 @@ export interface Letter {
 export interface SendOptions {
   color: boolean;
   duplex: boolean;
+  /** Pingen-Postprodukt: cheap (Standard), fast (Priority), registered (Einschreiben), bulk, premium */
+  product?: "cheap" | "fast" | "registered" | "bulk" | "premium";
 }
 
 export interface SendResult {
@@ -66,6 +68,8 @@ export interface StatusResult {
   /** Normalisierter Status für unser Dashboard */
   status: LetterStatus;
   deliveredAt?: string;
+  trackingNumber?: string; // Einschreiben-Sendungsnummer
+  submittedAt?: string;
 }
 
 export interface Carrier {

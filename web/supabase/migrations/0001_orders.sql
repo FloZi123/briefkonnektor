@@ -45,3 +45,8 @@ on conflict (id) do nothing;
 -- Aufräumen abgelaufener Bestellungen (per Cron/Edge-Function täglich aufrufen):
 --   delete from public.orders where expires_at < now();
 --   + zugehörige Objekte im Bucket "letters" löschen
+
+-- 0002: Versandstatus des Carriers und Einschreiben-Sendungsnummer (angewendet am 21.10.2026)
+alter table public.orders add column if not exists carrier_status text;
+alter table public.orders add column if not exists tracking_number text;
+create index if not exists orders_carrier_ref_idx on public.orders (carrier_ref);

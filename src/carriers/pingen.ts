@@ -17,7 +17,7 @@ import type { Carrier, Letter, LetterStatus, SendOptions, SendResult, StatusResu
  *   POST {api}/organisations/{org}/webhooks                   type "webhooks" {event_category,url,signing_key}
  *   Webhook-Eingang: Header "Signature" = HMAC-SHA256(rawBody, signing_key) hex
  *
- * delivery_product: "cheap" | "fast" | "electronic_email" | "electronic_ebill"
+ * delivery_product (Post): "cheap" | "fast" | "bulk" | "premium" | "registered" – plus electronic_email / electronic_ebill
  * (Einschreiben-Produktcode noch gegen Preisrechner/Doku verifizieren)
  * Alle Requests/Responses sind JSON:API (application/vnd.api+json).
  */
@@ -130,7 +130,7 @@ export class PingenCarrier implements Carrier {
       file_url_signature: url_signature,
       address_position: "left",
       auto_send: true,
-      delivery_product: "cheap",
+      delivery_product: opts.product ?? "cheap",
       print_mode: opts.duplex ? "duplex" : "simplex",
       print_spectrum: opts.color ? "color" : "grayscale",
       meta_data: { letter_id: letter.id, customer: letter.customer },
@@ -140,8 +140,8 @@ export class PingenCarrier implements Carrier {
 
   async status(carrierRef: string): Promise<StatusResult> {
     const res = await this.api<JsonApi<LetterResource>>(`${this.base}/deliveries/letters/${carrierRef}`);
-    const a = res.data.attributes;
-    return { carrierStatus: a.status, status: mapStatus(a.status), deliveredAt: undefined };
+    const a = res.data.attributes as LetterResource["attributes"] & { tracking_number?: string | null; submitted_at?: string | null };
+    return { carrierStatus: a.status, status: mapStatus(a.status), deliveredAt: undefined, trackingNumber: a.tracking_number ?? undefined, submittedAt: a.submitted_at ?? undefined };
   }
 
   async cancel(carrierRef: string): Promise<void> {

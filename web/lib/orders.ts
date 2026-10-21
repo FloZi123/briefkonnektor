@@ -25,6 +25,8 @@ export interface Order {
   draft: Draft;
   pdf?: Uint8Array;
   carrierRef?: string;
+  carrierStatus?: string;
+  trackingNumber?: string;
   stripeSessionId?: string;
   lastError?: string;
 }
@@ -34,6 +36,7 @@ interface OrderStore {
   get(id: string, withPdf: boolean): Promise<Order | undefined>;
   update(o: Order): Promise<Order>;
   findByStripeSession(sessionId: string): Promise<Order | undefined>;
+  findByCarrierRef(ref: string): Promise<Order | undefined>;
 }
 
 /* ---------- In-Memory ---------- */
@@ -56,6 +59,9 @@ const memoryStore: OrderStore = {
   async findByStripeSession(sessionId) {
     return [...mem.values()].find((o) => o.stripeSessionId === sessionId);
   },
+  async findByCarrierRef(ref) {
+    return [...mem.values()].find((o) => o.carrierRef === ref);
+  },
 };
 
 /* ---------- Supabase ---------- */
@@ -77,6 +83,8 @@ interface Row {
   draft: Draft;
   pdf_path: string | null;
   carrier_ref: string | null;
+  carrier_status: string | null;
+  tracking_number: string | null;
   stripe_session_id: string | null;
   last_error: string | null;
 }
@@ -96,6 +104,8 @@ const toRow = (o: Order): Omit<Row, "created_at"> & { created_at?: string } => (
   draft: o.draft,
   pdf_path: o.pdf ? `${o.id}.pdf` : null,
   carrier_ref: o.carrierRef ?? null,
+  carrier_status: o.carrierStatus ?? null,
+  tracking_number: o.trackingNumber ?? null,
   stripe_session_id: o.stripeSessionId ?? null,
   last_error: o.lastError ?? null,
 });
@@ -114,6 +124,8 @@ const fromRow = (r: Row): Order => ({
   deadline: r.deadline ?? undefined,
   draft: r.draft,
   carrierRef: r.carrier_ref ?? undefined,
+  carrierStatus: r.carrier_status ?? undefined,
+  trackingNumber: r.tracking_number ?? undefined,
   stripeSessionId: r.stripe_session_id ?? undefined,
   lastError: r.last_error ?? undefined,
 });
@@ -156,6 +168,11 @@ function supabaseStore(sb: SupabaseClient): OrderStore {
     },
     async findByStripeSession(sessionId) {
       const { data, error } = await sb.from("orders").select("*").eq("stripe_session_id", sessionId).maybeSingle<Row>();
+      if (error) throw new Error(`orders select: ${error.message}`);
+      return data ? fromRow(data) : undefined;
+    },
+    async findByCarrierRef(ref) {
+      const { data, error } = await sb.from("orders").select("*").eq("carrier_ref", ref).maybeSingle<Row>();
       if (error) throw new Error(`orders select: ${error.message}`);
       return data ? fromRow(data) : undefined;
     },
@@ -214,4 +231,8 @@ export async function findByStripeSession(sessionId: string, opts: { withPdf?: b
   const o = await getStore().findByStripeSession(sessionId);
   if (o && opts.withPdf && !o.pdf) return getStore().get(o.id, true);
   return o;
+}
+
+export async function findByCarrierRef(ref: string): Promise<Order | undefined> {
+  return getStore().findByCarrierRef(ref);
 }

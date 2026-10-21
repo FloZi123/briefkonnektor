@@ -71,6 +71,14 @@ export default async function FertigScreen({ searchParams }: { searchParams: Pro
         ))}
       </div>
 
+      {order.trackingNumber && (
+        <div className="notice" style={{ marginTop: 14 }}>
+          <span>
+            <strong>Einschreiben-Sendungsnummer:</strong> <span className="mono">{order.trackingNumber}</span>
+          </span>
+        </div>
+      )}
+
       {order.deadline && (
         <div className="fristbox" style={{ marginTop: 14 }}>
           <span><strong>Fristerinnerung:</strong> Wir erinnern Sie per E-Mail, falls bis {order.deadline} keine Antwort kommt.</span>
