@@ -133,7 +133,7 @@ export class PingenCarrier implements Carrier {
       delivery_product: opts.product ?? "cheap",
       print_mode: opts.duplex ? "duplex" : "simplex",
       print_spectrum: opts.color ? "color" : "grayscale",
-      meta_data: { letter_id: letter.id, customer: letter.customer },
+      // kein meta_data: Pingen erlaubt dort nur feste Felder (E-Rechnung); Zuordnung über file_original_name + carrier_ref
     });
     return { carrierRef: created.data.id, carrierStatus: created.data.attributes.status };
   }
