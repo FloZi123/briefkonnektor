@@ -7,11 +7,9 @@ import { today } from "./dates";
 import type { Draft } from "./types";
 import type { Order } from "./orders";
 
-/** Aus Layout-Warnungen des Renderers eine Meldung für den Nutzer machen – oder null, wenn nur Hinweise. */
+/** Nur noch echte Verstöße blockieren – Kürzungen nimmt der Renderer selbst vor. */
 export function layoutProblem(warnings: string[]): string | null {
-  if (warnings.some((w) => w.startsWith("Anschrift"))) return "Die Empfängeranschrift ist zu lang für das Adressfenster – bitte den Zusatz kürzen oder weglassen.";
-  if (warnings.some((w) => w.startsWith("Betreff braucht"))) return "Der Betreff ist zu lang – bitte „Worum geht es?“ kürzer fassen (max. zwei Zeilen).";
-  if (warnings.some((w) => w.startsWith("Text") || w.startsWith("Infoblock"))) return "Ein Wort oder eine Angabe ist zu lang für die Zeile – bitte Text bzw. Aktenzeichen prüfen.";
+  if (warnings.some((w) => w.includes("über den Rand") || w.includes("Fensterzone"))) return "Der Brief passt nicht ins DIN-Layout – bitte Anschrift und Text prüfen.";
   return null;
 }
 

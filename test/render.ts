@@ -17,17 +17,18 @@ const r1 = await renderLetter({
 });
 const overflow = r1.warnings.filter((w) => w.includes("über den Rand"));
 if (overflow.length) throw new Error("Randüberschreitung: " + overflow.join(" | "));
-if (!r1.warnings.some((w) => w.startsWith("Betreff braucht"))) throw new Error("Betreff-Kürzung nicht gemeldet");
+if (!r1.warnings.some((w) => w.startsWith("Betreff gekürzt"))) throw new Error("Betreff-Kürzung nicht gemeldet");
 console.log(`✓ Langer Betreff/Text: ${r1.pages} Seiten, keine Randüberschreitung; gemeldet: ${r1.warnings.join("; ")}`);
 
-// 2. ein Wort, das breiter als die Zeile ist → muss als Warnung erscheinen
+// 2. ein Wort, das breiter als die Zeile ist → wird zeichenweise gebrochen, keine Randüberschreitung
 const r2 = await renderLetter({ ...base, subject: "Test", body: "Sehr geehrte Damen und Herren,\n\n" + "X".repeat(140) + "\n\nMit freundlichen Grüßen" });
-if (!r2.warnings.some((w) => w.includes("über den Rand"))) throw new Error("überlanges Wort nicht erkannt");
-console.log("✓ Überlanges Wort wird gemeldet:", r2.warnings[0]);
+if (r2.warnings.some((w) => w.includes("über den Rand"))) throw new Error("überlanges Wort nicht gebrochen: " + r2.warnings.join(" | "));
+console.log("✓ Überlanges Wort wird gebrochen");
 
-// 3. Anschrift mit 7 Zeilen → Warnung
+// 3. Anschrift mit zu langer Zusatzzeile → gekürzt, bleibt in der Fensterzone
 const r3 = await renderLetter({ ...base, recipient: { ...base.recipient, name2: "Abteilung Rechnungswesen, Team Nord, Gebäude 3, Zimmer 12", country: "AT" }, subject: "Test", body: "Text" });
-console.log(r3.warnings.length ? "✓ Anschrift-Prüfung:" : "– Anschrift ohne Warnung (ok bei ≤6 Zeilen):", r3.warnings.join("; ") || "keine");
+if (r3.warnings.some((w) => w.includes("über den Rand") || w.includes("Fensterzone"))) throw new Error("Anschrift nicht eingepasst: " + r3.warnings.join(" | "));
+console.log("✓ Anschrift eingepasst:", r3.warnings.join("; ") || "keine Kürzung nötig");
 
 // 4. Normalfall → keine Warnungen
 const r4 = await renderLetter({ ...base, subject: "Widerspruch gegen den Bescheid vom 01.10.2026", body: "Sehr geehrte Damen und Herren,\n\nhiermit lege ich Widerspruch ein.\n\nMit freundlichen Grüßen" });

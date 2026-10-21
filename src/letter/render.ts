@@ -73,6 +73,33 @@ function addressLines(a: Address, withCountry: boolean): string[] {
   return lines;
 }
 
+function splitLong(word: string, font: PDFFont, size: number, maxWidth: number): string[] {
+  const out: string[] = [];
+  let cur = "";
+  for (const ch of word) {
+    if (font.widthOfTextAtSize(cur + ch, size) > maxWidth && cur) {
+      out.push(cur);
+      cur = ch;
+    } else cur += ch;
+  }
+  if (cur) out.push(cur);
+  return out;
+}
+
+/** Kürzt eine Zeile am Wortende auf die Breite, mit „…“. */
+function fit(text: string, font: PDFFont, size: number, maxWidth: number): string {
+  if (font.widthOfTextAtSize(text, size) <= maxWidth) return text;
+  const words = text.split(/\s+/);
+  let cur = "";
+  for (const w of words) {
+    const probe = (cur ? cur + " " + w : w) + " …";
+    if (font.widthOfTextAtSize(probe, size) > maxWidth) break;
+    cur = cur ? cur + " " + w : w;
+  }
+  if (!cur) cur = splitLong(text, font, size, maxWidth - font.widthOfTextAtSize(" …", size))[0] ?? "";
+  return cur + " …";
+}
+
 /** Zeilenumbruch nach Wortgrenzen; respektiert vorhandene Absätze. */
 function wrap(text: string, font: PDFFont, size: number, maxWidth: number): string[] {
   const out: string[] = [];
@@ -82,13 +109,17 @@ function wrap(text: string, font: PDFFont, size: number, maxWidth: number): stri
       continue;
     }
     let line = "";
-    for (const word of para.split(/\s+/)) {
-      const probe = line ? `${line} ${word}` : word;
-      if (font.widthOfTextAtSize(probe, size) <= maxWidth) {
-        line = probe;
-      } else {
-        if (line) out.push(line);
-        line = word;
+    for (const rawWord of para.split(/\s+/)) {
+      // Ein einzelnes Wort, das breiter als die Zeile ist (Aktenzeichen, URL), wird zeichenweise gebrochen
+      const pieces = font.widthOfTextAtSize(rawWord, size) <= maxWidth ? [rawWord] : splitLong(rawWord, font, size, maxWidth);
+      for (const word of pieces) {
+        const probe = line ? `${line} ${word}` : word;
+        if (font.widthOfTextAtSize(probe, size) <= maxWidth) {
+          line = probe;
+        } else {
+          if (line) out.push(line);
+          line = word;
+        }
       }
     }
     if (line) out.push(line);
@@ -164,14 +195,24 @@ export async function renderLetter(input: RenderInput): Promise<RenderOutput> {
     color: grey,
   });
   y = A4.h - LAYOUT.addrZoneTop - fs; // erste Zeile der Anschriftzone
-  const recipientLines = addressLines(input.recipient, true);
-  if (recipientLines.length > 6) check.warnings.push(`Anschrift hat ${recipientLines.length} Zeilen (max. 6 in der Anschriftzone)`);
+  let recipientLines = addressLines(input.recipient, true);
+  if (recipientLines.length > 6) {
+    recipientLines = addressLines({ ...input.recipient, name2: "" }, true);
+    check.warnings.push("Anschrift gekürzt: Zusatz weggelassen (mehr als 6 Zeilen)");
+  }
+  recipientLines = recipientLines.map((l) => {
+    const f = fit(l, font, fs, LAYOUT.addrWidth);
+    if (f !== l) check.warnings.push(`Anschrift gekürzt: „${l.slice(0, 40)}…“`);
+    return f;
+  });
+  const addrLh = fs * 1.15; // enger Zeilenabstand in der Anschrift (DIN: 6 Zeilen in 27,3 mm)
   for (const line of recipientLines) {
     check.line("Anschrift", line, font, fs, LAYOUT.addrLeft, LAYOUT.addrLeft + LAYOUT.addrWidth);
     page.drawText(line, { x: LAYOUT.addrLeft, y, size: fs, font, color: black });
-    y -= lh;
+    y -= addrLh;
   }
-  if (A4.h - y > mm(90)) check.warnings.push("Anschrift reicht über die Fensterzone (90 mm) hinaus");
+  // Unterkante der letzten Zeile (Grundlinie + Unterlänge) muss innerhalb von 90 mm liegen
+  if (A4.h - (y + addrLh - fs * 0.25) > mm(90)) check.warnings.push("Anschrift reicht über die Fensterzone (90 mm) hinaus");
 
   // --- Informationsblock rechts ---
   y = A4.h - LAYOUT.infoTop;
@@ -186,7 +227,10 @@ export async function renderLetter(input: RenderInput): Promise<RenderOutput> {
   // --- Betreff (fett, max. 2 Zeilen, Umbruch am rechten Rand) ---
   const subjectAll = wrap(input.subject, bold, fs, textWidth);
   const subjectLines = subjectAll.slice(0, 2);
-  if (subjectAll.length > 2) check.warnings.push(`Betreff braucht ${subjectAll.length} Zeilen, nur 2 werden gedruckt`);
+  if (subjectAll.length > 2) {
+    subjectLines[1] = fit(subjectAll.slice(1).join(" "), bold, fs, textWidth);
+    check.warnings.push(`Betreff gekürzt auf 2 Zeilen (brauchte ${subjectAll.length})`);
+  }
   y = A4.h - LAYOUT.subjectTop;
   for (const line of subjectLines) {
     check.line("Betreff", line, bold, fs, LAYOUT.marginLeft, A4.w - LAYOUT.marginRight);
