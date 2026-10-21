@@ -26,11 +26,11 @@ function DemoLetter() {
         <span className="fold" style={{ top: "66%" }} />
         <div className="hd">
           <div>
-            <b>Landratsamt Schwandorf</b>
-            <div className="ls">Straßenverkehrsamt · Bußgeldstelle</div>
+            <b>Polizei Berlin</b>
+            <div className="ls">Zentrale Bußgeldstelle</div>
           </div>
           <div className="ls" style={{ textAlign: "right" }}>
-            Az. <span className="mark">SAD-78/4412-26</span>
+            Az. <span className="mark">B-78/4412-26</span>
             <br />
             <span className="mark">14.10.2026</span>
           </div>
@@ -40,14 +40,14 @@ function DemoLetter() {
           <br />
           Lena Hartmann
           <br />
-          Bergstraße 12
+          Kastanienallee 12
           <br />
-          92421 Schwandorf
+          10435 Berlin
         </div>
         <div className="subj">Bußgeldbescheid – Überschreitung der zulässigen Höchstgeschwindigkeit</div>
         <p>
-          am 29.09.2026 um 17:42 Uhr wurde mit dem Fahrzeug SAD-LH 311 auf der B 85 die zulässige Höchstgeschwindigkeit außerhalb geschlossener Ortschaften um 24 km/h
-          überschritten.
+          am 29.09.2026 um 17:42 Uhr wurde mit dem Fahrzeug B-LH 311 auf der A 100 (Stadtring) die zulässige Höchstgeschwindigkeit innerhalb geschlossener Ortschaften
+          um 24 km/h überschritten.
         </p>
         <p>
           Gegen Sie wird eine Geldbuße von <span className="mark">115,00 €</span> zuzüglich Gebühren und Auslagen in Höhe von 28,50 € festgesetzt.
