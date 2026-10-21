@@ -1,4 +1,7 @@
-import { PDFDocument, StandardFonts, rgb, type PDFFont, type PDFPage } from "pdf-lib";
+import { PDFDocument, rgb, type PDFFont, type PDFPage } from "pdf-lib";
+import fontkit from "@pdf-lib/fontkit";
+import SANS_REGULAR from "./fonts/LiberationSans-Regular";
+import SANS_BOLD from "./fonts/LiberationSans-Bold";
 import type { Address, Sender } from "../types";
 
 /**
@@ -13,10 +16,14 @@ const A4 = { w: mm(210), h: mm(297) };
 const LAYOUT = {
   marginLeft: mm(25),
   marginRight: mm(20),
-  addrLeft: mm(20),
-  addrTop: mm(45), // Beginn Anschriftfeld (Form B): Zusatz-/Vermerkzone 45–62,7 mm mit Rücksendeangabe
-  addrZoneTop: mm(62.7), // Anschriftzone 62,7–90 mm (6 Zeilen) – sichtbar im Fenster von DL/C6-5-Umschlägen
-  addrWidth: mm(85),
+  // Anschrift: DIN 5008 Form B (Anschriftzone 62,7–90 mm) UND Pingen-Fenster links (Adressbereich X 22 / Y 60 / 85,5 × 25,5 mm,
+  // Frankierbereich 40–60 mm muss leer bleiben, 3 mm Sicherheitsabstand). Schnittmenge: X 25 mm, Zeilen 63–85 mm.
+  addrLeft: mm(25),
+  addrZoneTop: mm(63),
+  addrZoneBottom: mm(85),
+  addrWidth: mm(80),
+  addrFontSize: 10.5,
+  addrLineHeight: 10.5 * 1.1,
   infoLeft: mm(125), // Informationsblock
   infoTop: mm(50),
   subjectTop: mm(98.5), // Betreffzeile Form B
@@ -146,8 +153,10 @@ export async function renderLetter(input: RenderInput): Promise<RenderOutput> {
   doc.setAuthor(input.sender.name);
   doc.setProducer("Briefkonnektor");
 
-  const font = await doc.embedFont(StandardFonts.Helvetica);
-  const bold = await doc.embedFont(StandardFonts.HelveticaBold);
+  // Echte, eingebettete Schrift (Liberation Sans, metrisch wie Arial/Helvetica) – Druckdienstleister wie Pingen verlangen das
+  doc.registerFontkit(fontkit);
+  const font = await doc.embedFont(Buffer.from(SANS_REGULAR, "base64"), { subset: true });
+  const bold = await doc.embedFont(Buffer.from(SANS_BOLD, "base64"), { subset: true });
   const black = rgb(0, 0, 0);
   const grey = rgb(0.45, 0.45, 0.45);
   const { fontSize: fs, lineHeight: lh } = LAYOUT;
@@ -185,34 +194,27 @@ export async function renderLetter(input: RenderInput): Promise<RenderOutput> {
     color: grey,
   });
 
-  // --- Anschriftfeld: Rücksendeangabe + Empfänger ---
-  const returnLine = `${s.name} · ${s.street} · ${s.zip} ${s.city}`;
-  page.drawText(returnLine, { x: LAYOUT.addrLeft, y: A4.h - LAYOUT.addrTop - 6, size: 7, font, color: grey });
-  page.drawLine({
-    start: { x: LAYOUT.addrLeft, y: A4.h - LAYOUT.addrTop - 9 },
-    end: { x: LAYOUT.addrLeft + LAYOUT.addrWidth, y: A4.h - LAYOUT.addrTop - 9 },
-    thickness: 0.3,
-    color: grey,
-  });
-  y = A4.h - LAYOUT.addrZoneTop - fs; // erste Zeile der Anschriftzone
+  // --- Anschriftfeld (ohne Rücksendeangabe: der Frankierbereich 40–60 mm muss für den Druckdienstleister frei bleiben) ---
+  const afs = LAYOUT.addrFontSize;
+  y = A4.h - LAYOUT.addrZoneTop - afs; // erste Grundlinie
   let recipientLines = addressLines(input.recipient, true);
   if (recipientLines.length > 6) {
     recipientLines = addressLines({ ...input.recipient, name2: "" }, true);
     check.warnings.push("Anschrift gekürzt: Zusatz weggelassen (mehr als 6 Zeilen)");
   }
   recipientLines = recipientLines.map((l) => {
-    const f = fit(l, font, fs, LAYOUT.addrWidth);
+    const f = fit(l, font, afs, LAYOUT.addrWidth);
     if (f !== l) check.warnings.push(`Anschrift gekürzt: „${l.slice(0, 40)}…“`);
     return f;
   });
-  const addrLh = fs * 1.15; // enger Zeilenabstand in der Anschrift (DIN: 6 Zeilen in 27,3 mm)
+  const addrLh = LAYOUT.addrLineHeight;
   for (const line of recipientLines) {
-    check.line("Anschrift", line, font, fs, LAYOUT.addrLeft, LAYOUT.addrLeft + LAYOUT.addrWidth);
-    page.drawText(line, { x: LAYOUT.addrLeft, y, size: fs, font, color: black });
+    check.line("Anschrift", line, font, afs, LAYOUT.addrLeft, LAYOUT.addrLeft + LAYOUT.addrWidth);
+    page.drawText(line, { x: LAYOUT.addrLeft, y, size: afs, font, color: black });
     y -= addrLh;
   }
-  // Unterkante der letzten Zeile (Grundlinie + Unterlänge) muss innerhalb von 90 mm liegen
-  if (A4.h - (y + addrLh - fs * 0.25) > mm(90)) check.warnings.push("Anschrift reicht über die Fensterzone (90 mm) hinaus");
+  // Unterkante der letzten Zeile (Grundlinie + Unterlänge) muss innerhalb der Adresszone liegen
+  if (A4.h - (y + addrLh - afs * 0.25) > LAYOUT.addrZoneBottom) check.warnings.push("Anschrift reicht über die Fensterzone hinaus");
 
   // --- Informationsblock rechts ---
   y = A4.h - LAYOUT.infoTop;
