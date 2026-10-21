@@ -9,7 +9,7 @@ export const OPERATOR = {
   phone: "+49 176 21940180",
   email: "info@flinkbrief.com",
   vatId: "", // USt-IdNr. eintragen, sobald vorhanden
-  domain: "flinkbrief.com",
+  domain: "www.flinkbrief.com",
 };
 
 export const LEGAL_UPDATED = "20.10.2026";
