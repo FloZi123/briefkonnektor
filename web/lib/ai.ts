@@ -77,3 +77,43 @@ export async function draftLetter(d: Draft, instruction?: string): Promise<strin
   if (!text) throw new Error("Kein Text erhalten");
   return text;
 }
+
+export interface ReviewPoint {
+  kind: "fehlt" | "beleg" | "anlage" | "widerspruch" | "hinweis";
+  text: string;
+}
+
+/** Kurze Prüfliste zum fertigen Entwurf – was der Absender vor der Unterschrift noch ergänzen oder prüfen sollte. */
+export async function reviewLetter(d: Draft): Promise<ReviewPoint[]> {
+  const kind = LETTER_KINDS[d.kind];
+  const res = await client().messages.create({
+    model: MODEL,
+    max_tokens: 600,
+    system:
+      "Du prüfst den Entwurf eines Briefs einer Privatperson (Deutschland) vor dem Versand. Antworte ausschließlich mit einem JSON-Array aus maximal 5 Objekten " +
+      '{"kind": "fehlt"|"beleg"|"anlage"|"widerspruch"|"hinweis", "text": "…"}. ' +
+      "fehlt = eine für die Briefart wichtige Angabe fehlt oder ist nur Platzhalter; beleg = eine Behauptung, die mit Nachweis stärker wäre; " +
+      "anlage = Dokument, das beigelegt werden sollte; widerspruch = Angaben passen nicht zusammen; hinweis = sonst Wichtiges (kein Rechtsrat). " +
+      "Jeder Text ein kurzer, konkreter Satz in Sie-Form, max. 110 Zeichen. Nichts erfinden, keine Paragraphen, keine Allgemeinplätze. " +
+      "Wenn nichts zu beanstanden ist, antworte mit [].",
+    messages: [
+      {
+        role: "user",
+        content: `Briefart: ${kind.label}\nEmpfänger: ${d.recipient.name}\nAktenzeichen: ${d.reference || "–"}\nDatum des Schreibens: ${d.documentDate || "–"}\nAngaben des Absenders: ${d.reason || "–"}\n\nBrief:\n${d.body}`,
+      },
+    ],
+  });
+  const text = res.content.find((c) => c.type === "text")?.text ?? "[]";
+  const m = text.match(/\[[\s\S]*\]/);
+  if (!m) return [];
+  try {
+    const arr = JSON.parse(m[0]) as unknown;
+    if (!Array.isArray(arr)) return [];
+    return arr
+      .filter((p): p is ReviewPoint => !!p && typeof p === "object" && typeof (p as ReviewPoint).text === "string")
+      .map((p) => ({ kind: ["fehlt", "beleg", "anlage", "widerspruch", "hinweis"].includes(p.kind) ? p.kind : "hinweis", text: p.text.slice(0, 160) }))
+      .slice(0, 5);
+  } catch {
+    return [];
+  }
+}

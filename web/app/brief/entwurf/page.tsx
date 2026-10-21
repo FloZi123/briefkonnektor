@@ -5,6 +5,10 @@ import { ScreenHead, Disclaimer } from "@/components/ui";
 import { useDictation, DictateButton, appendText } from "@/components/dictate";
 import { useDraft } from "@/lib/store";
 import { subjectLine } from "@/lib/subject";
+import { findPlaceholders } from "@/lib/placeholders";
+import type { ReviewPoint } from "@/lib/ai";
+
+const TAG: Record<ReviewPoint["kind"], string> = { fehlt: "fehlt", beleg: "Beleg", anlage: "Anlage", widerspruch: "prüfen", hinweis: "Hinweis" };
 
 const CHIPS: Array<{ label: string; instruction: string }> = [
   { label: "Sachlicher", instruction: "Formuliere nüchterner und sachlicher, ohne Emotionen." },
@@ -19,6 +23,9 @@ export default function EntwurfScreen() {
   const [busy, setBusy] = useState<string | null>(null);
   const [error, setError] = useState<string>();
   const [wish, setWish] = useState("");
+  const [review, setReview] = useState<ReviewPoint[] | null>(null);
+  const [reviewing, setReviewing] = useState(false);
+  const [reviewedBody, setReviewedBody] = useState("");
   const dictate = useDictation((t) => setWish((w) => appendText(w, t)));
   const router = useRouter();
 
@@ -35,6 +42,7 @@ export default function EntwurfScreen() {
       const { body } = (await res.json()) as { body: string };
       update({ body });
       if (instruction) setWish("");
+      void runReview(body);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Entwurf konnte nicht erstellt werden");
     } finally {
@@ -42,12 +50,29 @@ export default function EntwurfScreen() {
     }
   }
 
+  async function runReview(body: string) {
+    if (!body || body === reviewedBody) return;
+    setReviewing(true);
+    try {
+      const res = await fetch("/api/review", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ draft: { ...draft, body } }) });
+      const { points } = (await res.json()) as { points: ReviewPoint[] };
+      setReview(points ?? []);
+      setReviewedBody(body);
+    } catch {
+      setReview([]);
+    } finally {
+      setReviewing(false);
+    }
+  }
+
   useEffect(() => {
     if (ready && !draft.body) void generate();
+    else if (ready && draft.body) void runReview(draft.body);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ready]);
 
   if (!ready) return null;
+  const placeholders = findPlaceholders(draft.body);
 
   return (
     <main className="screen">
@@ -78,6 +103,7 @@ export default function EntwurfScreen() {
           style={{ minHeight: 320, fontSize: 15 }}
           value={busy === "init" ? "Entwurf wird geschrieben …" : draft.body}
           onChange={(e) => update({ body: e.target.value })}
+          onBlur={() => void runReview(draft.body)}
           disabled={busy !== null}
           aria-busy={busy !== null}
         />
@@ -89,6 +115,30 @@ export default function EntwurfScreen() {
             </button>
           </div>
         )}
+        {busy === null && draft.body && (placeholders.length > 0 || reviewing || review !== null) && (
+          <div className={`reviewbox${placeholders.length === 0 && review && review.length === 0 ? " ok" : ""}`} aria-live="polite">
+            <div className="title">
+              {placeholders.length === 0 && review && review.length === 0 ? "Sieht vollständig aus" : "Vor der Unterschrift prüfen"}
+              {reviewing && <span className="muted" style={{ fontWeight: 400, fontSize: 12 }}>· wird geprüft …</span>}
+            </div>
+            {(placeholders.length > 0 || (review && review.length > 0)) && (
+              <ul>
+                {placeholders.map((p) => (
+                  <li key={p} className="ph">
+                    Platzhalter {p} im Text ersetzen
+                  </li>
+                ))}
+                {review?.map((r, i) => (
+                  <li key={i}>
+                    <span className="tag">{TAG[r.kind]}</span>
+                    {r.text}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+
         <div className="row" style={{ gap: 8 }}>
           {CHIPS.map((c) => (
             <button key={c.label} type="button" className="chip" disabled={busy !== null || !draft.body} onClick={() => generate(c.instruction)}>
@@ -120,8 +170,8 @@ export default function EntwurfScreen() {
       </div>
 
       <div className="screen-foot">
-        <button className="btn btn-primary" disabled={!draft.body || busy !== null} onClick={() => router.push("/brief/unterschrift")}>
-          Weiter zur Unterschrift
+        <button className="btn btn-primary" disabled={!draft.body || busy !== null || placeholders.length > 0} onClick={() => router.push("/brief/unterschrift")}>
+          {placeholders.length > 0 ? `Noch ${placeholders.length} Platzhalter ersetzen` : "Weiter zur Unterschrift"}
         </button>
         <Disclaimer />
       </div>

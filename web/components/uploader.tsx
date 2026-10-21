@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { saveDraft, loadDraft } from "@/lib/store";
 import type { Extracted } from "@/lib/types";
+import { validateFile, prepareFile } from "@/lib/upload";
 
 /** Foto/PDF aufnehmen oder hochladen → /api/extract → Entwurf vorbefüllen → Schritt 2 */
 export function Uploader() {
@@ -11,10 +12,16 @@ export function Uploader() {
   const [error, setError] = useState<string>();
   const router = useRouter();
 
-  async function onFile(file: File) {
+  async function onFile(raw: File) {
     setError(undefined);
+    const problem = validateFile(raw);
+    if (problem) {
+      setError(problem);
+      return;
+    }
     setBusy(true);
     try {
+      const file = await prepareFile(raw);
       const fd = new FormData();
       fd.append("file", file);
       const res = await fetch("/api/extract", { method: "POST", body: fd });
@@ -69,7 +76,7 @@ export function Uploader() {
       <input
         ref={input}
         type="file"
-        accept="image/*,application/pdf"
+        accept="image/*,.heic,.heif,application/pdf"
         capture="environment"
         hidden
         onChange={(e) => {
