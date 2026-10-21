@@ -32,7 +32,7 @@ Ohne `STRIPE_SECRET_KEY` wird die Zahlung simuliert (Bestellung sofort „bezahl
 
 ## Vercel
 
-Eigenes Projekt `flinkbrief`, Root Directory `web`, Framework Next.js, Domain https://www.flinkbrief.com (Apex → Redirect auf www), Functions in fra1. Env-Vars wie in `.env.example`; `NEXT_PUBLIC_BASE_URL` auf die Produktions-Domain. Stripe-Webhook auf `https://<domain>/api/webhooks/stripe`, Event `checkout.session.completed`.
+Eigenes Projekt `flinkbrief`, Root Directory `web`, Framework Next.js, Domain https://www.flinkbrief.de (flinkbrief.de, flinkbrief.com, www.flinkbrief.com → 308 Redirect), Functions in fra1. Env-Vars wie in `.env.example`; `NEXT_PUBLIC_BASE_URL` auf die Produktions-Domain. Stripe-Webhook auf `https://<domain>/api/webhooks/stripe`, Event `checkout.session.completed`.
 
 ## Supabase (Bestellungen + PDFs)
 

@@ -7,9 +7,9 @@ export const OPERATOR = {
   city: "Oberviechtach",
   country: "Deutschland",
   phone: "+49 176 21940180",
-  email: "info@flinkbrief.com",
+  email: "info@flinkbrief.de",
   vatId: "", // USt-IdNr. eintragen, sobald vorhanden
-  domain: "www.flinkbrief.com",
+  domain: "www.flinkbrief.de",
 };
 
 export const LEGAL_UPDATED = "20.10.2026";
