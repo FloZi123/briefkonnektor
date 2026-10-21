@@ -31,7 +31,7 @@ export async function extractFromDocument(bytes: Buffer, mime: string): Promise<
       "documentType (Art des Schreibens in 1–2 Wörtern: Bescheid, Aufforderung, Anhörung, Mahnung, Mitteilung, Rechnung, Vertrag …), " +
       "summary (3–5 kurze Sätze in einfacher Sprache für Laien: wer schreibt, was wurde entschieden oder verlangt, was passiert, wenn man nichts tut – nur was im Dokument steht, keine Bewertung, keine Empfehlung), " +
       "demand (was konkret vom Empfänger verlangt wird, ein Satz; weglassen, wenn nichts verlangt wird), " +
-      "options (Array der passenden Briefarten aus der Liste, beste zuerst, max. 3 – z. B. bei einer Aufforderung zur Mitwirkung: unterlagen, fristverlaengerung, nachfrage; bei einem ablehnenden Bescheid: widerspruch, nachfrage), " +
+      "options (Array der passenden Briefarten aus der Liste, beste zuerst, max. 3 – z. B. bei einer Aufforderung zur Mitwirkung: unterlagen, fristverlaengerung, nachfrage; bei einem ablehnenden Bescheid: widerspruch, nachfrage; bei Mahnung/Zahlungserinnerung/Rechnung: fristverlaengerung, nachfrage, beschwerde; bei Bußgeldbescheid: einspruch, nachfrage), " +
       "keyFacts (Array, max. 8: alle konkreten Angaben, die man zum Antworten braucht – Beträge mit Währung, Zeiträume, Fristen, Leistungs-/Vertragsart, Nummern, geforderte Unterlagen – je ein kurzer Satz wie 'Offener Betrag: 94,00 EUR' oder 'Zahlungsfrist: 30.10.2026'). " +
       "Unlesbare oder fehlende Felder weglassen, nie raten. Bei Adressen Straße und Hausnummer in street, PLZ fünfstellig in zip.",
     messages: [{ role: "user", content: [source, { type: "text", text: "Extrahiere die Felder als JSON." }] }],
