@@ -9,24 +9,26 @@ export function ResumeDraft() {
   useEffect(() => setD(hasDraft()), []);
   if (!d) return null;
   return (
-    <div className="card" style={{ padding: "12px 14px", display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
-      <span style={{ flex: 1, fontSize: 14 }}>
-        <strong>Angefangener Brief:</strong> {d.label}
-      </span>
-      <Link href={d.step} className="chip" style={{ borderColor: "var(--flink)", color: "var(--flink)", textDecoration: "none" }}>
-        Fortsetzen
-      </Link>
-      <button
-        type="button"
-        className="btn-link btn"
-        style={{ width: "auto", minHeight: 0, padding: 0, fontSize: 13 }}
-        onClick={() => {
-          clearDraft();
-          setD(null);
-        }}
-      >
-        Verwerfen
-      </button>
+    <div className="resume">
+      <span className="eyebrow">Angefangener Brief</span>
+      <strong style={{ fontSize: 17 }}>{d.label}</strong>
+      <span className="muted" style={{ fontSize: 13 }}>Ihre Angaben und der Entwurf sind gespeichert (24 Stunden).</span>
+      <div className="row" style={{ gap: 10, marginTop: 6 }}>
+        <Link href={d.step} className="btn btn-primary" style={{ flex: 1 }}>
+          Weitermachen
+        </Link>
+        <button
+          type="button"
+          className="btn btn-secondary"
+          style={{ width: "auto", padding: "0 16px" }}
+          onClick={() => {
+            clearDraft();
+            setD(null);
+          }}
+        >
+          Neu anfangen
+        </button>
+      </div>
     </div>
   );
 }

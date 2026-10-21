@@ -171,3 +171,6 @@ textarea.input { min-height: 160px; line-height: 1.5; resize: vertical; }
 .adjust summary::-webkit-details-marker { display: none; }
 .adjust summary::after { content: "+"; font-family: var(--font-mono); color: var(--ink-muted); }
 .adjust[open] summary::after { content: "–"; }
+
+/* Angefangener Brief (Startseite) */
+.resume { display: flex; flex-direction: column; gap: 6px; padding: 16px; border-radius: var(--radius-l); border: 1.5px solid var(--flink); background: var(--flink-soft); margin-bottom: 16px; }
