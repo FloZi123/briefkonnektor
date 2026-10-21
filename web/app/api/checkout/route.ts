@@ -23,6 +23,8 @@ export async function POST(req: Request) {
     await updateOrder(order);
     const { dispatchOrder } = await import("@/lib/letter");
     await updateOrder(await dispatchOrder(order));
+    const { sendOrderConfirmation } = await import("@/lib/mail");
+    await sendOrderConfirmation(order);
     return NextResponse.json({ url: `${base()}/brief/fertig?order=${order.id}&t=${order.token}`, simulated: true });
   }
 
