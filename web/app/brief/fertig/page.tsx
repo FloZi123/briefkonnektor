@@ -3,6 +3,7 @@ import { Logo } from "@/components/ui";
 import { Footer } from "@/components/legal";
 import { ClearDraftOnDone } from "@/components/resume";
 import { getOrder } from "@/lib/orders";
+import { reconcileWithStripe } from "@/lib/finalize";
 import { PRICES } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -10,7 +11,8 @@ export const dynamic = "force-dynamic";
 export default async function FertigScreen({ searchParams }: { searchParams: Promise<{ order?: string; t?: string }> }) {
   const { order: id, t } = await searchParams;
   const found = id ? await getOrder(id) : undefined;
-  const order = found && t && found.token === t ? found : undefined; // ohne passendes Token keine Daten
+  let order = found && t && found.token === t ? found : undefined; // ohne passendes Token keine Daten
+  if (order?.status === "pending") order = await reconcileWithStripe(order); // Webhook verspätet oder nicht angekommen
 
   if (!order) {
     return (

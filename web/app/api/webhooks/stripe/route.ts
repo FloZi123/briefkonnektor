@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { getOrder, findByStripeSession, updateOrder } from "@/lib/orders";
-import { dispatchOrder } from "@/lib/letter";
-import { sendOrderConfirmation, sendStatusMail } from "@/lib/mail";
+import { getOrder, findByStripeSession } from "@/lib/orders";
+import { finalizePaidOrder } from "@/lib/finalize";
 
 export const runtime = "nodejs";
 
@@ -24,12 +23,7 @@ export async function POST(req: Request) {
     const order =
       (session.metadata?.orderId && (await getOrder(session.metadata.orderId, { withPdf: true }))) ||
       (await findByStripeSession(session.id, { withPdf: true }));
-    if (order && order.status === "pending") {
-      order.status = "paid";
-      const done = await updateOrder(await dispatchOrder(order));
-      await sendOrderConfirmation(done);
-      if (done.status === "failed") await sendStatusMail(done, "failed");
-    }
+    if (order && order.status === "pending") await finalizePaidOrder(order);
   }
   return NextResponse.json({ received: true });
 }
