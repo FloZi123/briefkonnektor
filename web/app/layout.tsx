@@ -8,9 +8,11 @@ const sans = IBM_Plex_Sans({ subsets: ["latin"], weight: ["400", "500", "600"], 
 const mono = JetBrains_Mono({ subsets: ["latin"], weight: ["500"], variable: "--font-mono-src", display: "swap" });
 
 export const metadata: Metadata = {
-  title: { default: "Flinkbrief", template: "%s – Flinkbrief" },
-  description: "Bescheid fotografieren, Widerspruch fertig. Wir formulieren nach Ihren Angaben und verschicken per Post.",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.flinkbrief.de"),
+  title: { default: "Flinkbrief – Bescheid fotografieren, Widerspruch per Post", template: "%s – Flinkbrief" },
+  description: "Behördenbrief fotografieren, in einfachen Worten verstehen, Widerspruch oder Antwort formulieren lassen, mit dem Finger unterschreiben und per Post verschicken. Ab 4,99 €.",
   applicationName: "Flinkbrief",
+  openGraph: { siteName: "Flinkbrief", locale: "de_DE", type: "website" },
 };
 
 export const viewport: Viewport = { themeColor: "#2f5bea", width: "device-width", initialScale: 1, viewportFit: "cover" };

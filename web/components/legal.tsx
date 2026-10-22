@@ -5,6 +5,7 @@ import { LEGAL_UPDATED } from "@/lib/legal";
 /** Fußzeile mit Rechtslinks – auf Start- und Bestätigungsseite sowie allen Rechtsseiten. */
 export const Footer = () => (
   <footer className="footer">
+    <Link href="/ratgeber">Ratgeber</Link>
     <Link href="/impressum">Impressum</Link>
     <Link href="/datenschutz">Datenschutz</Link>
     <Link href="/agb">AGB</Link>

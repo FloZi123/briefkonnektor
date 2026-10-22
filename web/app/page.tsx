@@ -4,6 +4,7 @@ import { LETTER_KINDS, PRICES, euro, type LetterKind } from "@/lib/types";
 import { Uploader } from "@/components/uploader";
 import { Footer } from "@/components/legal";
 import { ResumeDraft } from "@/components/resume";
+import { GUIDES } from "@/lib/guides";
 
 const GROUPS: Array<{ title: string; kinds: LetterKind[] }> = [
   { title: "Behörde und Amt", kinds: ["widerspruch", "einspruch", "unterlagen", "fristverlaengerung", "nachfrage"] },
@@ -171,6 +172,19 @@ export default function Home() {
           </span>
           <span className="nm">Nur PDF</span>
           <span className="ds">Selbst drucken, unterschreiben und einwerfen. Nötig bei Miet- und Arbeitsvertrag.</span>
+        </div>
+      </section>
+
+      <section className="kinds" aria-label="Ratgeber">
+        <h2>Erst verstehen, dann antworten</h2>
+        <p className="sub">Was im Schreiben steht, welche Frist läuft und was Sie tun können – je Bescheid-Typ kurz erklärt.</p>
+        <div className="guide-list">
+          {GUIDES.map((g) => (
+            <Link key={g.slug} href={`/ratgeber/${g.slug}`} className="guide-card">
+              <strong>{g.title}</strong>
+              <small>{g.deadlineShort}</small>
+            </Link>
+          ))}
         </div>
       </section>
 
