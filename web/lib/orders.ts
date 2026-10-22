@@ -37,7 +37,11 @@ interface OrderStore {
   update(o: Order): Promise<Order>;
   findByStripeSession(sessionId: string): Promise<Order | undefined>;
   findByCarrierRef(ref: string): Promise<Order | undefined>;
+  /** Offene Bestellungen für den Abgleich: pending (Zahlung?), queued/sent (Carrier?). */
+  listOpen(): Promise<Order[]>;
 }
+
+const OPEN: OrderStatus[] = ["pending", "queued", "sent"];
 
 /* ---------- In-Memory ---------- */
 
@@ -61,6 +65,9 @@ const memoryStore: OrderStore = {
   },
   async findByCarrierRef(ref) {
     return [...mem.values()].find((o) => o.carrierRef === ref);
+  },
+  async listOpen() {
+    return [...mem.values()].filter((o) => OPEN.includes(o.status));
   },
 };
 
@@ -186,6 +193,11 @@ function supabaseStore(sb: SupabaseClient): OrderStore {
       if (error) throw new Error(`orders select: ${error.message}`);
       return data ? fromRow(data) : undefined;
     },
+    async listOpen() {
+      const { data, error } = await sb.from("orders").select("*").in("status", OPEN).order("created_at", { ascending: false }).limit(200);
+      if (error) throw new Error(`orders select: ${error.message}`);
+      return (data as Row[]).map(fromRow);
+    },
   };
 }
 
@@ -245,4 +257,8 @@ export async function findByStripeSession(sessionId: string, opts: { withPdf?: b
 
 export async function findByCarrierRef(ref: string): Promise<Order | undefined> {
   return getStore().findByCarrierRef(ref);
+}
+
+export async function listOpenOrders(): Promise<Order[]> {
+  return getStore().listOpen();
 }
