@@ -46,7 +46,7 @@ function layout(title: string, bodyHtml: string): string {
 <tr><td style="padding:22px 28px 0;"><a href="${base()}" style="font-family:Arial,Helvetica,sans-serif;font-weight:800;font-size:20px;color:#16203a;text-decoration:none;">flink<span style="color:#2f5bea;">brief</span></a></td></tr>
 <tr><td style="padding:18px 28px 8px;">${bodyHtml}</td></tr>
 <tr><td style="padding:14px 28px 20px;border-top:1px solid #dcdfd9;font-size:12px;line-height:1.5;color:#5a6274;">
-${esc(O.name)} · ${esc(O.street)} · ${esc(O.zip)} ${esc(O.city)} · <a href="mailto:${O.email}" style="color:#5a6274;">${O.email}</a><br>
+Flinkbrief · <a href="mailto:${O.email}" style="color:#5a6274;">${O.email}</a><br>
 <a href="${base()}/impressum" style="color:#5a6274;">Impressum</a> · <a href="${base()}/datenschutz" style="color:#5a6274;">Datenschutz</a> · <a href="${base()}/widerruf" style="color:#5a6274;">Widerruf</a> · <a href="${base()}/agb" style="color:#5a6274;">AGB</a>
 </td></tr></table></td></tr></table></body></html>`;
 }
@@ -78,9 +78,9 @@ ${o.deadline ? `<tr><td style="padding:3px 14px 3px 0;color:#5a6274;">Frist (Ihr
 </table>
 ${button(isDownload ? pdfUrl(o) : statusUrl(o), isDownload ? "PDF herunterladen" : "Status ansehen")}
 <p style="margin:0 0 14px;font-size:14px;color:#5a6274;">${isDownload ? `Status und Download jederzeit: <a href="${statusUrl(o)}" style="color:#2f5bea;">${statusUrl(o)}</a>` : `Eine PDF-Kopie Ihres Briefs: <a href="${pdfUrl(o)}" style="color:#2f5bea;">herunterladen</a>`}<br>Links gelten 30 Tage, danach löschen wir Bestellung und PDF automatisch.</p>
-<p style="margin:0 0 6px;">Mit freundlichen Grüßen<br><strong>${esc(O.name)}</strong><br>Flinkbrief</p>`,
+<p style="margin:0 0 6px;">Mit freundlichen Grüßen<br><strong>Ihr Flinkbrief-Team</strong></p>`,
   );
-  const text = `Guten Tag ${o.draft.sender.name},\n\n${intro}\n\nBestellnummer: ${o.id}\nBetreff: ${o.subject}\nEmpfänger: ${o.recipientName}\nLeistung: ${product} · ${o.priceLabel} inkl. MwSt.\n\nStatus: ${statusUrl(o)}\nPDF: ${pdfUrl(o)}\n\nLinks gelten 30 Tage.\n\nMit freundlichen Grüßen\n${O.name}\nFlinkbrief · ${base()}`;
+  const text = `Guten Tag ${o.draft.sender.name},\n\n${intro}\n\nBestellnummer: ${o.id}\nBetreff: ${o.subject}\nEmpfänger: ${o.recipientName}\nLeistung: ${product} · ${o.priceLabel} inkl. MwSt.\n\nStatus: ${statusUrl(o)}\nPDF: ${pdfUrl(o)}\n\nLinks gelten 30 Tage.\n\nMit freundlichen Grüßen\nIhr Flinkbrief-Team · ${base()}`;
   return { subject, html, text };
 }
 
@@ -96,8 +96,8 @@ export function renderStatusMail(o: Order, status: "sent" | "failed"): { subject
     status === "sent"
       ? "Ihr Brief wurde gedruckt und der Post übergeben. Die Zustellung dauert innerhalb Deutschlands üblicherweise ein bis drei Werktage."
       : "beim Versand Ihres Briefs ist ein Problem aufgetreten. Wir kümmern uns darum und melden uns bei Ihnen – Sie müssen nichts tun. Wenn es eilt, können Sie das PDF herunterladen, ausdrucken und selbst einwerfen.";
-  const html = layout(subject, `<p style="margin:0 0 14px;">Guten Tag ${esc(o.draft.sender.name)},</p><p style="margin:0 0 14px;">${esc(msg)}</p>${button(statusUrl(o), "Status ansehen")}<p style="margin:0 0 6px;">Mit freundlichen Grüßen<br><strong>${esc(O.name)}</strong><br>Flinkbrief</p>`);
-  const text = `Guten Tag ${o.draft.sender.name},\n\n${msg}\n\nStatus: ${statusUrl(o)}\n\nMit freundlichen Grüßen\n${O.name}\nFlinkbrief`;
+  const html = layout(subject, `<p style="margin:0 0 14px;">Guten Tag ${esc(o.draft.sender.name)},</p><p style="margin:0 0 14px;">${esc(msg)}</p>${button(statusUrl(o), "Status ansehen")}<p style="margin:0 0 6px;">Mit freundlichen Grüßen<br><strong>Ihr Flinkbrief-Team</strong></p>`);
+  const text = `Guten Tag ${o.draft.sender.name},\n\n${msg}\n\nStatus: ${statusUrl(o)}\n\nMit freundlichen Grüßen\nIhr Flinkbrief-Team`;
   return { subject, html, text };
 }
 

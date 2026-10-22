@@ -5,7 +5,6 @@ import { Logo } from "@/components/ui";
 import { Footer } from "@/components/legal";
 import { GUIDES, guideBySlug } from "@/lib/guides";
 import { LETTER_KINDS, PRICES, euro } from "@/lib/types";
-import { OPERATOR as O } from "@/lib/legal";
 
 const base = () => (process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.flinkbrief.de").replace(/\/$/, "");
 
@@ -134,9 +133,6 @@ export default async function GuidePage({ params }: { params: Promise<{ slug: st
                 </span>
               ) : null;
             })}
-          </p>
-          <p className="muted">
-            {O.name} · {O.street} · {O.zip} {O.city}
           </p>
         </section>
       </article>
