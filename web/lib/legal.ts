@@ -12,5 +12,5 @@ export const OPERATOR = {
   domain: "www.flinkbrief.de",
 };
 
-export const LEGAL_UPDATED = "20.10.2026";
+export const LEGAL_UPDATED = "22.10.2026";
 export const RETENTION_DAYS = 30;

@@ -30,8 +30,15 @@ export default function Page() {
       </p>
       <p>
         Die Schriften der Website liefern wir von unserem eigenen Server aus; es wird keine Verbindung zu Google Fonts aufgebaut. Wir setzen keine
-        Cookies und keine Analyse- oder Werbedienste ein. Ihr laufender Entwurf wird ausschließlich im Sitzungsspeicher Ihres Browsers
-        (sessionStorage) gehalten und beim Schließen des Tabs verworfen.
+        Cookies und keine Werbedienste ein. Ihr laufender Entwurf wird ausschließlich im lokalen Speicher Ihres Browsers (localStorage) gehalten,
+        damit er beim Fotografieren oder Bezahlen nicht verloren geht; er wird nach 24 Stunden oder beim Abschluss der Bestellung automatisch
+        gelöscht und nie an uns übertragen.
+      </p>
+      <p>
+        Zur Reichweitenmessung nutzen wir Vercel Web Analytics. Der Dienst arbeitet ohne Cookies und ohne geräteübergreifende Kennungen: Es werden
+        aufgerufene Seite, Verweisquelle, Land, Browser- und Gerätetyp erfasst; aus der IP-Adresse wird ein kurzlebiger, nicht rückrechenbarer
+        Hashwert gebildet, der nach 24 Stunden verworfen wird. Eine Identifizierung einzelner Personen ist damit nicht möglich. Rechtsgrundlage ist
+        unser berechtigtes Interesse, zu erfahren, welche Seiten genutzt werden (Art. 6 Abs. 1 lit. f DSGVO).
       </p>
 
       <h2>3. Erkennung aus Foto oder PDF</h2>
