@@ -65,6 +65,7 @@ export interface Draft {
   shipping: Shipping;
   email: string;
   deadline?: string; // berechnet, TT.MM.JJJJ
+  attribution?: string; // Kampagnen-Kennung der Landingpage (z. B. "steuer"), nur zur Auswertung
 }
 
 export const PRICES: Record<Shipping, { cents: number; label: string; hint: string }> = {

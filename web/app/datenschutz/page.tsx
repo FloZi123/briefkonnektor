@@ -32,7 +32,9 @@ export default function Page() {
         Die Schriften der Website liefern wir von unserem eigenen Server aus; es wird keine Verbindung zu Google Fonts aufgebaut. Wir setzen keine
         Cookies und keine Werbedienste ein. Ihr laufender Entwurf wird ausschließlich im lokalen Speicher Ihres Browsers (localStorage) gehalten,
         damit er beim Fotografieren oder Bezahlen nicht verloren geht; er wird nach 24 Stunden oder beim Abschluss der Bestellung automatisch
-        gelöscht und nie an uns übertragen.
+        gelöscht und nie an uns übertragen. Kommen Sie über eine unserer Anzeigen, merkt sich Ihr Browser zusätzlich für 30 Tage ein
+        Schlagwort der Einstiegsseite (z. B. „steuer“) – keine Kennung, keine Zuordnung zu Ihrer Person; wir zählen damit nur, welche Themen zu
+        Bestellungen führen.
       </p>
       <p>
         Zur Reichweitenmessung nutzen wir Vercel Web Analytics. Der Dienst arbeitet ohne Cookies und ohne geräteübergreifende Kennungen: Es werden

@@ -428,4 +428,16 @@ export const GUIDES: Guide[] = [
   },
 ];
 
+/** Einstiegsseiten für Anzeigen (/a/<kampagne>): gleicher Inhalt wie der Ratgeber, eigener Pfad je Kampagne – Aufrufe je Kampagne ohne Cookies zählbar. */
+export const CAMPAIGNS: Record<string, string> = {
+  steuer: "einspruch-steuerbescheid",
+  nebenkosten: "widerspruch-nebenkostenabrechnung",
+  mahnung: "mahnung-widersprechen",
+  bussgeld: "einspruch-bussgeldbescheid",
+  jobcenter: "widerspruch-jobcenter-bescheid",
+  krankenkasse: "widerspruch-krankenkasse",
+  rente: "widerspruch-rentenversicherung",
+  rundfunk: "widerspruch-rundfunkbeitrag",
+};
+
 export const guideBySlug = (slug: string) => GUIDES.find((g) => g.slug === slug);

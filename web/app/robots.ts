@@ -4,7 +4,7 @@ const base = () => (process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.flinkbrief.
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: [{ userAgent: "*", allow: "/", disallow: ["/brief/", "/api/", "/status"] }],
+    rules: [{ userAgent: "*", allow: "/", disallow: ["/brief/", "/api/", "/status", "/a/"] }],
     sitemap: `${base()}/sitemap.xml`,
   };
 }

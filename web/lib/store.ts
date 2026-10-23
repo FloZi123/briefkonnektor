@@ -48,9 +48,27 @@ export function loadDraft(): Draft {
     return { ...empty };
   }
 }
+const ATTR_KEY = "flinkbrief.attr";
+/** Kampagnen-Kennung der Einstiegsseite merken (nur ein Schlagwort wie "steuer", keine ID). */
+export function setAttribution(campaign: string) {
+  try {
+    storage()?.setItem(ATTR_KEY, JSON.stringify({ c: campaign.slice(0, 40), at: Date.now() }));
+  } catch {}
+}
+function getAttribution(): string | undefined {
+  try {
+    const raw = storage()?.getItem(ATTR_KEY);
+    if (!raw) return undefined;
+    const { c, at } = JSON.parse(raw) as { c: string; at: number };
+    return Date.now() - at < 30 * 24 * 60 * 60 * 1000 ? c : undefined;
+  } catch {
+    return undefined;
+  }
+}
 export function saveDraft(d: Draft) {
   try {
-    storage()?.setItem(KEY, JSON.stringify({ ...d, savedAt: Date.now() }));
+    const attribution = d.attribution ?? getAttribution();
+    storage()?.setItem(KEY, JSON.stringify({ ...d, ...(attribution ? { attribution } : {}), savedAt: Date.now() }));
   } catch {
     /* privater Modus o. ä. – Flow läuft trotzdem im State weiter */
   }
