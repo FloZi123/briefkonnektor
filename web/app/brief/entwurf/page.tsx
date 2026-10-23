@@ -34,6 +34,8 @@ export default function EntwurfScreen() {
   const [reviewing, setReviewing] = useState(false);
   const [reviewedBody, setReviewedBody] = useState("");
   const [adjustOpen, setAdjustOpen] = useState(false);
+  // Textfeld bleibt, wenn der Text gelöscht wurde oder die Erstellung scheiterte – sonst gäbe es keinen Weg zurück
+  const [edited, setEdited] = useState(false);
   const dictate = useDictation((t) => setWish((w) => appendText(w, t)));
   const router = useRouter();
 
@@ -129,15 +131,29 @@ export default function EntwurfScreen() {
 
         {!busy && draft.body && placeholders.length > 0 && <FillAssistant placeholders={placeholders} fills={fills} loading={reviewing && fills.length === 0} onFill={fill} />}
 
-        {!busy && draft.body && (
+        {!busy && (draft.body || edited || error) && (
           <textarea
             id="body"
             className="input"
             style={{ minHeight: 300, fontSize: 15 }}
             value={draft.body}
-            onChange={(e) => update({ body: e.target.value })}
+            onChange={(e) => {
+              setEdited(true);
+              update({ body: e.target.value });
+            }}
             onBlur={() => void runReview(draft.body)}
+            placeholder="Brieftext hier eingeben – oder unten neu erstellen lassen."
+            aria-label="Brieftext"
           />
+        )}
+
+        {!busy && !error && edited && !hasBody(draft) && (
+          <div className="notice" style={{ alignItems: "center", justifyContent: "space-between", flexWrap: "wrap" }}>
+            <span>Der Text ist leer.</span>
+            <button type="button" className="chip" onClick={() => generate()}>
+              Entwurf neu erstellen
+            </button>
+          </div>
         )}
 
         {!busy && draft.body && placeholders.length === 0 && (hints.length > 0 || reviewing || review !== null) && (
