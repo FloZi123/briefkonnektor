@@ -6,7 +6,7 @@ import { useDictation, DictateButton, appendText } from "@/components/dictate";
 import { AddressLookup, useZipToCity } from "@/components/address";
 import { useDraft } from "@/lib/store";
 import { LETTER_KINDS, type LetterKind } from "@/lib/types";
-import { widerspruchsfrist, einspruchsfrist, daysUntil } from "@/lib/dates";
+import { widerspruchsfrist, einspruchsfrist, steuerfrist, daysUntil } from "@/lib/dates";
 
 function DatenScreen() {
   const { draft, update, ready } = useDraft();
@@ -25,9 +25,9 @@ function DatenScreen() {
 
   if (!ready) return null;
   const kind = LETTER_KINDS[draft.kind];
-  const frist = draft.kind === "widerspruch" ? widerspruchsfrist(draft.documentDate) : draft.kind === "einspruch" ? einspruchsfrist(draft.documentDate) : undefined;
+  const frist = draft.kind === "widerspruch" ? widerspruchsfrist(draft.documentDate) : draft.kind === "einspruch" ? einspruchsfrist(draft.documentDate) : draft.kind === "steuer" ? steuerfrist(draft.documentDate) : undefined;
   const remedyMismatch =
-    draft.remedy && draft.remedy !== "keine" && ((draft.remedy === "einspruch" && draft.kind === "widerspruch") || (draft.remedy === "widerspruch" && draft.kind === "einspruch") || (draft.remedy === "klage" && (draft.kind === "widerspruch" || draft.kind === "einspruch")));
+    draft.remedy && draft.remedy !== "keine" && ((draft.remedy === "einspruch" && draft.kind === "widerspruch") || (draft.remedy === "widerspruch" && (draft.kind === "einspruch" || draft.kind === "steuer")) || (draft.remedy === "klage" && (draft.kind === "widerspruch" || draft.kind === "einspruch" || draft.kind === "steuer")));
   const days = frist ? daysUntil(frist) : undefined;
   const fromPhoto = params.get("from") === "photo";
 
@@ -49,7 +49,7 @@ function DatenScreen() {
       {frist && (
         <div style={{ paddingTop: 14 }}>
           <Fristbox>
-            <strong>{draft.kind === "einspruch" ? "Einspruchsfrist: 2 Wochen ab Zustellung." : "Widerspruchsfrist: 1 Monat ab Bekanntgabe."}</strong> Bescheid vom {draft.documentDate} → Eingang bei der Behörde bis spätestens <strong>{frist}</strong>
+            <strong>{draft.kind === "einspruch" ? "Einspruchsfrist: 2 Wochen ab Zustellung." : draft.kind === "steuer" ? "Einspruchsfrist: 1 Monat ab Bekanntgabe (Bescheiddatum + 4 Tage)." : "Widerspruchsfrist: 1 Monat ab Bekanntgabe."}</strong> Bescheid vom {draft.documentDate} → Eingang bei der Behörde bis spätestens <strong>{frist}</strong>
             {days !== undefined && days >= 0 && ` (noch ${days} Tage)`}
             {days !== undefined && days < 0 && " – Frist vermutlich abgelaufen; bitte prüfen."}
           </Fristbox>

@@ -3,7 +3,7 @@ import { useRouter } from "next/navigation";
 import { ScreenHead, Fristbox } from "@/components/ui";
 import { useDraft } from "@/lib/store";
 import { LETTER_KINDS, type LetterKind } from "@/lib/types";
-import { widerspruchsfrist, einspruchsfrist, daysUntil } from "@/lib/dates";
+import { widerspruchsfrist, einspruchsfrist, steuerfrist, daysUntil } from "@/lib/dates";
 
 /**
  * Nach dem Foto: Was steht im Brief (einfache Sprache), was wird verlangt, welche Frist – dann das Anliegen wählen.
@@ -23,8 +23,10 @@ export default function VerstehenScreen() {
 
   const suggested = (u.options ?? []).filter((k) => LETTER_KINDS[k]);
   const others = (Object.keys(LETTER_KINDS) as LetterKind[]).filter((k) => !suggested.includes(k) && k !== "frei");
-  const fristKind = draft.remedy === "einspruch" ? "einspruch" : draft.remedy === "widerspruch" ? "widerspruch" : suggested[0] === "einspruch" ? "einspruch" : suggested[0] === "widerspruch" ? "widerspruch" : undefined;
-  const frist = fristKind === "einspruch" ? einspruchsfrist(draft.documentDate) : fristKind === "widerspruch" ? widerspruchsfrist(draft.documentDate) : undefined;
+  // Steuerbescheid: Rechtsbehelf heißt ebenfalls "Einspruch", Frist aber 1 Monat – die Briefart "steuer" entscheidet
+  const isSteuer = draft.kind === "steuer" || suggested[0] === "steuer";
+  const fristKind = isSteuer ? "steuer" : draft.remedy === "einspruch" ? "einspruch" : draft.remedy === "widerspruch" ? "widerspruch" : suggested[0] === "einspruch" ? "einspruch" : suggested[0] === "widerspruch" ? "widerspruch" : undefined;
+  const frist = fristKind === "einspruch" ? einspruchsfrist(draft.documentDate) : fristKind === "steuer" ? steuerfrist(draft.documentDate) : fristKind === "widerspruch" ? widerspruchsfrist(draft.documentDate) : undefined;
   const days = frist ? daysUntil(frist) : undefined;
 
   const choose = (k: LetterKind) => {
@@ -71,7 +73,7 @@ export default function VerstehenScreen() {
             )}
             {frist && (
               <>
-                {fristKind === "einspruch" ? "Einspruch" : "Widerspruch"} muss danach bis spätestens <strong>{frist}</strong> eingehen
+                {fristKind === "einspruch" || fristKind === "steuer" ? "Einspruch" : "Widerspruch"} muss danach bis spätestens <strong>{frist}</strong> eingehen
                 {days !== undefined && days >= 0 && ` (noch ${days} Tage)`}
                 {days !== undefined && days < 0 && " – vermutlich abgelaufen, bitte prüfen"}.
               </>

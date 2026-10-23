@@ -269,6 +269,163 @@ export const GUIDES: Guide[] = [
     cta: "Festsetzungsbescheid fotografieren – Flinkbrief erkennt Beitragsnummer, Zeitraum und Betrag und formuliert den Widerspruch an die richtige Rundfunkanstalt.",
     related: ["widerspruch-jobcenter-bescheid", "mahnung-widersprechen"],
   },
+  {
+    slug: "einspruch-steuerbescheid",
+    kind: "steuer",
+    title: "Einspruch gegen den Steuerbescheid",
+    metaTitle: "Einspruch Steuerbescheid: Frist, Form, Aussetzung der Vollziehung",
+    description: "Ein Monat Frist, kostenlos, per Brief oder ELSTER: Wie Sie gegen einen Steuerbescheid Einspruch einlegen, was mit der Nachzahlung passiert und wann die schlichte Änderung reicht.",
+    deadline: "Ein Monat ab Bekanntgabe. Ein Bescheid gilt am vierten Tag nach Aufgabe zur Post als bekannt gegeben – Bescheiddatum plus vier Tage, dann ein Monat.",
+    deadlineShort: "Ein Monat ab Bekanntgabe",
+    sections: [
+      {
+        h: "Was im Steuerbescheid steht",
+        p: [
+          "Der Steuerbescheid vom Finanzamt nennt die festgesetzte Steuer, die bereits gezahlten Beträge und daraus die Nachzahlung oder Erstattung. Entscheidend ist der Erläuterungsteil am Ende: Dort steht, wo das Finanzamt von Ihrer Erklärung abgewichen ist – etwa nicht anerkannte Werbungskosten, gestrichene Fahrtkosten oder fehlende Belege.",
+          "Ebenfalls im Bescheid: Vorläufigkeitsvermerke (Punkte, die wegen anhängiger Verfahren offen bleiben) und die Rechtsbehelfsbelehrung mit Frist und Adresse für den Einspruch.",
+        ],
+      },
+      {
+        h: "Frist und Form",
+        p: [
+          "Der Einspruch muss innerhalb eines Monats nach Bekanntgabe beim Finanzamt eingehen, das den Bescheid erlassen hat (§ 355 AO). Bei Post gilt der Bescheid am vierten Tag nach Aufgabe als bekannt gegeben (§ 122 AO); fällt das Fristende auf ein Wochenende oder einen Feiertag, gilt der nächste Werktag.",
+          "Der Einspruch ist kostenlos und formlos möglich: per Brief, über ELSTER („Einspruch“ im Formularbereich) oder zur Niederschrift im Finanzamt. Nötig sind Steuernummer, Steuerart und Jahr, das Datum des Bescheids und die Erklärung, dass Sie Einspruch einlegen. Die Begründung darf nachgereicht werden.",
+        ],
+      },
+      {
+        h: "Zahlen müssen Sie trotzdem – außer bei Aussetzung",
+        p: [
+          "Der Einspruch stoppt die Fälligkeit nicht. Die Nachzahlung ist zum genannten Termin fällig, sonst entstehen Säumniszuschläge von einem Prozent pro Monat. Wenn ernstliche Zweifel an der Rechtmäßigkeit bestehen, können Sie zusammen mit dem Einspruch die Aussetzung der Vollziehung beantragen (§ 361 AO) – dann muss der strittige Betrag bis zur Entscheidung nicht gezahlt werden. Wird der Einspruch später abgelehnt, fallen für die Zeit der Aussetzung Zinsen an.",
+        ],
+      },
+      {
+        h: "Einspruch oder schlichte Änderung?",
+        p: [
+          "Beim Einspruch prüft das Finanzamt den ganzen Bescheid neu – auch zu Ihren Ungunsten. Vor einer solchen „Verböserung“ muss es Sie aber hinweisen, und Sie können den Einspruch dann zurücknehmen.",
+          "Geht es nur um einen einzelnen Punkt, zum Beispiel einen vergessenen Beleg, reicht oft ein Antrag auf schlichte Änderung (§ 172 AO). Er ist an dieselbe Frist gebunden, löst aber keine Gesamtprüfung aus. Nach Ablauf der Frist bleiben nur enge Ausnahmen: neue Tatsachen, die Sie nicht grob verschuldet verspätet vorbringen, oder offenbare Schreib- und Rechenfehler des Finanzamts.",
+        ],
+      },
+      {
+        h: "Häufige Einspruchsgründe",
+        p: ["Diese Punkte lohnen einen Blick in den Erläuterungsteil:"],
+        list: [
+          "Werbungskosten, Sonderausgaben oder außergewöhnliche Belastungen ohne Begründung gekürzt",
+          "Entfernungspauschale, Homeoffice-Pauschale oder Arbeitsmittel nicht berücksichtigt",
+          "Handwerker- und Haushaltsleistungen nicht angerechnet",
+          "Kinderfreibetrag, Kinderbetreuungskosten oder Unterhaltsleistungen fehlen",
+          "Zahlendreher gegenüber der Erklärung oder Lohnsteuerbescheinigung",
+        ],
+      },
+    ],
+    faq: [
+      { q: "Muss ich während des Einspruchs zahlen?", a: "Ja, die Nachzahlung bleibt fällig. Nur ein bewilligter Antrag auf Aussetzung der Vollziehung schiebt die Zahlung des strittigen Betrags auf." },
+      { q: "Kann der Bescheid durch den Einspruch schlechter werden?", a: "Grundsätzlich ja, das Finanzamt prüft alles neu. Es muss Sie vorher auf eine Verschlechterung hinweisen; dann können Sie den Einspruch zurücknehmen und es bleibt beim alten Bescheid." },
+      { q: "Reicht eine E-Mail an das Finanzamt?", a: "Eine einfache E-Mail genügt in der Regel nicht. Sicher sind Brief, ELSTER oder die Niederschrift im Finanzamt. Für die Frist zählt der Eingang beim Finanzamt." },
+      { q: "Was ist mit dem Vorläufigkeitsvermerk?", a: "Punkte mit Vorläufigkeitsvermerk bleiben automatisch offen, solange Musterverfahren laufen. Dafür brauchen Sie keinen eigenen Einspruch – nur für alles andere." },
+    ],
+    cta: "Steuerbescheid fotografieren – Flinkbrief erkennt Steuernummer, Steuerart und Frist und formuliert den Einspruch mit Ihren Beanstandungen.",
+    related: ["widerspruch-jobcenter-bescheid", "mahnung-widersprechen"],
+  },
+  {
+    slug: "widerspruch-krankenkasse",
+    kind: "widerspruch",
+    title: "Widerspruch gegen einen Bescheid der Krankenkasse",
+    metaTitle: "Widerspruch Krankenkasse: Ablehnung, Krankengeld, Hilfsmittel – Frist und Form",
+    description: "Ein Monat Frist, kostenlos, schriftlich: Was Sie tun können, wenn die Krankenkasse eine Leistung ablehnt, das Krankengeld beendet oder Geld zurückfordert.",
+    deadline: "Ein Monat ab Bekanntgabe – Bescheiddatum plus drei Tage, dann ein Monat. Fehlt die Rechtsbehelfsbelehrung, verlängert sich die Frist auf ein Jahr.",
+    deadlineShort: "Ein Monat ab Bekanntgabe",
+    sections: [
+      {
+        h: "Welche Bescheide es gibt",
+        p: [
+          "Krankenkassen entscheiden per Bescheid über Leistungen: Hilfsmittel wie Rollstuhl oder Hörgerät, Reha und Kuren, Zahnersatz, Psychotherapie, häusliche Krankenpflege, Fahrtkosten – und über das Krankengeld, insbesondere dessen Ende. Dazu kommen Beitragsbescheide für freiwillig Versicherte und Rückforderungen.",
+          "Oft stützt sich die Ablehnung auf ein Gutachten des Medizinischen Dienstes (MD). Dieses Gutachten können Sie anfordern; es ist der Ausgangspunkt für jede Begründung.",
+        ],
+      },
+      {
+        h: "Frist und Form",
+        p: [
+          "Der Widerspruch muss innerhalb eines Monats nach Bekanntgabe bei der Krankenkasse eingehen (§ 84 SGG). Ein per Post versandter Bescheid gilt am dritten Tag nach Aufgabe als bekannt gegeben (§ 37 SGB X). Der Widerspruch ist kostenlos; schriftlich heißt Brief mit Unterschrift oder Niederschrift in der Geschäftsstelle. Eine Begründung ist nicht Pflicht und kann nachgereicht werden.",
+          "Über den Widerspruch entscheidet der Widerspruchsausschuss der Kasse. Lehnt er ab, bleibt die Klage beim Sozialgericht – ebenfalls kostenlos, Frist wieder ein Monat.",
+        ],
+      },
+      {
+        h: "Was Sie in den Widerspruch aufnehmen sollten",
+        p: ["Je konkreter, desto besser. Hilfreich sind:"],
+        list: [
+          "Das MD-Gutachten und die Akte anfordern (Akteneinsicht nach § 25 SGB X)",
+          "Aktuelle Befunde und eine Stellungnahme des behandelnden Arztes beilegen, die auf das Gutachten eingeht",
+          "Bei Hilfsmitteln: warum das beantragte Hilfsmittel nötig ist und die vorgeschlagene Alternative nicht ausreicht",
+          "Beim Krankengeld: lückenlose Arbeitsunfähigkeitsbescheinigungen nachweisen – Lücken sind der häufigste Ablehnungsgrund",
+          "Bei Rückforderungen: Zeitraum, Betrag und Berechnung anfordern",
+        ],
+      },
+      {
+        h: "Fristen der Kasse: Genehmigungsfiktion",
+        p: [
+          "Die Krankenkasse muss über einen Leistungsantrag innerhalb von drei Wochen entscheiden, bei Einschaltung des Medizinischen Dienstes innerhalb von fünf Wochen (§ 13 Abs. 3a SGB V). Versäumt sie das ohne Mitteilung eines hinreichenden Grundes, können Sie sich die Leistung selbst beschaffen und die Kosten erstattet verlangen. Prüfen Sie deshalb immer das Datum Ihres Antrags.",
+        ],
+      },
+    ],
+    faq: [
+      { q: "Kostet der Widerspruch etwas?", a: "Nein. Widerspruch und eine spätere Klage beim Sozialgericht sind für Versicherte kostenlos." },
+      { q: "Muss ich das MD-Gutachten hinnehmen?", a: "Nein. Es ist eine Stellungnahme nach Aktenlage. Ein aktueller Befundbericht Ihres Arztes, der sich konkret mit dem Gutachten auseinandersetzt, ist das stärkste Mittel im Widerspruch." },
+      { q: "Läuft das Krankengeld während des Widerspruchs weiter?", a: "Bei einer Ablehnung oder Beendigung in der Regel nicht. Umso wichtiger ist, schnell zu widersprechen und die Arbeitsunfähigkeit lückenlos zu belegen." },
+      { q: "Was, wenn die Frist vorbei ist?", a: "Dann bleibt der Überprüfungsantrag nach § 44 SGB X. Die Kasse muss den Bescheid erneut prüfen; Leistungen gibt es aber höchstens vier Jahre rückwirkend." },
+    ],
+    cta: "Bescheid fotografieren – Flinkbrief erkennt Versichertennummer, Datum und Frist und formuliert den Widerspruch mit Bitte um das Gutachten.",
+    related: ["widerspruch-rentenversicherung", "widerspruch-jobcenter-bescheid"],
+  },
+  {
+    slug: "widerspruch-rentenversicherung",
+    kind: "widerspruch",
+    title: "Widerspruch gegen einen Bescheid der Rentenversicherung",
+    metaTitle: "Widerspruch Rentenbescheid: Erwerbsminderung, Versicherungsverlauf, Frist",
+    description: "Ein Monat Frist gegen Rentenbescheid, Ablehnung der Erwerbsminderungsrente oder Reha. Was Sie prüfen sollten und wie der Widerspruch an die Deutsche Rentenversicherung aussieht.",
+    deadline: "Ein Monat ab Bekanntgabe – Bescheiddatum plus drei Tage, dann ein Monat. Danach wird der Rentenbescheid bestandskräftig.",
+    deadlineShort: "Ein Monat ab Bekanntgabe",
+    sections: [
+      {
+        h: "Welche Bescheide es gibt",
+        p: [
+          "Die Deutsche Rentenversicherung verschickt Rentenbescheide (Altersrente, Höhe, anerkannte Zeiten), Bescheide über Erwerbsminderungsrente oder deren Ablehnung, Reha-Bescheide, Bescheide zum Hinzuverdienst sowie Rückforderungen. Jeder davon ist ein Verwaltungsakt mit Widerspruchsmöglichkeit.",
+          "Dem Rentenbescheid liegt der Versicherungsverlauf bei. Er listet jeden Monat Ihres Lebens mit Beitrags-, Anrechnungs- und Berücksichtigungszeiten. Fehler dort wirken sich direkt auf die Rentenhöhe aus.",
+        ],
+      },
+      {
+        h: "Frist und Form",
+        p: [
+          "Der Widerspruch muss innerhalb eines Monats nach Bekanntgabe bei der Rentenversicherung eingehen (§ 84 SGG); der Bescheid gilt am dritten Tag nach Aufgabe zur Post als bekannt gegeben. Der Widerspruch ist kostenlos, schriftlich per Brief oder zur Niederschrift in einer Auskunfts- und Beratungsstelle. Begründung und Unterlagen können nachgereicht werden.",
+          "Es entscheidet die Widerspruchsstelle des Rentenversicherungsträgers. Gegen deren Bescheid bleibt die Klage beim Sozialgericht, kostenlos, Frist ein Monat.",
+        ],
+      },
+      {
+        h: "Rentenbescheid: den Versicherungsverlauf prüfen",
+        p: ["Typische Lücken und Fehler, die sich mit Nachweisen beheben lassen:"],
+        list: [
+          "Schul- und Hochschulzeiten nach dem 17. Geburtstag nicht als Anrechnungszeit erfasst",
+          "Kindererziehungszeiten fehlen oder sind dem falschen Elternteil zugeordnet",
+          "Zeiten von Krankheit, Arbeitslosigkeit oder Pflege eines Angehörigen nicht berücksichtigt",
+          "Ausbildung, Wehr- oder Zivildienst fehlen",
+          "Entgelte einzelner Jahre weichen von den Lohnunterlagen ab",
+        ],
+      },
+      {
+        h: "Erwerbsminderungsrente abgelehnt",
+        p: [
+          "Die Ablehnung stützt sich fast immer auf ein Gutachten mit der Aussage, Sie könnten noch mindestens sechs Stunden täglich arbeiten. Im Widerspruch zählt deshalb: das Gutachten anfordern, aktuelle Facharztberichte beilegen, die konkret die Belastbarkeit beschreiben, und auf Beschwerden hinweisen, die das Gutachten nicht berücksichtigt hat. Wer mehrere Erkrankungen hat, sollte das Zusammenwirken benennen – einzeln betrachtet wirkt jede harmloser.",
+        ],
+      },
+    ],
+    faq: [
+      { q: "Versicherungsverlauf falsch – Widerspruch oder Kontenklärung?", a: "Vor dem Rentenantrag: Kontenklärung beantragen. Liegt der Rentenbescheid schon vor, muss der Fehler mit dem Widerspruch innerhalb eines Monats gerügt werden – danach bleibt nur der Überprüfungsantrag nach § 44 SGB X mit höchstens vier Jahren Rückwirkung." },
+      { q: "Wird die Rente während des Widerspruchs weitergezahlt?", a: "Eine bewilligte Rente läuft weiter. Bei einer Ablehnung gibt es bis zur Entscheidung nichts; bei Rückforderungen hat der Widerspruch aufschiebende Wirkung." },
+      { q: "Kostet der Widerspruch etwas?", a: "Nein. Widerspruch und Klage beim Sozialgericht sind für Versicherte kostenlos. Kostenlos beraten die Auskunfts- und Beratungsstellen der Rentenversicherung und die Versichertenältesten." },
+      { q: "Wie lange dauert das Widerspruchsverfahren?", a: "Bei Rentenbescheiden meist drei bis sechs Monate, bei Erwerbsminderung mit neuem Gutachten oft länger. Nach drei Monaten ohne Entscheidung ist eine Untätigkeitsklage möglich." },
+    ],
+    cta: "Bescheid fotografieren – Flinkbrief erkennt Versicherungsnummer, Datum und Frist und formuliert den Widerspruch mit Bitte um Gutachten und Akteneinsicht.",
+    related: ["widerspruch-krankenkasse", "widerspruch-jobcenter-bescheid"],
+  },
 ];
 
 export const guideBySlug = (slug: string) => GUIDES.find((g) => g.slug === slug);

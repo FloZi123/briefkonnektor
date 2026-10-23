@@ -26,12 +26,12 @@ export async function extractFromDocument(bytes: Buffer, mime: string): Promise<
       "sender (der Adressat des Dokuments, falls im Anschriftfeld lesbar: name, street, zip, city), " +
       "reference (Aktenzeichen, Kunden-, Vertrags- oder Geschäftszeichen), documentDate (TT.MM.JJJJ), subject (worum es geht, ein Satz, deutsch), " +
       "deadlineHint (Frist laut Rechtsbehelfsbelehrung oder Text, wörtlich), " +
-      "remedy (Rechtsbehelf laut Rechtsbehelfsbelehrung: widerspruch | einspruch | klage | beschwerde | keine – bei Bußgeldbescheiden ist es 'einspruch', dann auch kind='einspruch'), " +
+      "remedy (Rechtsbehelf laut Rechtsbehelfsbelehrung: widerspruch | einspruch | klage | beschwerde | keine – bei Bußgeldbescheiden ist es 'einspruch', dann auch kind='einspruch'; bei Steuerbescheiden des Finanzamts ist es ebenfalls 'einspruch', dann kind='steuer'), " +
       "remedyText (Kernsatz der Rechtsbehelfsbelehrung, max. 160 Zeichen), amount (Betrag falls genannt), confidence (high|medium|low), " +
       "documentType (Art des Schreibens in 1–2 Wörtern: Bescheid, Aufforderung, Anhörung, Mahnung, Mitteilung, Rechnung, Vertrag …), " +
       "summary (3–5 kurze Sätze in einfacher Sprache für Laien: wer schreibt, was wurde entschieden oder verlangt, was passiert, wenn man nichts tut – nur was im Dokument steht, keine Bewertung, keine Empfehlung), " +
       "demand (was konkret vom Empfänger verlangt wird, ein Satz; weglassen, wenn nichts verlangt wird), " +
-      "options (Array der passenden Briefarten aus der Liste, beste zuerst, max. 3 – z. B. bei einer Aufforderung zur Mitwirkung: unterlagen, fristverlaengerung, nachfrage; bei einem ablehnenden Bescheid: widerspruch, nachfrage; bei Mahnung/Zahlungserinnerung/Rechnung: fristverlaengerung, nachfrage, beschwerde; bei Bußgeldbescheid: einspruch, nachfrage), " +
+      "options (Array der passenden Briefarten aus der Liste, beste zuerst, max. 3 – z. B. bei einer Aufforderung zur Mitwirkung: unterlagen, fristverlaengerung, nachfrage; bei einem ablehnenden Bescheid: widerspruch, nachfrage; bei Mahnung/Zahlungserinnerung/Rechnung: fristverlaengerung, nachfrage, beschwerde; bei Bußgeldbescheid: einspruch, nachfrage; bei Steuerbescheid: steuer, nachfrage), " +
       "keyFacts (Array, max. 8: alle konkreten Angaben, die man zum Antworten braucht – Beträge mit Währung, Zeiträume, Fristen, Leistungs-/Vertragsart, Nummern, geforderte Unterlagen – je ein kurzer Satz wie 'Offener Betrag: 94,00 EUR' oder 'Zahlungsfrist: 30.10.2026'). " +
       "Unlesbare oder fehlende Felder weglassen, nie raten. Bei Adressen Straße und Hausnummer in street, PLZ fünfstellig in zip.",
     messages: [{ role: "user", content: [source, { type: "text", text: "Extrahiere die Felder als JSON." }] }],
@@ -79,6 +79,7 @@ export async function draftLetter(d: Draft, instruction?: string): Promise<strin
     "Grußformel: 'Mit freundlichen Grüßen'. " +
     "Verboten (Rechtsdienstleistungsgesetz): Erfolgsaussichten bewerten, Paragraphen oder Urteile zitieren, Fristen berechnen, rechtliche Behauptungen aufstellen, die nicht aus den Angaben stammen. Erlaubt: die Erklärung selbst ('lege ich fristgerecht Widerspruch ein'), Bitten (Überprüfung, Akteneinsicht, Begründung), Fristen setzen bei Mängelanzeige/Mahnung. " +
     "Bei Einspruch gegen Bußgeldbescheid: 'lege ich Einspruch ein', Begründung nur wenn Angaben vorhanden (sonst ankündigen, dass sie nach Akteneinsicht folgt), um Akteneinsicht bitten. " +
+    "Bei Einspruch gegen Steuerbescheid: 'lege ich Einspruch ein', Steuerart und Jahr sowie Steuernummer nennen, die beanstandeten Punkte konkret benennen (Position, Betrag), ggf. Belege als Anlage ankündigen; wenn der Nutzer es wünscht, Aussetzung der Vollziehung nach § 361 AO beantragen; keine Rechtsbehauptungen, die nicht aus den Angaben folgen. " +
     "Bei Unterlagen nachreichen: Bezug auf die Aufforderung, beigefügte Unterlagen als Aufzählung (nur die aus den Angaben), fehlende Unterlagen mit Grund und Nachreichtermin nennen, um Eingangsbestätigung bitten. " +
     "Bei Nachfrage/Stellungnahme: Fragen nummeriert und konkret, Stellungnahme sachlich zu den Punkten des Schreibens, um schriftliche Antwort bitten; nichts einräumen, was der Absender nicht angegeben hat. " +
     "Bei Fristverlängerung: Bezug, bisherige Frist, Grund aus den Angaben, konkreter neuer Termin (sonst Platzhalter), Bitte um kurze Bestätigung; Zusicherung, bis dahin zu liefern. " +

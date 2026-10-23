@@ -3,6 +3,7 @@ import { z } from "zod";
 export const LETTER_KINDS = {
   widerspruch: { label: "Widerspruch gegen Bescheid", hint: "1 Monat Frist", deadlineDays: 30 },
   einspruch: { label: "Einspruch gegen Bußgeldbescheid", hint: "2 Wochen Frist", deadlineDays: 14 },
+  steuer: { label: "Einspruch gegen Steuerbescheid", hint: "1 Monat Frist", deadlineDays: 30 },
   unterlagen: { label: "Unterlagen nachreichen", hint: "Antwort auf Aufforderung", deadlineDays: null },
   nachfrage: { label: "Nachfrage / Stellungnahme", hint: "etwas klären oder erklären", deadlineDays: null },
   fristverlaengerung: { label: "Fristverlängerung beantragen", hint: "mehr Zeit erbitten", deadlineDays: null },

@@ -25,15 +25,15 @@ export function formCheck(d: Draft): FormPoint[] {
     const wants = d.kind;
     const mismatch =
       (d.remedy === "einspruch" && wants === "widerspruch") ||
-      (d.remedy === "widerspruch" && wants === "einspruch") ||
-      (d.remedy === "klage" && (wants === "widerspruch" || wants === "einspruch"));
+      (d.remedy === "widerspruch" && (wants === "einspruch" || wants === "steuer")) ||
+      (d.remedy === "klage" && (wants === "widerspruch" || wants === "einspruch" || wants === "steuer"));
     if (mismatch) {
       const label = { einspruch: "Einspruch", widerspruch: "Widerspruch", klage: "Klage", beschwerde: "Beschwerde" }[d.remedy];
       out.push({
         kind: "rechtsbehelf",
         text:
           d.remedy === "klage"
-            ? `Laut Rechtsbehelfsbelehrung ist gegen diesen Bescheid Klage vorgesehen, kein ${wants === "einspruch" ? "Einspruch" : "Widerspruch"}. Ein Brief hilft hier meist nicht – bitte die Belehrung lesen oder beraten lassen.`
+            ? `Laut Rechtsbehelfsbelehrung ist gegen diesen Bescheid Klage vorgesehen, kein ${wants === "einspruch" || wants === "steuer" ? "Einspruch" : "Widerspruch"}. Ein Brief hilft hier meist nicht – bitte die Belehrung lesen oder beraten lassen.`
             : `Laut Rechtsbehelfsbelehrung heißt der Rechtsbehelf „${label}“. Briefart im Schritt zuvor entsprechend wählen.`,
         severity: "warn",
       });
@@ -46,6 +46,7 @@ export function formCheck(d: Draft): FormPoint[] {
       if (!d.documentDate && !d.reference) out.push({ kind: "form", text: "Bescheid nicht eindeutig bezeichnet: Datum oder Aktenzeichen im Schritt zuvor eintragen.", severity: "warn" });
       break;
     case "einspruch":
+    case "steuer":
       if (!has(b, /einspruch/i)) out.push({ kind: "form", text: "Das Wort „Einspruch“ fehlt im Text – die Erklärung muss eindeutig sein.", severity: "warn" });
       if (!d.reference) out.push({ kind: "form", text: "Aktenzeichen des Bußgeldbescheids fehlt – ohne Aktenzeichen kann die Behörde den Einspruch nicht zuordnen.", severity: "warn" });
       out.push({ kind: "form", text: "Einspruch muss innerhalb von 2 Wochen nach Zustellung bei der Bußgeldstelle eingehen – Einschreiben empfohlen.", severity: "info" });

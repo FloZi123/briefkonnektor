@@ -53,3 +53,18 @@ export function einspruchsfrist(documentDate: string): string | undefined {
   while (end.getDay() === 0 || end.getDay() === 6) end.setDate(end.getDate() + 1);
   return fmtDE(end);
 }
+
+/**
+ * Einspruchsfrist gegen Steuerbescheid: 1 Monat ab Bekanntgabe (§ 355 AO). Bekanntgabe gilt bei Post am 4. Tag nach Aufgabe
+ * (§ 122 Abs. 2 AO, seit 2025). Wir rechnen Bescheiddatum + 4 Tage, Ende = +1 Monat, Wochenende → Montag. Feiertage nicht berücksichtigt.
+ */
+export function steuerfrist(documentDate: string): string | undefined {
+  const d = parseDE(documentDate);
+  if (!d) return undefined;
+  const bekanntgabe = new Date(d);
+  bekanntgabe.setDate(bekanntgabe.getDate() + 4);
+  const end = new Date(bekanntgabe);
+  end.setMonth(end.getMonth() + 1);
+  while (end.getDay() === 0 || end.getDay() === 6) end.setDate(end.getDate() + 1);
+  return fmtDE(end);
+}

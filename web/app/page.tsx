@@ -7,7 +7,7 @@ import { ResumeDraft } from "@/components/resume";
 import { GUIDES } from "@/lib/guides";
 
 const GROUPS: Array<{ title: string; kinds: LetterKind[] }> = [
-  { title: "Behörde und Amt", kinds: ["widerspruch", "einspruch", "unterlagen", "fristverlaengerung", "nachfrage"] },
+  { title: "Behörde und Amt", kinds: ["widerspruch", "einspruch", "steuer", "unterlagen", "fristverlaengerung", "nachfrage"] },
   { title: "Wohnung", kinds: ["nebenkosten", "maengel"] },
   { title: "Geld und Sonstiges", kinds: ["mahnung", "beschwerde", "frei"] },
 ];
