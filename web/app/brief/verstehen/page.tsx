@@ -1,4 +1,5 @@
 "use client";
+import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ScreenHead, Fristbox } from "@/components/ui";
 import { useDraft } from "@/lib/store";
@@ -14,12 +15,14 @@ const REMEDY_LABEL: Record<string, string> = { widerspruch: "Widerspruch", einsp
 export default function VerstehenScreen() {
   const { draft, update, ready } = useDraft();
   const router = useRouter();
-  if (!ready) return null;
   const u = draft.understanding;
-  if (!u?.summary) {
-    router.replace("/brief/daten?from=photo");
-    return null;
-  }
+  // Ohne Zusammenfassung gibt es hier nichts zu zeigen. Weiterleiten im Effekt, nicht beim Rendern (React-Fehler);
+  // „Das haben wir erkannt“ nur, wenn aus dem Foto tatsächlich Angaben stammen.
+  const recognized = !!(draft.recipient.name || draft.reference || draft.documentDate);
+  useEffect(() => {
+    if (ready && !u?.summary) router.replace(recognized ? "/brief/daten?from=photo" : "/brief/daten");
+  }, [ready, u?.summary, recognized, router]);
+  if (!ready || !u?.summary) return null;
 
   const suggested = (u.options ?? []).filter((k) => LETTER_KINDS[k]);
   const others = (Object.keys(LETTER_KINDS) as LetterKind[]).filter((k) => !suggested.includes(k) && k !== "frei");
