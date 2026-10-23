@@ -49,9 +49,10 @@ function DatenScreen() {
       {frist && (
         <div style={{ paddingTop: 14 }}>
           <Fristbox>
-            <strong>{draft.kind === "einspruch" ? "Einspruchsfrist: 2 Wochen ab Zustellung." : draft.kind === "steuer" ? "Einspruchsfrist: 1 Monat ab Bekanntgabe (Bescheiddatum + 4 Tage)." : "Widerspruchsfrist: 1 Monat ab Bekanntgabe."}</strong> Bescheid vom {draft.documentDate} → Eingang bei der Behörde bis spätestens <strong>{frist}</strong>
+            <strong>{draft.kind === "einspruch" ? "Einspruchsfrist: 2 Wochen ab Zustellung." : draft.kind === "steuer" ? "Einspruchsfrist: 1 Monat ab Bekanntgabe (§ 355 AO; Bekanntgabe gilt als Bescheiddatum + 4 Tage)." : "Widerspruchsfrist: 1 Monat ab Bekanntgabe."}</strong> Bescheid vom {draft.documentDate} → Eingang bei der Behörde bis spätestens <strong>{frist}</strong>
             {days !== undefined && days >= 0 && ` (noch ${days} Tage)`}
             {days !== undefined && days < 0 && " – Frist vermutlich abgelaufen; bitte prüfen."}
+            {" "}Maßgeblich ist die Rechtsbehelfsbelehrung auf dem Bescheid; ging er Ihnen nachweislich später zu, zählt der tatsächliche Zugang.
           </Fristbox>
         </div>
       )}
