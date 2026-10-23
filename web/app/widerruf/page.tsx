@@ -1,5 +1,6 @@
 import { LegalPage } from "@/components/legal";
 import { OPERATOR as O } from "@/lib/legal";
+import { PRICES, euro } from "@/lib/types";
 
 export const metadata = { title: "Widerrufsbelehrung" };
 
@@ -32,7 +33,7 @@ export default function Page() {
       <h2>Vorzeitiges Erlöschen des Widerrufsrechts</h2>
       <div className="box">
         <p>
-          <strong>PDF-Download (0,99 €):</strong> Das Widerrufsrecht erlischt, wenn wir mit der Bereitstellung des digitalen Inhalts begonnen haben,
+          <strong>PDF-Download ({euro(PRICES.download.cents)}):</strong> Das Widerrufsrecht erlischt, wenn wir mit der Bereitstellung des digitalen Inhalts begonnen haben,
           nachdem Sie ausdrücklich zugestimmt haben, dass wir vor Ablauf der Widerrufsfrist beginnen, und Sie Ihre Kenntnis bestätigt haben, dass Sie
           durch Ihre Zustimmung Ihr Widerrufsrecht verlieren (§ 356 Abs. 5 BGB).
         </p>
