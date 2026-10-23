@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/ui";
 import { Footer } from "@/components/legal";
-import { guideBySlug, type Guide } from "@/lib/guides";
+import { GUIDES, type Guide } from "@/lib/guides";
 import { LETTER_KINDS, PRICES, euro } from "@/lib/types";
 import { Attribution } from "@/components/attribution";
 
@@ -107,15 +107,12 @@ export function GuideArticle({ g, campaign }: { g: Guide; campaign?: string }) {
           </p>
           <p className="muted">
             Weitere Ratgeber:{" "}
-            {g.related.map((slug, i) => {
-              const r = guideBySlug(slug);
-              return r ? (
-                <span key={slug}>
-                  {i > 0 && " · "}
-                  <Link href={`/ratgeber/${slug}`}>{r.title}</Link>
-                </span>
-              ) : null;
-            })}
+            {GUIDES.filter((r) => r.slug !== g.slug).map((r, i) => (
+              <span key={r.slug}>
+                {i > 0 && " · "}
+                <Link href={`/ratgeber/${r.slug}`}>{r.title}</Link>
+              </span>
+            ))}
           </p>
         </section>
       </article>

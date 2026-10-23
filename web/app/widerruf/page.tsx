@@ -2,7 +2,7 @@ import { LegalPage } from "@/components/legal";
 import { OPERATOR as O } from "@/lib/legal";
 import { PRICES, euro } from "@/lib/types";
 
-export const metadata = { title: "Widerrufsbelehrung" };
+export const metadata = { title: "Widerrufsbelehrung", description: "Widerrufsrecht bei Flinkbrief und wann es durch den sofortigen Versand erlischt.", alternates: { canonical: "/widerruf" } };
 
 export default function Page() {
   return (

@@ -6,7 +6,8 @@ import { GUIDES } from "@/lib/guides";
 
 export const metadata: Metadata = {
   title: "Ratgeber: Bescheide verstehen und beantworten",
-  description: "Fristen, Form und Ablauf bei Bußgeldbescheid, Jobcenter-Bescheid, Nebenkostenabrechnung, Mahnung und Rundfunkbeitrag – verständlich erklärt.",
+  description: "Fristen, Form und Ablauf bei Bußgeldbescheid, Jobcenter-Bescheid, Nebenkostenabrechnung, Mahnung, Rundfunkbeitrag, Steuerbescheid, Krankenkasse und Rente – verständlich erklärt.",
+  alternates: { canonical: "/ratgeber" },
 };
 
 export default function RatgeberIndex() {

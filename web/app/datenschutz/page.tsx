@@ -1,7 +1,7 @@
 import { LegalPage } from "@/components/legal";
 import { OPERATOR as O, RETENTION_DAYS } from "@/lib/legal";
 
-export const metadata = { title: "Datenschutzerklärung" };
+export const metadata = { title: "Datenschutzerklärung", description: "Welche Daten Flinkbrief beim Fotografieren, Formulieren, Bezahlen und Versenden eines Briefs verarbeitet – und wie lange.", alternates: { canonical: "/datenschutz" } };
 
 export default function Page() {
   return (

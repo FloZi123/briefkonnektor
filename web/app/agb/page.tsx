@@ -2,7 +2,7 @@ import { LegalPage } from "@/components/legal";
 import { OPERATOR as O, RETENTION_DAYS } from "@/lib/legal";
 import { PRICES, euro } from "@/lib/types";
 
-export const metadata = { title: "AGB" };
+export const metadata = { title: "AGB", description: "Allgemeine Geschäftsbedingungen von Flinkbrief: Leistung, Preise, Versand, Widerruf, Haftung.", alternates: { canonical: "/agb" } };
 
 export default function Page() {
   return (

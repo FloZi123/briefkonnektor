@@ -1,7 +1,7 @@
 import { LegalPage } from "@/components/legal";
 import { OPERATOR as O } from "@/lib/legal";
 
-export const metadata = { title: "Impressum" };
+export const metadata = { title: "Impressum", description: "Anbieterkennzeichnung von Flinkbrief: Betreiber, Kontakt, Verantwortlicher.", alternates: { canonical: "/impressum" } };
 
 export default function Page() {
   return (

@@ -76,9 +76,31 @@ function DemoLetter() {
   );
 }
 
+export const metadata = { alternates: { canonical: "/" } };
+
+const base = () => (process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.flinkbrief.de").replace(/\/$/, "");
+
 export default function Home() {
+  const jsonLd = [
+    { "@context": "https://schema.org", "@type": "Organization", name: "Flinkbrief", url: base(), logo: `${base()}/flinkbrief-mark.svg`, email: "info@flinkbrief.de", areaServed: "DE" },
+    { "@context": "https://schema.org", "@type": "WebSite", name: "Flinkbrief", url: base(), inLanguage: "de" },
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      name: "Flinkbrief – Antwort auf Behördenpost per Post",
+      serviceType: "Formulierungshilfe und Briefversand",
+      provider: { "@type": "Organization", name: "Flinkbrief" },
+      areaServed: "DE",
+      offers: [
+        { "@type": "Offer", name: "Brief per Post", price: (PRICES.post.cents / 100).toFixed(2), priceCurrency: "EUR" },
+        { "@type": "Offer", name: "Einschreiben Einwurf", price: (PRICES.registered.cents / 100).toFixed(2), priceCurrency: "EUR" },
+        { "@type": "Offer", name: "Nur PDF", price: (PRICES.download.cents / 100).toFixed(2), priceCurrency: "EUR" },
+      ],
+    },
+  ];
   return (
     <main className="home">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="home-head">
         <Logo height={24} />
         <Link href="/status" className="quiet">
