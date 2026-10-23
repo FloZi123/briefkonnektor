@@ -109,8 +109,10 @@ export default function Home() {
       </div>
 
       <section className="hero">
+        <h1>
+          <span>Bescheid bekommen?</span> <span>Antwort in 5 Minuten.</span>
+        </h1>
         <div className="hero-copy">
-          <h1>Bescheid bekommen? Die Antwort ist in fünf Minuten in der Post.</h1>
           <p className="lead">
             Brief fotografieren. Flinkbrief erklärt in einfachen Worten, was drinsteht und bis wann Sie reagieren müssen, schreibt den Widerspruch nach Ihren
             Angaben und schickt ihn per Post – unterschrieben mit dem Finger.
@@ -173,7 +175,10 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="prices" aria-label="Preise">
+      <section className="prices">
+        <h2>Was es kostet</h2>
+        <p className="sub">Verstehen ist kostenlos. Sie zahlen erst, wenn Sie den Brief verschicken oder als PDF herunterladen.</p>
+        <div className="price-list">
         <div className="price hi">
           <span className="amt">
             {euro(PRICES.post.cents)}
@@ -198,6 +203,7 @@ export default function Home() {
           <span className="nm">Nur PDF</span>
           <span className="ds">Selbst drucken, unterschreiben und einwerfen. Nötig bei Miet- und Arbeitsvertrag.</span>
         </div>
+        </div>
       </section>
 
       <section className="kinds" aria-label="Ratgeber">
@@ -214,6 +220,7 @@ export default function Home() {
       </section>
 
       <section className="honest">
+        <h2>Was Sie wissen sollten</h2>
         <div>
           <b>Keine Rechtsberatung</b>
           Flinkbrief formuliert nach Ihren Angaben und prüft die Form. Ob ein Widerspruch Erfolg hat, kann nur ein Anwalt beurteilen.

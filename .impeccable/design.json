@@ -1,0 +1,345 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-23T21:07:37.070Z",
+  "title": "Design System: Flinkbrief",
+  "extensions": {
+    "colorMeta": {
+      "paper-000": {
+        "role": "neutral",
+        "displayName": "Papiergrau",
+        "canonical": "#eef1f6",
+        "tonalRamp": [
+          "hsl(218 31% 15%)",
+          "hsl(218 31% 25%)",
+          "hsl(218 31% 35%)",
+          "hsl(218 31% 45%)",
+          "hsl(218 31% 58%)",
+          "hsl(218 31% 70%)",
+          "hsl(218 31% 82%)",
+          "hsl(218 31% 95%)"
+        ]
+      },
+      "paper-100": {
+        "role": "neutral",
+        "displayName": "Blattweiß",
+        "canonical": "#ffffff",
+        "tonalRamp": [
+          "hsl(0 0% 15%)",
+          "hsl(0 0% 25%)",
+          "hsl(0 0% 35%)",
+          "hsl(0 0% 45%)",
+          "hsl(0 0% 58%)",
+          "hsl(0 0% 70%)",
+          "hsl(0 0% 82%)",
+          "hsl(0 0% 95%)"
+        ]
+      },
+      "paper-200": {
+        "role": "neutral",
+        "displayName": "Abgesetztes Grau",
+        "canonical": "#e4e8ef",
+        "tonalRamp": [
+          "hsl(218 26% 15%)",
+          "hsl(218 26% 25%)",
+          "hsl(218 26% 35%)",
+          "hsl(218 26% 45%)",
+          "hsl(218 26% 58%)",
+          "hsl(218 26% 70%)",
+          "hsl(218 26% 82%)",
+          "hsl(218 26% 95%)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Linie",
+        "canonical": "#d4d9e3",
+        "tonalRamp": [
+          "hsl(220 21% 15%)",
+          "hsl(220 21% 25%)",
+          "hsl(220 21% 35%)",
+          "hsl(220 21% 45%)",
+          "hsl(220 21% 58%)",
+          "hsl(220 21% 70%)",
+          "hsl(220 21% 82%)",
+          "hsl(220 21% 95%)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Tintenblau",
+        "canonical": "#0f1b3d",
+        "tonalRamp": [
+          "hsl(224 61% 15%)",
+          "hsl(224 61% 25%)",
+          "hsl(224 61% 35%)",
+          "hsl(224 61% 45%)",
+          "hsl(224 61% 58%)",
+          "hsl(224 61% 70%)",
+          "hsl(224 61% 82%)",
+          "hsl(224 61% 95%)"
+        ]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Tinte gedämpft",
+        "canonical": "#5b6680",
+        "tonalRamp": [
+          "hsl(222 17% 15%)",
+          "hsl(222 17% 25%)",
+          "hsl(222 17% 35%)",
+          "hsl(222 17% 45%)",
+          "hsl(222 17% 58%)",
+          "hsl(222 17% 70%)",
+          "hsl(222 17% 82%)",
+          "hsl(222 17% 95%)"
+        ]
+      },
+      "flink": {
+        "role": "primary",
+        "displayName": "Flink-Blau",
+        "canonical": "#2f5bea",
+        "tonalRamp": [
+          "hsl(226 82% 15%)",
+          "hsl(226 82% 25%)",
+          "hsl(226 82% 35%)",
+          "hsl(226 82% 45%)",
+          "hsl(226 82% 58%)",
+          "hsl(226 82% 70%)",
+          "hsl(226 82% 82%)",
+          "hsl(226 82% 95%)"
+        ]
+      },
+      "marker": {
+        "role": "secondary",
+        "displayName": "Textmarker-Gelb",
+        "canonical": "#fff1a8",
+        "tonalRamp": [
+          "hsl(50 100% 15%)",
+          "hsl(50 100% 25%)",
+          "hsl(50 100% 35%)",
+          "hsl(50 100% 45%)",
+          "hsl(50 100% 58%)",
+          "hsl(50 100% 70%)",
+          "hsl(50 100% 82%)",
+          "hsl(50 100% 95%)"
+        ]
+      },
+      "zugestellt": {
+        "role": "tertiary",
+        "displayName": "Zugestellt-Grün",
+        "canonical": "#0e8a5f",
+        "tonalRamp": [
+          "hsl(159 82% 15%)",
+          "hsl(159 82% 25%)",
+          "hsl(159 82% 35%)",
+          "hsl(159 82% 45%)",
+          "hsl(159 82% 58%)",
+          "hsl(159 82% 70%)",
+          "hsl(159 82% 82%)",
+          "hsl(159 82% 95%)"
+        ]
+      },
+      "frist": {
+        "role": "tertiary",
+        "displayName": "Frist-Orange",
+        "canonical": "#d9480f",
+        "tonalRamp": [
+          "hsl(17 87% 15%)",
+          "hsl(17 87% 25%)",
+          "hsl(17 87% 35%)",
+          "hsl(17 87% 45%)",
+          "hsl(17 87% 58%)",
+          "hsl(17 87% 70%)",
+          "hsl(17 87% 82%)",
+          "hsl(17 87% 95%)"
+        ]
+      },
+      "fehler": {
+        "role": "tertiary",
+        "displayName": "Fehler-Rot",
+        "canonical": "#b42318",
+        "tonalRamp": [
+          "hsl(4 76% 15%)",
+          "hsl(4 76% 25%)",
+          "hsl(4 76% 35%)",
+          "hsl(4 76% 45%)",
+          "hsl(4 76% 58%)",
+          "hsl(4 76% 70%)",
+          "hsl(4 76% 82%)",
+          "hsl(4 76% 95%)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero-Headline, eine pro Seite."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Abschnittsüberschriften."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Schritt-, Karten- und Gruppentitel."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Fließtext."
+      },
+      "lead": {
+        "displayName": "Lead",
+        "purpose": "Einleitung unter der Headline."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Feldbeschriftungen."
+      },
+      "data": {
+        "displayName": "Daten",
+        "purpose": "Aktenzeichen, Preise, Zähler."
+      }
+    },
+    "shadows": [
+      {
+        "name": "shadow-sheet",
+        "value": "0 1px 0 rgba(15,27,61,.06), 0 10px 30px -12px rgba(15,27,61,.25)",
+        "purpose": "Blatt: Briefvorschau, Demo-Bescheid."
+      },
+      {
+        "name": "shadow-card",
+        "value": "0 1px 2px rgba(15,27,61,.05), 0 6px 20px -8px rgba(15,27,61,.12)",
+        "purpose": "Zettel: Notizen am Blatt, angefangener Brief, Ratgeber-CTA."
+      }
+    ],
+    "motion": [
+      {
+        "name": "press",
+        "value": "transform .08s",
+        "purpose": "Button/Kamera 1px nach unten beim Drücken."
+      },
+      {
+        "name": "tap",
+        "value": "transform .1s ease-out",
+        "purpose": "scale(0.98) bei Kacheln, Chips, Links."
+      },
+      {
+        "name": "state",
+        "value": "border-color .15s, background-color .15s",
+        "purpose": "Hover- und Auswahlwechsel."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "md",
+        "value": "720px"
+      },
+      {
+        "name": "lg",
+        "value": "900px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primärbutton",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Die eine Handlung pro Ansicht.",
+      "html": "<button class=\"ds-btn-primary\">Weiter</button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 20px;border-radius:var(--radius-m,10px);background:var(--flink,#2f5bea);color:var(--flink-ink,#fff);font-weight:600;font-size:16px;border:0;cursor:pointer;transition:background-color .15s,transform .08s}.ds-btn-primary:hover{background:var(--flink-hover,#2246c7)}.ds-btn-primary:focus-visible{outline:2px solid var(--focus,#2f5bea);outline-offset:2px}.ds-btn-primary:active{transform:translateY(1px)}"
+    },
+    {
+      "name": "Sekundärbutton",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Alternative Handlung mit Rahmen.",
+      "html": "<button class=\"ds-btn-secondary\">Zurück</button>",
+      "css": ".ds-btn-secondary{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 20px;border-radius:var(--radius-m,10px);background:var(--paper-100,#fff);color:var(--ink,#0f1b3d);border:1.5px solid var(--line-strong,#aeb6c6);font-weight:600;font-size:16px;cursor:pointer}.ds-btn-secondary:hover{border-color:var(--ink,#0f1b3d)}.ds-btn-secondary:focus-visible{outline:2px solid var(--focus,#2f5bea);outline-offset:2px}"
+    },
+    {
+      "name": "Eingabefeld",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Textfeld, 48px.",
+      "html": "<input class=\"ds-input\" placeholder=\"Aktenzeichen\">",
+      "css": ".ds-input{min-height:48px;padding:10px 12px;border:1px solid var(--line-strong,#aeb6c6);border-radius:var(--radius-m,10px);background:var(--paper-100,#fff);color:var(--ink,#0f1b3d);font-size:16px;width:260px}.ds-input:hover{border-color:var(--ink-muted,#5b6680)}.ds-input:focus{outline:none;border-color:var(--flink,#2f5bea);box-shadow:0 0 0 3px var(--flink-soft,#e4ebff)}"
+    },
+    {
+      "name": "Briefart-Link",
+      "kind": "card",
+      "refersTo": "kind-link",
+      "description": "Einstieg ohne Foto.",
+      "html": "<a class=\"ds-kind\" href=\"#\"><span>Widerspruch</span><small>gegen einen Bescheid</small></a>",
+      "css": ".ds-kind{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:11px 14px;border:1px solid var(--line,#d4d9e3);border-radius:var(--radius-m,10px);background:var(--paper-100,#fff);color:var(--ink,#0f1b3d);text-decoration:none;font-weight:600;font-size:15px;min-width:280px}.ds-kind small{font-weight:400;font-size:13px;color:var(--ink-muted,#5b6680)}.ds-kind:hover{border-color:var(--ink,#0f1b3d)}.ds-kind:focus-visible{outline:2px solid var(--focus,#2f5bea);outline-offset:2px}"
+    },
+    {
+      "name": "Fristbox",
+      "kind": "custom",
+      "refersTo": "fristbox",
+      "description": "Frist über dem Formular.",
+      "html": "<div class=\"ds-frist\">Einspruch bis <b>2. November 2026</b></div>",
+      "css": ".ds-frist{padding:12px 14px;border-radius:var(--radius-m,10px);background:var(--frist-soft,#ffede3);border-left:3px solid var(--frist,#d9480f);color:var(--ink,#0f1b3d);font-size:14px}"
+    },
+    {
+      "name": "Marker",
+      "kind": "custom",
+      "refersTo": "mark",
+      "description": "Erkannter Inhalt im Blatt.",
+      "html": "<p class=\"ds-p\">Geldbuße <span class=\"ds-mark\">115,00 €</span></p>",
+      "css": ".ds-p{font-size:15px;color:#1a1a1a}.ds-mark{background:var(--marker,#fff1a8);color:var(--marker-ink,#5a4500);padding:0 3px;border-radius:2px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Das Blatt auf dem Tisch",
+    "overview": "Flinkbrief zeigt sein Produkt als das, was es ist: ein Blatt Papier. Seiten liegen als weiße Blätter auf kühlem Papiergrau, und das Einzige, was schmückt, ist ein gelber Textmarker.",
+    "keyCharacteristics": [
+      "Papier als Material",
+      "Marker-Gelb als einziger Schmuck",
+      "Ein Markenblau, eine Primärhandlung pro Ansicht",
+      "Frist in Orange",
+      "Light und Dark gleichwertig"
+    ],
+    "rules": [
+      {
+        "name": "The One Voice Rule",
+        "body": "Pro Ansicht genau eine Fläche in flink.",
+        "section": "colors"
+      },
+      {
+        "name": "The Real State Rule",
+        "body": "Grün, Orange und Rot nur für echte Zustände.",
+        "section": "colors"
+      },
+      {
+        "name": "The Marker Rule",
+        "body": "Gelb markiert Inhalt, nie Flächen, Buttons oder Rahmen.",
+        "section": "colors"
+      },
+      {
+        "name": "The 14px Floor Rule",
+        "body": "Lesetext mindestens 14px, Hilfstext 13px; Ausnahme Demo-Blatt.",
+        "section": "typography"
+      },
+      {
+        "name": "The Paper Only Rule",
+        "body": "Nur Papier wirft Schatten.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do nur Tokens aus globals.css verwenden",
+      "Do genau eine flink-Fläche pro Ansicht",
+      "Do Zahlen in JetBrains Mono",
+      "Do Hover nur für Zeigegeräte",
+      "Do Kontrast 4,5:1"
+    ],
+    "donts": [
+      "Don’t neue Farben, Schriften, Radien oder Schatten",
+      "Don’t Verläufe, Glows, Karten in Karten, Bounce",
+      "Don’t Stockfotos",
+      "Don’t Gelb für Flächen",
+      "Don’t Lesetext unter 14px"
+    ]
+  }
+}
