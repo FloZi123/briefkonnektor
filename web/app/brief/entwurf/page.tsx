@@ -8,7 +8,7 @@ import { FillAssistant } from "@/components/fills";
 import { useDraft } from "@/lib/store";
 import { subjectLine } from "@/lib/subject";
 import { findPlaceholders } from "@/lib/placeholders";
-import { formCheck } from "@/lib/formcheck";
+import { formCheck, hasBody } from "@/lib/formcheck";
 import type { ReviewPoint, FillSuggestion } from "@/lib/ai";
 
 const TAG: Record<ReviewPoint["kind"] | "form" | "rechtsbehelf" | "schriftform", string> = { fehlt: "fehlt", beleg: "Beleg", anlage: "Anlage", widerspruch: "prüfen", hinweis: "Hinweis", form: "Form", rechtsbehelf: "Rechtsbehelf", schriftform: "Schriftform" };
@@ -190,7 +190,7 @@ export default function EntwurfScreen() {
       </div>
 
       <div className="screen-foot">
-        <button className="btn btn-primary" disabled={!draft.body || busy !== null || placeholders.length > 0} onClick={() => router.push("/brief/unterschrift")}>
+        <button className="btn btn-primary" disabled={!hasBody(draft) || busy !== null || placeholders.length > 0} onClick={() => router.push("/brief/unterschrift")}>
           {placeholders.length > 0 ? `Noch ${placeholders.length} Angabe${placeholders.length > 1 ? "n" : ""} ergänzen` : "Weiter zur Unterschrift"}
         </button>
         <Disclaimer />
