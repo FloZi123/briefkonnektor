@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { ScreenHead } from "@/components/ui";
 import { useDraft } from "@/lib/store";
-import { needsWrittenForm } from "@/lib/formcheck";
+import { needsWrittenForm, missingDetails, hasBody } from "@/lib/formcheck";
 import { PRICES, euro, type Shipping } from "@/lib/types";
 import { subjectLine } from "@/lib/subject";
 
@@ -14,7 +14,8 @@ export default function VersandScreen() {
 
   const price = PRICES[draft.shipping];
   const emailOk = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(draft.email);
-  const missing = !draft.body ? { text: "Der Brieftext fehlt – bitte den Entwurf noch einmal erstellen.", href: "/brief/entwurf", label: "Zum Entwurf" } : !draft.recipient.name || !draft.recipient.street || !draft.sender.name ? { text: "Empfänger- oder Absenderangaben fehlen.", href: "/brief/daten", label: "Zu den Angaben" } : null;
+  const detailsMissing = missingDetails(draft);
+  const missing = !hasBody(draft) ? { text: "Der Brieftext fehlt – bitte den Entwurf noch einmal erstellen.", href: "/brief/entwurf", label: "Zum Entwurf" } : detailsMissing ? { text: detailsMissing, href: "/brief/daten", label: "Zu den Angaben" } : null;
 
   async function pay() {
     if (missing) {
@@ -108,7 +109,7 @@ export default function VersandScreen() {
       {error && <div className="errorbox" style={{ marginTop: 12 }}>{error}</div>}
 
       <div className="screen-foot">
-        <button className="btn btn-primary" disabled={!emailOk || busy} onClick={pay}>
+        <button className="btn btn-primary" disabled={!emailOk || busy || !!missing} onClick={pay}>
           {busy ? "Weiter zur Zahlung …" : `Jetzt bezahlen & ${draft.shipping === "download" ? "herunterladen" : "versenden"} · ${euro(price.cents)}`}
         </button>
         <span className="muted" style={{ fontSize: 10.5, textAlign: "center", lineHeight: 1.4 }}>
