@@ -98,6 +98,9 @@ export default function Home() {
             <Uploader />
             <div className="trust">
               <span>
+                <Tick /> Verstehen ist kostenlos
+              </span>
+              <span>
                 <Tick /> Kein Konto nötig
               </span>
               <span>

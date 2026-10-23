@@ -24,7 +24,7 @@ export async function extractFromDocument(bytes: Buffer, mime: string): Promise<
       "Felder: kind (eine der Briefarten: " + KINDS + " – die Briefart, die der Empfänger des Dokuments jetzt vermutlich schreiben will; bei Bescheiden mit Rechtsbehelfsbelehrung 'widerspruch'), " +
       "recipient (die Stelle, die das Dokument geschickt hat – also der künftige Empfänger des Antwortbriefs: name, name2, street, zip, city, country ISO-2), " +
       "sender (der Adressat des Dokuments, falls im Anschriftfeld lesbar: name, street, zip, city), " +
-      "reference (Aktenzeichen, Kunden-, Vertrags- oder Geschäftszeichen), documentDate (TT.MM.JJJJ), subject (worum es geht, ein Satz, deutsch), " +
+      "reference (nur die Nummer selbst ohne Bezeichnung – Aktenzeichen, Steuernummer, Kunden-, Versicherungs- oder Vertragsnummer; z. B. '211/123/45678', nicht 'Steuernummer: 211/123/45678'), documentDate (TT.MM.JJJJ), subject (Thema als knappe Betreffangabe, max. 60 Zeichen, kein ganzer Satz – z. B. 'Einkommensteuer 2025', 'Nebenkostenabrechnung 2025', 'Rückforderung Juli–September 2026'), " +
       "deadlineHint (Frist laut Rechtsbehelfsbelehrung oder Text, wörtlich), " +
       "remedy (Rechtsbehelf laut Rechtsbehelfsbelehrung: widerspruch | einspruch | klage | beschwerde | keine – bei Bußgeldbescheiden ist es 'einspruch', dann auch kind='einspruch'; bei Steuerbescheiden des Finanzamts ist es ebenfalls 'einspruch', dann kind='steuer'), " +
       "remedyText (Kernsatz der Rechtsbehelfsbelehrung, max. 160 Zeichen), amount (Betrag falls genannt), confidence (high|medium|low), " +
