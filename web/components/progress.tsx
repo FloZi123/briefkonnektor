@@ -13,7 +13,7 @@ export function Progress({ steps, seconds }: { steps: string[]; seconds: number 
   return (
     <div className="progress" role="status" aria-live="polite">
       <div className="bar">
-        <span style={{ width: `${pct}%` }} />
+        <span style={{ transform: `scaleX(${pct / 100})` }} />
       </div>
       <ul>
         {steps.map((s, i) => (
