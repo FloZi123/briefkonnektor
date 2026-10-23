@@ -39,12 +39,10 @@ export default function VerstehenScreen() {
       <ScreenHead step={1} back="/" />
       <div className="stack" style={{ gap: 6, paddingTop: 8 }}>
         <span className="eyebrow">Das steht in Ihrem Brief</span>
-        <h1 style={{ fontSize: 24 }}>
-          {u.documentType ?? "Schreiben"}
-          {draft.recipient.name ? ` von ${draft.recipient.name}` : ""}
-        </h1>
-        <p className="muted" style={{ fontSize: 13 }}>
-          {draft.documentDate ? `Vom ${draft.documentDate}` : ""}
+        <h1 style={{ fontSize: 24 }}>{u.documentType ?? "Schreiben"}</h1>
+        <p className="muted" style={{ fontSize: 13, overflowWrap: "anywhere" }}>
+          {draft.recipient.name ? `Von ${draft.recipient.name}` : ""}
+          {draft.documentDate ? `${draft.recipient.name ? " · " : ""}vom ${draft.documentDate}` : ""}
           {draft.reference ? ` · Az. ${draft.reference}` : ""}
         </p>
       </div>

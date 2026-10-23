@@ -80,14 +80,28 @@ function addressLines(a: Address, withCountry: boolean): string[] {
   return lines;
 }
 
+/** Bricht ein überbreites Wort – bevorzugt nach Bindestrich oder Schrägstrich, sonst zeichenweise. */
 function splitLong(word: string, font: PDFFont, size: number, maxWidth: number): string[] {
   const out: string[] = [];
+  const segments = word.split(/(?<=[-/])/); // "Freiherr-von-Hirschberg-Straße" → ["Freiherr-", "von-", "Hirschberg-", "Straße"]
   let cur = "";
-  for (const ch of word) {
-    if (font.widthOfTextAtSize(cur + ch, size) > maxWidth && cur) {
-      out.push(cur);
-      cur = ch;
-    } else cur += ch;
+  for (const seg of segments) {
+    if (font.widthOfTextAtSize(cur + seg, size) <= maxWidth) {
+      cur += seg;
+      continue;
+    }
+    if (cur) out.push(cur);
+    cur = "";
+    if (font.widthOfTextAtSize(seg, size) <= maxWidth) {
+      cur = seg;
+      continue;
+    }
+    for (const ch of seg) {
+      if (font.widthOfTextAtSize(cur + ch, size) > maxWidth && cur) {
+        out.push(cur);
+        cur = ch;
+      } else cur += ch;
+    }
   }
   if (cur) out.push(cur);
   return out;
@@ -195,19 +209,31 @@ export async function renderLetter(input: RenderInput): Promise<RenderOutput> {
   });
 
   // --- Anschriftfeld (ohne Rücksendeangabe: der Frankierbereich 40–60 mm muss für den Druckdienstleister frei bleiben) ---
-  const afs = LAYOUT.addrFontSize;
-  y = A4.h - LAYOUT.addrZoneTop - afs; // erste Grundlinie
-  let recipientLines = addressLines(input.recipient, true);
-  if (recipientLines.length > 6) {
-    recipientLines = addressLines({ ...input.recipient, name2: "" }, true);
-    check.warnings.push("Anschrift gekürzt: Zusatz weggelassen (mehr als 6 Zeilen)");
+  // Anschrift: lange Zeilen umbrechen statt abschneiden – eine gekürzte Anschrift kommt nicht an.
+  // Reihenfolge: 10,5 pt → Zusatz weglassen → 9,5 pt (Post: mind. 8 pt lesbar) → als letzte Rettung kürzen.
+  let afs = LAYOUT.addrFontSize;
+  let addrLh = LAYOUT.addrLineHeight;
+  const maxLinesAt = (size: number, lh: number) => Math.floor((LAYOUT.addrZoneBottom - LAYOUT.addrZoneTop - size - size * 0.25) / lh) + 1;
+  const wrapAddr = (a: Address, size: number) => addressLines(a, true).flatMap((l) => wrap(l, font, size, LAYOUT.addrWidth));
+  let recipientLines = wrapAddr(input.recipient, afs);
+  if (recipientLines.length > maxLinesAt(afs, addrLh) && input.recipient.name2) {
+    recipientLines = wrapAddr({ ...input.recipient, name2: "" }, afs);
+    check.warnings.push("Anschrift: Zusatz weggelassen (Fenster fasst nur 5 Zeilen)");
   }
-  recipientLines = recipientLines.map((l) => {
-    const f = fit(l, font, afs, LAYOUT.addrWidth);
-    if (f !== l) check.warnings.push(`Anschrift gekürzt: „${l.slice(0, 40)}…“`);
-    return f;
-  });
-  const addrLh = LAYOUT.addrLineHeight;
+  if (recipientLines.length > maxLinesAt(afs, addrLh)) {
+    afs = 9.5;
+    addrLh = 9.5 * 1.05;
+    recipientLines = wrapAddr({ ...input.recipient, name2: "" }, afs);
+    check.warnings.push("Anschrift: kleinere Schrift (9,5 pt), damit alle Zeilen ins Fenster passen");
+  }
+  if (recipientLines.length > maxLinesAt(afs, addrLh)) {
+    recipientLines = addressLines({ ...input.recipient, name2: "" }, true).map((l) => {
+      const f = fit(l, font, afs, LAYOUT.addrWidth);
+      if (f !== l) check.warnings.push(`Anschrift gekürzt: „${l.slice(0, 40)}…“`);
+      return f;
+    });
+  }
+  y = A4.h - LAYOUT.addrZoneTop - afs; // erste Grundlinie
   for (const line of recipientLines) {
     check.line("Anschrift", line, font, afs, LAYOUT.addrLeft, LAYOUT.addrLeft + LAYOUT.addrWidth);
     page.drawText(line, { x: LAYOUT.addrLeft, y, size: afs, font, color: black });

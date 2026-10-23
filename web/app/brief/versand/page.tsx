@@ -37,7 +37,7 @@ export default function VersandScreen() {
   return (
     <main className="screen">
       <ScreenHead step={5} back="/brief/unterschrift" />
-      <div style={{ display: "flex", gap: 14, alignItems: "center", paddingTop: 8 }}>
+      <div style={{ display: "flex", gap: 14, alignItems: "flex-start", paddingTop: 8 }}>
         <div className="letter" style={{ width: 72, padding: 8, gap: 4, flexShrink: 0 }} aria-hidden="true">
           <span style={{ height: 3, width: "60%", background: "var(--line)", borderRadius: 2 }} />
           <span style={{ height: 3, width: "40%", background: "var(--line)", borderRadius: 2, marginTop: 6 }} />
@@ -47,7 +47,7 @@ export default function VersandScreen() {
         </div>
         <div className="stack" style={{ gap: 4 }}>
           <h1 style={{ fontSize: 22 }}>Fast fertig</h1>
-          <span className="muted" style={{ fontSize: 13 }}>
+          <span className="muted" style={{ fontSize: 13, display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
             {subjectLine(draft.kind, draft.subject, draft.documentDate)} · an {draft.recipient.name}
           </span>
           <button

@@ -30,6 +30,16 @@ const r3 = await renderLetter({ ...base, recipient: { ...base.recipient, name2: 
 if (r3.warnings.some((w) => w.includes("über den Rand") || w.includes("Fensterzone"))) throw new Error("Anschrift nicht eingepasst: " + r3.warnings.join(" | "));
 console.log("✓ Anschrift eingepasst:", r3.warnings.join("; ") || "keine Kürzung nötig");
 
+// 3b. Lange Behörden-/Straßennamen → umgebrochen statt abgeschnitten (eine gekürzte Anschrift kommt nicht an)
+const r3b = await renderLetter({
+  ...base,
+  recipient: { name: "Zweckverband Abfallwirtschaft und Straßenreinigung Oberpfalz-Nord – Abteilung Gebührenfestsetzung", name2: "", street: "Dr.-Johann-Baptist-Nepomuk-Freiherr-von-Hirschberg-Straße 128a", zip: "92526", city: "Oberviechtach", country: "DE" },
+  subject: "Test",
+  body: "Text",
+});
+if (r3b.warnings.some((w) => w.includes("gekürzt") || w.includes("Fensterzone") || w.includes("über den Rand"))) throw new Error("lange Anschrift nicht umgebrochen: " + r3b.warnings.join(" | "));
+console.log("✓ Lange Anschrift umgebrochen, nichts abgeschnitten");
+
 // 4. Normalfall → keine Warnungen
 const r4 = await renderLetter({ ...base, subject: "Widerspruch gegen den Bescheid vom 01.10.2026", body: "Sehr geehrte Damen und Herren,\n\nhiermit lege ich Widerspruch ein.\n\nMit freundlichen Grüßen" });
 if (r4.warnings.length) throw new Error("Normalfall mit Warnungen: " + r4.warnings.join(" | "));
