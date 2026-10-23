@@ -2,6 +2,8 @@
 
 Claude schreibt den Brief, der Konnektor rendert ein DIN-5008-PDF und übergibt es an den Carrier (Druck, Kuvertierung, Porto). Remote-MCP-Server über Streamable HTTP, lauffähig lokal und als Vercel-Function.
 
+Im selben Repo liegt unter `web/` die Privatkunden-App **Flinkbrief** (www.flinkbrief.de), die Renderer, Pingen-Adapter und Preise aus `src/` mitbenutzt – Doku in `web/README.md`.
+
 ## Tools
 
 | Tool | Zweck |
@@ -74,10 +76,13 @@ src/
   types.ts          Zod-Schemas (Adresse, Absender), Letter, Carrier-Interface
   store.ts          In-Memory-Ablage (→ Supabase)
   pricing.ts        Versandklassen + Preise
-  letter/render.ts  DIN-5008-Form-B-PDF mit pdf-lib
+  letter/render.ts  DIN-5008-Form-B-PDF mit pdf-lib (Anschrift wird umgebrochen, bei Bedarf 10,5 → 9,5 pt, Trennung an Bindestrich/Schrägstrich)
   carriers/         mock.ts, pingen.ts, index.ts
 api/mcp.ts          Vercel-Function
 test/client.ts      End-to-End-Test mit echtem MCP-Client
+test/render.ts      Renderer-Tests (Umbruch, lange Adressen, Sonderzeichen)
+test/pingen*.ts     Pingen-Adapter (Mock / live gegen Staging)
+web/                Flinkbrief-App (eigenes Vercel-Projekt, siehe web/README.md)
 ```
 
 ## Nächste Schritte
