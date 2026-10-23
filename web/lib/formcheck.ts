@@ -1,4 +1,26 @@
-import type { Draft } from "./types";
+import type { Address, Draft } from "./types";
+
+const filled = (s?: string) => !!s && s.trim().length > 0;
+
+/** PLZ: in Deutschland genau fünf Ziffern, im Ausland (AT/CH: vier) mindestens vier Zeichen. */
+export function zipOk(a: Address): boolean {
+  const zip = (a.zip ?? "").trim();
+  return (a.country ?? "DE") === "DE" ? /^\d{5}$/.test(zip) : zip.length >= 4;
+}
+
+const addressMissing = (a: Address, who: string): string | null =>
+  !filled(a.name) || !filled(a.street) || !filled(a.zip) || !filled(a.city) ? `${who}: Name, Straße, PLZ und Ort ausfüllen.` : !zipOk(a) ? `${who}: Die PLZ hat in Deutschland fünf Ziffern.` : null;
+
+/**
+ * Pflichtangaben für den Brief – dieselbe Prüfung vor dem Entwurf und vor der Zahlung.
+ * Leer oder nur Leerzeichen zählt als fehlend. Gibt den ersten fehlenden Punkt zurück oder null.
+ */
+export function missingDetails(d: Draft): string | null {
+  return addressMissing(d.recipient, "Empfänger") ?? (filled(d.subject) ? null : "Thema in einem Satz fehlt.") ?? addressMissing(d.sender, "Absender");
+}
+
+/** Brieftext vorhanden – nur Leerzeichen zählt nicht. */
+export const hasBody = (d: Draft) => filled(d.body);
 
 /**
  * Formale Prüfung je Briefart – deterministisch, keine KI, keine Rechtsbewertung.

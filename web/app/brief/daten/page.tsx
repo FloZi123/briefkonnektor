@@ -7,6 +7,7 @@ import { AddressLookup, useZipToCity } from "@/components/address";
 import { useDraft } from "@/lib/store";
 import { LETTER_KINDS, type LetterKind } from "@/lib/types";
 import { widerspruchsfrist, einspruchsfrist, steuerfrist, daysUntil } from "@/lib/dates";
+import { missingDetails } from "@/lib/formcheck";
 
 function DatenScreen() {
   const { draft, update, ready } = useDraft();
@@ -34,7 +35,9 @@ function DatenScreen() {
   const setR = (k: keyof typeof draft.recipient, v: string) => update((d) => ({ recipient: { ...d.recipient, [k]: v } }));
   const setS = (k: keyof typeof draft.sender, v: string) => update((d) => ({ sender: { ...d.sender, [k]: v } }));
 
-  const valid = draft.recipient.name && draft.recipient.street && draft.recipient.zip && draft.recipient.city && draft.sender.name && draft.sender.street && draft.sender.zip && draft.sender.city && draft.subject;
+  const missing = missingDetails(draft);
+  // Hinweis erst, wenn alles ausgefüllt aussieht, aber z. B. die PLZ nicht stimmt – sonst sagt der gesperrte Knopf nicht, warum
+  const looksFilled = [draft.recipient.name, draft.recipient.street, draft.recipient.zip, draft.recipient.city, draft.subject, draft.sender.name, draft.sender.street, draft.sender.zip, draft.sender.city].every((v) => v && v.length > 0);
 
   return (
     <main className="screen">
@@ -69,6 +72,7 @@ function DatenScreen() {
         style={{ paddingTop: 16 }}
         onSubmit={(e) => {
           e.preventDefault();
+          if (missing) return;
           update({ deadline: frist });
           router.push("/brief/entwurf");
         }}
@@ -158,7 +162,12 @@ function DatenScreen() {
         </div>
 
         <div className="screen-foot">
-          <button className="btn btn-primary" type="submit" disabled={!valid}>
+          {missing && looksFilled && (
+            <p className="errorbox" role="status">
+              {missing}
+            </p>
+          )}
+          <button className="btn btn-primary" type="submit" disabled={!!missing}>
             Entwurf erstellen
           </button>
           <Disclaimer />
