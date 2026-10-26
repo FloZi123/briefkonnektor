@@ -125,7 +125,7 @@ export const GUIDES: Guide[] = [
     ],
     elsewhere: [
       "Leistungen wurden gekürzt oder gestrichen und Miete oder Essen sind gefährdet: Eilantrag beim Sozialgericht. Sozialberatungen von Caritas, Diakonie, AWO oder ein Fachanwalt für Sozialrecht helfen dabei; Beratungshilfe beim Amtsgericht kostet 15 €.",
-      "Der Bescheid ist unverständlich, aber vermutlich richtig: Lieber nachfragen oder Unterlagen nachreichen als pauschal widersprechen. Fast die Hälfte der erfolgreichen Widersprüche beruht auf nachgereichten Unterlagen.",
+      "Der Bescheid ist unverständlich, aber vermutlich richtig: Lieber nachfragen oder Unterlagen nachreichen als pauschal widersprechen.",
       "Ein Widerspruch mit erfundenen Paragrafen oder Textbausteinen aus dem Internet schadet eher – Jobcenter prüfen jeden Fall ohnehin vollständig.",
     ],
     cta: "Bescheid fotografieren – Flinkbrief erkennt Kundennummer, Zeitraum und Betrag und formuliert den Widerspruch.",
@@ -180,7 +180,7 @@ export const GUIDES: Guide[] = [
       { q: "Was ist mit der Heizkostenabrechnung?", a: "Sie gehört zur Nebenkostenabrechnung, folgt aber der Heizkostenverordnung: 50 bis 70 Prozent nach Verbrauch, der Rest nach Fläche. Fehlt die Verbrauchserfassung, dürfen Sie 15 Prozent kürzen." },
     ],
     elsewhere: [
-      "Sie wollen die Abrechnung Posten für Posten fachlich prüfen lassen: Mieterverein (Mitgliedschaft ab etwa 60–90 € im Jahr, Beratung inklusive) oder ein Prüfdienst. Die Einwendung über Flinkbrief sichert bis dahin die Frist und die Belegeinsicht.",
+      "Sie wollen die Abrechnung Posten für Posten fachlich prüfen lassen: Mieterverein (Beratung ist im Mitgliedsbeitrag enthalten) oder ein Prüfdienst. Die Einwendung über Flinkbrief sichert bis dahin die Frist und die Belegeinsicht.",
       "Streit um Mietpreisbremse, Mieterhöhung oder Kaution: Mieterverein oder spezialisierte Anbieter wie Conny, die mit Erfolgsbeteiligung arbeiten.",
       "Der Vermieter droht mit Kündigung oder Klage: Fachanwalt für Mietrecht.",
     ],
@@ -235,8 +235,8 @@ export const GUIDES: Guide[] = [
       { q: "Was ist ein Vollstreckungsbescheid?", a: "Er folgt, wenn Sie dem Mahnbescheid nicht widersprechen. Auch dagegen gibt es noch zwei Wochen Einspruch – danach kann der Gerichtsvollzieher kommen." },
     ],
     elsewhere: [
-      "Es ist ein gerichtlicher Mahnbescheid (gelber Umschlag vom Amtsgericht): Widerspruch innerhalb von zwei Wochen auf dem beiliegenden Formular, nicht per Brief. Bei Unsicherheit Verbraucherzentrale oder Anwalt.",
-      "Inkasso droht mit Schufa-Eintrag oder die Forderung ist Ihnen völlig unbekannt: Verbraucherzentrale (Beratung ab etwa 20–30 €).",
+      "Es ist ein gerichtlicher Mahnbescheid (gelber Umschlag vom Amtsgericht): Widerspruch innerhalb von zwei Wochen beim Mahngericht, am besten mit dem beiliegenden Formular. Bei Unsicherheit Verbraucherzentrale oder Anwalt.",
+      "Inkasso droht mit Schufa-Eintrag oder die Forderung ist Ihnen völlig unbekannt: Verbraucherzentrale (Beratung gegen geringe Gebühr, je nach Bundesland).",
       "Hohe Summe oder Klage angekündigt: Anwalt, mit Rechtsschutz oder Beratungshilfe.",
     ],
     cta: "Mahnung fotografieren – Flinkbrief erkennt Absender, Betrag und Rechnungsnummer und formuliert die Antwort: bestreiten, nachfragen oder Ratenzahlung vorschlagen.",
@@ -289,7 +289,7 @@ export const GUIDES: Guide[] = [
       { q: "Zählt eine Zweitwohnung?", a: "Für eine Nebenwohnung gibt es auf Antrag eine Befreiung, wenn für die Hauptwohnung bereits gezahlt wird." },
     ],
     elsewhere: [
-      "Sie beziehen Bürgergeld, BAföG oder Grundsicherung: Befreiung mit Bescheid beim Beitragsservice beantragen – das ist ein Antrag, kein Widerspruch. Die Befreiung gilt ab dem Monat des Antrags, also möglichst früh stellen.",
+      "Sie beziehen Bürgergeld, BAföG oder Grundsicherung: Befreiung mit Bescheid beim Beitragsservice beantragen – das ist ein Antrag, kein Widerspruch. Rückwirkend geht das nur begrenzt, also möglichst früh stellen.",
       "Die Vollstreckung läuft bereits (Vollstreckungsankündigung, Gerichtsvollzieher): Beitragsservice oder Vollstreckungsstelle anrufen und Ratenzahlung vereinbaren.",
       "Grundsätzliche Einwände gegen den Beitrag (Verfassungsmäßigkeit, keine Nutzung) sind höchstrichterlich entschieden – ein Widerspruch damit hat keine Aussicht.",
     ],
@@ -351,7 +351,7 @@ export const GUIDES: Guide[] = [
       { q: "Was ist mit dem Vorläufigkeitsvermerk?", a: "Punkte mit Vorläufigkeitsvermerk bleiben automatisch offen, solange Musterverfahren laufen. Dafür brauchen Sie keinen eigenen Einspruch – nur für alles andere." },
     ],
     elsewhere: [
-      "Betrieb, Vermietung, Kapitalerträge im Ausland oder hohe Nachzahlung: Steuerberater. Arbeitnehmer und Rentner bekommen beim Lohnsteuerhilfeverein Beratung inklusive Einspruch (Mitgliedschaft ab etwa 50 € im Jahr).",
+      "Betrieb, Vermietung, Kapitalerträge im Ausland oder hohe Nachzahlung: Steuerberater. Arbeitnehmer und Rentner bekommen beim Lohnsteuerhilfeverein Beratung inklusive Einspruch (Beitrag nach Einkommen).",
       "Der Einspruch wurde abgelehnt (Einspruchsentscheidung): Klage beim Finanzgericht innerhalb eines Monats, in der Regel mit Berater.",
       "Die Nachzahlung ist nicht leistbar: Stundung oder Ratenzahlung beim Finanzamt beantragen – unabhängig vom Einspruch, der die Zahlung nicht aufschiebt.",
     ],
@@ -461,7 +461,7 @@ export const GUIDES: Guide[] = [
       { q: "Wie lange dauert das Widerspruchsverfahren?", a: "Bei Rentenbescheiden meist drei bis sechs Monate, bei Erwerbsminderung mit neuem Gutachten oft länger. Nach drei Monaten ohne Entscheidung ist eine Untätigkeitsklage möglich." },
     ],
     elsewhere: [
-      "Erwerbsminderungsrente oder Reha abgelehnt: Sozialverband VdK oder SoVD (Mitgliedschaft ab etwa 6 € im Monat) übernimmt Widerspruch und Klage; alternativ Fachanwalt für Sozialrecht.",
+      "Erwerbsminderungsrente oder Reha abgelehnt: Sozialverband VdK oder SoVD übernimmt für Mitglieder Widerspruch und Klage; alternativ Fachanwalt für Sozialrecht.",
       "Im Rentenbescheid fehlen Zeiten (Ausbildung, Kinder, Ausland): Erst Kontenklärung beantragen und Nachweise einreichen – oft reicht das ohne Widerspruch.",
       "Der Widerspruch wurde abgelehnt: Klage beim Sozialgericht innerhalb eines Monats, gerichtskostenfrei.",
     ],
