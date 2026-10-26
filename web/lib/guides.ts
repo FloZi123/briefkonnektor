@@ -69,7 +69,7 @@ export const GUIDES: Guide[] = [
       { q: "Was ist der Unterschied zum Anhörungsbogen?", a: "Der Anhörungsbogen kommt vor dem Bescheid und ist noch kein Bußgeld. Dort können Sie sich äußern oder schweigen. Der Bußgeldbescheid kommt danach – erst gegen ihn gibt es den Einspruch." },
     ],
     elsewhere: [
-      "Fahrverbot oder Punkte, die den Führerschein gefährden: Fachanwalt für Verkehrsrecht. Mit Verkehrsrechtsschutz kostet das meist nichts; kostenlose Prüfdienste (z. B. Geblitzt.de) übernehmen solche Fälle auch ohne Versicherung.",
+      "Fahrverbot oder Punkte, die den Führerschein gefährden: Fachanwalt für Verkehrsrecht. Mit Verkehrsrechtsschutz kostet das meist nichts; es gibt auch Prüfdienste, die solche Fälle ohne Kosten für Sie übernehmen.",
       "Die Messung selbst soll angegriffen werden (Eichschein, Messprotokoll, Toleranzen): Dafür braucht es Akteneinsicht und in der Praxis einen Anwalt.",
       "Es geht um einen Strafbefehl statt eines Bußgeldbescheids: immer Anwalt, die Frist beträgt ebenfalls zwei Wochen.",
     ],
@@ -126,7 +126,7 @@ export const GUIDES: Guide[] = [
     elsewhere: [
       "Leistungen wurden gekürzt oder gestrichen und Miete oder Essen sind gefährdet: Eilantrag beim Sozialgericht. Sozialberatungen von Caritas, Diakonie, AWO oder ein Fachanwalt für Sozialrecht helfen dabei; Beratungshilfe beim Amtsgericht kostet 15 €.",
       "Der Bescheid ist unverständlich, aber vermutlich richtig: Lieber nachfragen oder Unterlagen nachreichen als pauschal widersprechen.",
-      "Ein Widerspruch mit erfundenen Paragrafen oder Textbausteinen aus dem Internet schadet eher – Jobcenter prüfen jeden Fall ohnehin vollständig.",
+      "Jobcenter prüfen jeden Widerspruch vollständig – entscheidend sind Ihre konkreten Angaben zum Fall, nicht Paragrafen oder Textbausteine aus dem Internet.",
     ],
     cta: "Bescheid fotografieren – Flinkbrief erkennt Kundennummer, Zeitraum und Betrag und formuliert den Widerspruch.",
     related: ["widerspruch-rundfunkbeitrag", "mahnung-widersprechen"],
@@ -181,7 +181,7 @@ export const GUIDES: Guide[] = [
     ],
     elsewhere: [
       "Sie wollen die Abrechnung Posten für Posten fachlich prüfen lassen: Mieterverein (Beratung ist im Mitgliedsbeitrag enthalten) oder ein Prüfdienst. Die Einwendung über Flinkbrief sichert bis dahin die Frist und die Belegeinsicht.",
-      "Streit um Mietpreisbremse, Mieterhöhung oder Kaution: Mieterverein oder spezialisierte Anbieter wie Conny, die mit Erfolgsbeteiligung arbeiten.",
+      "Streit um Mietpreisbremse, Mieterhöhung oder Kaution: Mieterverein oder spezialisierte Legal-Tech-Anbieter, die mit Erfolgsbeteiligung arbeiten.",
       "Der Vermieter droht mit Kündigung oder Klage: Fachanwalt für Mietrecht.",
     ],
     cta: "Abrechnung fotografieren – Flinkbrief erkennt Zeitraum, Beträge und Vermieter und formuliert die Einwendung mit Bitte um Belegeinsicht.",
@@ -291,7 +291,7 @@ export const GUIDES: Guide[] = [
     elsewhere: [
       "Sie beziehen Bürgergeld, BAföG oder Grundsicherung: Befreiung mit Bescheid beim Beitragsservice beantragen – das ist ein Antrag, kein Widerspruch. Rückwirkend geht das nur begrenzt, also möglichst früh stellen.",
       "Die Vollstreckung läuft bereits (Vollstreckungsankündigung, Gerichtsvollzieher): Beitragsservice oder Vollstreckungsstelle anrufen und Ratenzahlung vereinbaren.",
-      "Grundsätzliche Einwände gegen den Beitrag (Verfassungsmäßigkeit, keine Nutzung) sind höchstrichterlich entschieden – ein Widerspruch damit hat keine Aussicht.",
+      "Grundsätzliche Einwände gegen den Beitrag (Verfassungsmäßigkeit, keine Nutzung) hat das Bundesverfassungsgericht 2018 entschieden. Ein Widerspruch bezieht sich deshalb sinnvollerweise auf den konkreten Bescheid: Zeitraum, Befreiung, doppelte Anmeldung, Zahlung bereits erfolgt.",
     ],
     cta: "Festsetzungsbescheid fotografieren – Flinkbrief erkennt Beitragsnummer, Zeitraum und Betrag und formuliert den Widerspruch an die richtige Rundfunkanstalt.",
     related: ["widerspruch-jobcenter-bescheid", "mahnung-widersprechen"],
