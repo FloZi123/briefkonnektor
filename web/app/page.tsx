@@ -178,6 +178,9 @@ export default function Home() {
       <section className="prices">
         <h2>Was es kostet</h2>
         <p className="sub">Verstehen ist kostenlos. Sie zahlen erst, wenn Sie den Brief verschicken oder als PDF herunterladen.</p>
+        <p className="distinct">
+          <strong>Kein PDF zum Selberdrucken.</strong> Flinkbrief druckt, kuvertiert und verschickt den Brief – auf Wunsch als Einschreiben mit Zustellnachweis. Drucker, Umschlag und Gang zur Post entfallen.
+        </p>
         <div className="price-list">
         <div className="price hi">
           <span className="amt">

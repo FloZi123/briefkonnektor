@@ -89,6 +89,16 @@ export function GuideArticle({ g, campaign }: { g: Guide; campaign?: string }) {
           </section>
         ))}
 
+        <section className="elsewhere">
+          <h2>Wann ein Brief allein nicht reicht</h2>
+          <p>Flinkbrief hält die Frist und bringt Ihren Standpunkt formgerecht auf den Weg. In diesen Fällen holen Sie sich zusätzlich Hilfe:</p>
+          <ul>
+            {g.elsewhere.map((li) => (
+              <li key={li}>{li}</li>
+            ))}
+          </ul>
+        </section>
+
         <section>
           <h2>Häufige Fragen</h2>
           <dl className="faq">

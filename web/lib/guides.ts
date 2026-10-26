@@ -14,6 +14,8 @@ export interface Guide {
   deadlineShort: string; // für Karten
   sections: Array<{ h: string; p: string[]; list?: string[] }>;
   faq: Array<{ q: string; a: string }>;
+  /** Wann ein Brief allein nicht reicht: ehrliche Verweise auf Mieterverein, Sozialverband, Anwalt, Beratungsstellen. */
+  elsewhere: string[];
   cta: string;
   related: string[]; // slugs
 }
@@ -66,6 +68,11 @@ export const GUIDES: Guide[] = [
       { q: "Reicht eine E-Mail?", a: "In den meisten Bundesländern nicht. Sicher ist der Brief mit Unterschrift oder die Niederschrift bei der Behörde. Für die Frist zählt der Eingang bei der Behörde." },
       { q: "Was ist der Unterschied zum Anhörungsbogen?", a: "Der Anhörungsbogen kommt vor dem Bescheid und ist noch kein Bußgeld. Dort können Sie sich äußern oder schweigen. Der Bußgeldbescheid kommt danach – erst gegen ihn gibt es den Einspruch." },
     ],
+    elsewhere: [
+      "Fahrverbot oder Punkte, die den Führerschein gefährden: Fachanwalt für Verkehrsrecht. Mit Verkehrsrechtsschutz kostet das meist nichts; kostenlose Prüfdienste (z. B. Geblitzt.de) übernehmen solche Fälle auch ohne Versicherung.",
+      "Die Messung selbst soll angegriffen werden (Eichschein, Messprotokoll, Toleranzen): Dafür braucht es Akteneinsicht und in der Praxis einen Anwalt.",
+      "Es geht um einen Strafbefehl statt eines Bußgeldbescheids: immer Anwalt, die Frist beträgt ebenfalls zwei Wochen.",
+    ],
     cta: "Bußgeldbescheid fotografieren – Flinkbrief erkennt Aktenzeichen, Frist und Betrag und formuliert den Einspruch.",
     related: ["widerspruch-jobcenter-bescheid", "mahnung-widersprechen"],
   },
@@ -115,6 +122,11 @@ export const GUIDES: Guide[] = [
       { q: "Muss ich während des Widerspruchs zurückzahlen?", a: "Bei Erstattungsbescheiden hat der Widerspruch aufschiebende Wirkung – die Rückforderung ruht, bis entschieden ist. Bei Aufrechnung mit laufenden Leistungen lohnt sich ein ausdrücklicher Hinweis darauf im Widerspruch." },
       { q: "Was, wenn die Frist vorbei ist?", a: "Dann bleibt der Überprüfungsantrag nach § 44 SGB X. Das Jobcenter muss den Bescheid erneut prüfen; Nachzahlungen gibt es aber höchstens für ein Jahr rückwirkend." },
       { q: "Kann ich den Widerspruch per E-Mail schicken?", a: "Eine einfache E-Mail genügt der Schriftform nicht. Sicher sind Brief, Niederschrift im Jobcenter oder der Upload mit Login bei jobcenter.digital." },
+    ],
+    elsewhere: [
+      "Leistungen wurden gekürzt oder gestrichen und Miete oder Essen sind gefährdet: Eilantrag beim Sozialgericht. Sozialberatungen von Caritas, Diakonie, AWO oder ein Fachanwalt für Sozialrecht helfen dabei; Beratungshilfe beim Amtsgericht kostet 15 €.",
+      "Der Bescheid ist unverständlich, aber vermutlich richtig: Lieber nachfragen oder Unterlagen nachreichen als pauschal widersprechen. Fast die Hälfte der erfolgreichen Widersprüche beruht auf nachgereichten Unterlagen.",
+      "Ein Widerspruch mit erfundenen Paragrafen oder Textbausteinen aus dem Internet schadet eher – Jobcenter prüfen jeden Fall ohnehin vollständig.",
     ],
     cta: "Bescheid fotografieren – Flinkbrief erkennt Kundennummer, Zeitraum und Betrag und formuliert den Widerspruch.",
     related: ["widerspruch-rundfunkbeitrag", "mahnung-widersprechen"],
@@ -167,6 +179,11 @@ export const GUIDES: Guide[] = [
       { q: "Darf der Vermieter Belege nur als Kopie schicken?", a: "Sie haben Anspruch auf Einsicht in die Originale beim Vermieter. Kopien kann er gegen Kostenerstattung schicken; verpflichtet ist er dazu nur, wenn die Einsicht vor Ort unzumutbar ist." },
       { q: "Was ist mit der Heizkostenabrechnung?", a: "Sie gehört zur Nebenkostenabrechnung, folgt aber der Heizkostenverordnung: 50 bis 70 Prozent nach Verbrauch, der Rest nach Fläche. Fehlt die Verbrauchserfassung, dürfen Sie 15 Prozent kürzen." },
     ],
+    elsewhere: [
+      "Sie wollen die Abrechnung Posten für Posten fachlich prüfen lassen: Mieterverein (Mitgliedschaft ab etwa 60–90 € im Jahr, Beratung inklusive) oder ein Prüfdienst. Die Einwendung über Flinkbrief sichert bis dahin die Frist und die Belegeinsicht.",
+      "Streit um Mietpreisbremse, Mieterhöhung oder Kaution: Mieterverein oder spezialisierte Anbieter wie Conny, die mit Erfolgsbeteiligung arbeiten.",
+      "Der Vermieter droht mit Kündigung oder Klage: Fachanwalt für Mietrecht.",
+    ],
     cta: "Abrechnung fotografieren – Flinkbrief erkennt Zeitraum, Beträge und Vermieter und formuliert die Einwendung mit Bitte um Belegeinsicht.",
     related: ["mahnung-widersprechen", "widerspruch-jobcenter-bescheid"],
   },
@@ -217,6 +234,11 @@ export const GUIDES: Guide[] = [
       { q: "Wie hoch dürfen Inkassokosten sein?", a: "Sie richten sich nach dem Rechtsanwaltsvergütungsgesetz und sind bei kleinen Forderungen gedeckelt – bei Forderungen bis 50 Euro maximal 30 Euro für die Inkassotätigkeit." },
       { q: "Was ist ein Vollstreckungsbescheid?", a: "Er folgt, wenn Sie dem Mahnbescheid nicht widersprechen. Auch dagegen gibt es noch zwei Wochen Einspruch – danach kann der Gerichtsvollzieher kommen." },
     ],
+    elsewhere: [
+      "Es ist ein gerichtlicher Mahnbescheid (gelber Umschlag vom Amtsgericht): Widerspruch innerhalb von zwei Wochen auf dem beiliegenden Formular, nicht per Brief. Bei Unsicherheit Verbraucherzentrale oder Anwalt.",
+      "Inkasso droht mit Schufa-Eintrag oder die Forderung ist Ihnen völlig unbekannt: Verbraucherzentrale (Beratung ab etwa 20–30 €).",
+      "Hohe Summe oder Klage angekündigt: Anwalt, mit Rechtsschutz oder Beratungshilfe.",
+    ],
     cta: "Mahnung fotografieren – Flinkbrief erkennt Absender, Betrag und Rechnungsnummer und formuliert die Antwort: bestreiten, nachfragen oder Ratenzahlung vorschlagen.",
     related: ["widerspruch-nebenkostenabrechnung", "einspruch-bussgeldbescheid"],
   },
@@ -265,6 +287,11 @@ export const GUIDES: Guide[] = [
       { q: "Was ist der Säumniszuschlag?", a: "Ein Prozent der rückständigen Beiträge, mindestens 8 Euro, pro Festsetzungsbescheid. Er entfällt, wenn der Bescheid aufgehoben wird." },
       { q: "An wen schicke ich den Widerspruch?", a: "An die in der Rechtsbehelfsbelehrung genannte Landesrundfunkanstalt. Der Beitragsservice in Köln ist nur die Verwaltungsstelle; dort eingegangene Widersprüche werden in der Regel weitergeleitet, sicher ist aber der direkte Weg." },
       { q: "Zählt eine Zweitwohnung?", a: "Für eine Nebenwohnung gibt es auf Antrag eine Befreiung, wenn für die Hauptwohnung bereits gezahlt wird." },
+    ],
+    elsewhere: [
+      "Sie beziehen Bürgergeld, BAföG oder Grundsicherung: Befreiung mit Bescheid beim Beitragsservice beantragen – das ist ein Antrag, kein Widerspruch. Die Befreiung gilt ab dem Monat des Antrags, also möglichst früh stellen.",
+      "Die Vollstreckung läuft bereits (Vollstreckungsankündigung, Gerichtsvollzieher): Beitragsservice oder Vollstreckungsstelle anrufen und Ratenzahlung vereinbaren.",
+      "Grundsätzliche Einwände gegen den Beitrag (Verfassungsmäßigkeit, keine Nutzung) sind höchstrichterlich entschieden – ein Widerspruch damit hat keine Aussicht.",
     ],
     cta: "Festsetzungsbescheid fotografieren – Flinkbrief erkennt Beitragsnummer, Zeitraum und Betrag und formuliert den Widerspruch an die richtige Rundfunkanstalt.",
     related: ["widerspruch-jobcenter-bescheid", "mahnung-widersprechen"],
@@ -323,6 +350,11 @@ export const GUIDES: Guide[] = [
       { q: "Reicht eine E-Mail an das Finanzamt?", a: "Eine einfache E-Mail genügt in der Regel nicht. Sicher sind Brief, ELSTER oder die Niederschrift im Finanzamt. Für die Frist zählt der Eingang beim Finanzamt." },
       { q: "Was ist mit dem Vorläufigkeitsvermerk?", a: "Punkte mit Vorläufigkeitsvermerk bleiben automatisch offen, solange Musterverfahren laufen. Dafür brauchen Sie keinen eigenen Einspruch – nur für alles andere." },
     ],
+    elsewhere: [
+      "Betrieb, Vermietung, Kapitalerträge im Ausland oder hohe Nachzahlung: Steuerberater. Arbeitnehmer und Rentner bekommen beim Lohnsteuerhilfeverein Beratung inklusive Einspruch (Mitgliedschaft ab etwa 50 € im Jahr).",
+      "Der Einspruch wurde abgelehnt (Einspruchsentscheidung): Klage beim Finanzgericht innerhalb eines Monats, in der Regel mit Berater.",
+      "Die Nachzahlung ist nicht leistbar: Stundung oder Ratenzahlung beim Finanzamt beantragen – unabhängig vom Einspruch, der die Zahlung nicht aufschiebt.",
+    ],
     cta: "Steuerbescheid fotografieren – Flinkbrief erkennt Steuernummer, Steuerart und Frist und formuliert den Einspruch mit Ihren Beanstandungen.",
     related: ["widerspruch-jobcenter-bescheid", "mahnung-widersprechen"],
   },
@@ -373,6 +405,11 @@ export const GUIDES: Guide[] = [
       { q: "Läuft das Krankengeld während des Widerspruchs weiter?", a: "Bei einer Ablehnung oder Beendigung in der Regel nicht. Umso wichtiger ist, schnell zu widersprechen und die Arbeitsunfähigkeit lückenlos zu belegen." },
       { q: "Was, wenn die Frist vorbei ist?", a: "Dann bleibt der Überprüfungsantrag nach § 44 SGB X. Die Kasse muss den Bescheid erneut prüfen; Leistungen gibt es aber höchstens vier Jahre rückwirkend." },
     ],
+    elsewhere: [
+      "Reha, Hilfsmittel, Krankengeld oder Behandlung abgelehnt: Unabhängige Patientenberatung (UPD, kostenlos) oder Sozialverband VdK/SoVD, die den Widerspruch auch inhaltlich begründen und bis zum Sozialgericht begleiten.",
+      "Die Kasse hat drei Wochen (mit Gutachten fünf Wochen) nicht entschieden: Dann gilt der Antrag als genehmigt (§ 13 Abs. 3a SGB V) – das ist kein Widerspruch, sondern ein Anspruch, den Sie schriftlich geltend machen.",
+      "Der Widerspruch wurde abgelehnt (Widerspruchsbescheid): Klage beim Sozialgericht innerhalb eines Monats, gerichtskostenfrei.",
+    ],
     cta: "Bescheid fotografieren – Flinkbrief erkennt Versichertennummer, Datum und Frist und formuliert den Widerspruch mit Bitte um das Gutachten.",
     related: ["widerspruch-rentenversicherung", "widerspruch-jobcenter-bescheid"],
   },
@@ -422,6 +459,11 @@ export const GUIDES: Guide[] = [
       { q: "Wird die Rente während des Widerspruchs weitergezahlt?", a: "Eine bewilligte Rente läuft weiter. Bei einer Ablehnung gibt es bis zur Entscheidung nichts; bei Rückforderungen hat der Widerspruch aufschiebende Wirkung." },
       { q: "Kostet der Widerspruch etwas?", a: "Nein. Widerspruch und Klage beim Sozialgericht sind für Versicherte kostenlos. Kostenlos beraten die Auskunfts- und Beratungsstellen der Rentenversicherung und die Versichertenältesten." },
       { q: "Wie lange dauert das Widerspruchsverfahren?", a: "Bei Rentenbescheiden meist drei bis sechs Monate, bei Erwerbsminderung mit neuem Gutachten oft länger. Nach drei Monaten ohne Entscheidung ist eine Untätigkeitsklage möglich." },
+    ],
+    elsewhere: [
+      "Erwerbsminderungsrente oder Reha abgelehnt: Sozialverband VdK oder SoVD (Mitgliedschaft ab etwa 6 € im Monat) übernimmt Widerspruch und Klage; alternativ Fachanwalt für Sozialrecht.",
+      "Im Rentenbescheid fehlen Zeiten (Ausbildung, Kinder, Ausland): Erst Kontenklärung beantragen und Nachweise einreichen – oft reicht das ohne Widerspruch.",
+      "Der Widerspruch wurde abgelehnt: Klage beim Sozialgericht innerhalb eines Monats, gerichtskostenfrei.",
     ],
     cta: "Bescheid fotografieren – Flinkbrief erkennt Versicherungsnummer, Datum und Frist und formuliert den Widerspruch mit Bitte um Gutachten und Akteneinsicht.",
     related: ["widerspruch-krankenkasse", "widerspruch-jobcenter-bescheid"],
