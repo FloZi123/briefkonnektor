@@ -27,6 +27,7 @@ Preise kommen aus `NEXT_PUBLIC_PRICE_{POST,REGISTERED,DOWNLOAD}_CENTS` (brutto, 
 | `/brief/versand` | Versandart (Post 4,99 / Einschreiben 9,99 / PDF 0,99), E-Mail, Stripe Checkout |
 | `/brief/fertig?order=…&t=…` | Bestätigung mit Live-Status, PDF-Download (Token) |
 | `/status` | Status-Abfrage ohne Konto (Bestellnummer + E-Mail) |
+| `/fristrechner` | Fristrechner (Bekanntgabe +4 Tage, Monatsfrist, Wochenende/Feiertage; `lib/frist.ts`, Test `test/frist.ts`), aus jeder Fristbox verlinkt |
 | `/ratgeber`, `/ratgeber/[slug]` | 8 SEO-Ratgeber aus `lib/guides.ts` (FAQ/Article-JSON-LD, OG-Bild) |
 | `/a/[slug]` | Anzeigen-Landingpages (gleicher Inhalt wie Ratgeber, `noindex`, Canonical auf Ratgeber); speichern die Kampagne 30 Tage in `localStorage` → landet als `draft.attribution` an der Bestellung |
 | `/impressum`, `/agb`, `/widerruf`, `/datenschutz` | Rechtstexte (einzige Stellen mit Postanschrift) |
