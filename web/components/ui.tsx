@@ -3,8 +3,14 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export function Logo({ height = 24 }: { height?: number }) {
-  // eslint-disable-next-line @next/next/no-img-element
-  return <img src="/flinkbrief-lockup.svg" alt="Flinkbrief" style={{ height, width: "auto" }} />;
+  // Wortmarke in Ink-Farbe: im Dark Mode die helle Variante, sonst verschwindet „flink“ auf dunklem Grund
+  return (
+    <picture>
+      <source srcSet="/flinkbrief-lockup-dark.svg" media="(prefers-color-scheme: dark)" />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/flinkbrief-lockup.svg" alt="Flinkbrief" style={{ height, width: "auto", display: "block" }} />
+    </picture>
+  );
 }
 
 const STEPS = ["Verstehen", "Angaben", "Entwurf", "Unterschrift", "Versand"];
