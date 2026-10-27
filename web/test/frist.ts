@@ -51,3 +51,11 @@ check("Nebenkosten Ende", f(r.ende), "28.02.2029");
 // nächster Werktag über Weihnachten: Fr 25.12.2026 → Mo 28.12.2026
 check("Werktag Weihnachten", f(naechsterWerktag(d("25.12.2026"))), "28.12.2026");
 console.log("alle Fristtests bestanden");
+
+// Flow-Helfer nutzen dieselbe Logik
+import { widerspruchsfrist, einspruchsfrist, steuerfrist } from "../lib/dates";
+check("flow widerspruch", widerspruchsfrist("14.10.2026") ?? "", "19.11.2026");
+check("flow steuer", steuerfrist("01.12.2026") ?? "", "07.01.2027");
+// Bußgeld: Bescheid 16.09.2026 → Zustellung angenommen 19.09. → +14 = Sa 03.10. (Feiertag) → Mo 05.10.2026
+check("flow bussgeld", einspruchsfrist("16.09.2026") ?? "", "05.10.2026");
+console.log("Flow-Fristen konsistent");

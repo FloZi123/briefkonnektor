@@ -52,10 +52,16 @@ function DatenScreen() {
       {frist && (
         <div style={{ paddingTop: 14 }}>
           <Fristbox>
-            <strong>{draft.kind === "einspruch" ? "Einspruchsfrist: 2 Wochen ab Zustellung." : draft.kind === "steuer" ? "Einspruchsfrist: 1 Monat ab Bekanntgabe (§ 355 AO; Bekanntgabe gilt als Bescheiddatum + 4 Tage)." : "Widerspruchsfrist: 1 Monat ab Bekanntgabe."}</strong> Bescheid vom {draft.documentDate} → Eingang bei der Behörde bis spätestens <strong>{frist}</strong>
-            {days !== undefined && days >= 0 && ` (noch ${days} Tage)`}
+            <strong>{draft.kind === "einspruch" ? "Einspruchsfrist: 2 Wochen ab Zustellung." : draft.kind === "steuer" ? "Einspruchsfrist: 1 Monat ab Bekanntgabe (§ 355 AO)." : "Widerspruchsfrist: 1 Monat ab Bekanntgabe."}</strong> Bescheid vom {draft.documentDate} → Eingang bei der Behörde bis spätestens <strong>{frist}</strong>
+            {days !== undefined && days >= 0 && ` (noch ${days} Tage).`}
             {days !== undefined && days < 0 && " – Frist vermutlich abgelaufen; bitte prüfen."}
-            {" "}Maßgeblich ist die Rechtsbehelfsbelehrung auf dem Bescheid; ging er Ihnen nachweislich später zu, zählt der tatsächliche Zugang.
+            {days === undefined && "."}
+            {" "}
+            {draft.kind === "einspruch" ? "Gerechnet mit Zustellung drei Tage nach dem Bescheiddatum – maßgeblich ist das Datum auf dem gelben Umschlag." : "Gerechnet mit Bekanntgabe vier Tage nach dem Bescheiddatum; ging er Ihnen nachweislich später zu, zählt der tatsächliche Zugang."}{" "}
+            Maßgeblich ist die Rechtsbehelfsbelehrung auf dem Bescheid.{" "}
+            <a href={`/fristrechner?art=${draft.kind === "einspruch" ? "bussgeld" : draft.kind === "steuer" ? "steuer" : "widerspruch"}`} target="_blank" rel="noopener" className="frist-link">
+              Genau berechnen
+            </a>
           </Fristbox>
         </div>
       )}

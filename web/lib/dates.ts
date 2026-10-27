@@ -17,20 +17,22 @@ export function today(): string {
   return fmtDE(new Date());
 }
 
+import { berechneFrist, naechsterWerktag } from "./frist";
+
+const addDays = (d: Date, n: number): Date => {
+  const x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  x.setDate(x.getDate() + n);
+  return x;
+};
+
 /**
- * Widerspruchsfrist: 1 Monat ab Bekanntgabe. Bekanntgabe gilt bei Post am 4. Tag nach Aufgabe (§ 41 VwVfG / § 37 SGB X),
- * Fristende am Monatstag; fällt es auf Sa/So/Feiertag, verschiebt es sich auf den nächsten Werktag (§ 193 BGB).
- * Wir rechnen konservativ: Bekanntgabe = Bescheiddatum + 3 Tage, Ende = +1 Monat, Wochenende → Montag. Feiertage nicht berücksichtigt.
+ * Widerspruchsfrist: 1 Monat ab Bekanntgabe; Bekanntgabe bei Post am 4. Tag nach dem Bescheiddatum (§ 41 VwVfG / § 37 SGB X),
+ * Fristende nach § 188 BGB, Wochenende und bundesweite Feiertage → nächster Werktag. Gleiche Logik wie der Fristrechner (lib/frist.ts).
  */
 export function widerspruchsfrist(documentDate: string): string | undefined {
   const d = parseDE(documentDate);
   if (!d) return undefined;
-  const bekanntgabe = new Date(d);
-  bekanntgabe.setDate(bekanntgabe.getDate() + 3);
-  const end = new Date(bekanntgabe);
-  end.setMonth(end.getMonth() + 1);
-  while (end.getDay() === 0 || end.getDay() === 6) end.setDate(end.getDate() + 1);
-  return fmtDE(end);
+  return fmtDE(berechneFrist({ art: "widerspruch", datum: d, zugang: "post" }).ende);
 }
 
 export function daysUntil(dateDE: string): number | undefined {
@@ -42,29 +44,24 @@ export function daysUntil(dateDE: string): number | undefined {
 }
 
 /**
- * Einspruchsfrist gegen Bußgeldbescheid: 2 Wochen ab Zustellung (§ 67 OWiG). Zustellung meist per Postzustellungsurkunde;
- * wir rechnen konservativ Bescheiddatum + 3 Tage, Ende = +14 Tage, Wochenende → Montag. Feiertage nicht berücksichtigt.
+ * Einspruchsfrist gegen Bußgeldbescheid: 2 Wochen ab Zustellung (§ 67 OWiG). Das Zustelldatum steht auf dem gelben Umschlag und ist
+ * aus dem Foto meist nicht bekannt – wir nehmen Bescheiddatum + 3 Tage an (typische Laufzeit der Postzustellungsurkunde) und
+ * weisen im Screen darauf hin, dass das Datum auf dem Umschlag maßgeblich ist. Fristende Wochenende/Feiertag → nächster Werktag (§ 43 StPO).
  */
 export function einspruchsfrist(documentDate: string): string | undefined {
   const d = parseDE(documentDate);
   if (!d) return undefined;
-  const end = new Date(d);
-  end.setDate(end.getDate() + 3 + 14);
-  while (end.getDay() === 0 || end.getDay() === 6) end.setDate(end.getDate() + 1);
-  return fmtDE(end);
+  return fmtDE(berechneFrist({ art: "bussgeld", datum: addDays(d, 3), zugang: "zustellung" }).ende);
 }
 
 /**
- * Einspruchsfrist gegen Steuerbescheid: 1 Monat ab Bekanntgabe (§ 355 AO). Bekanntgabe gilt bei Post am 4. Tag nach Aufgabe
- * (§ 122 Abs. 2 AO, seit 2025). Wir rechnen Bescheiddatum + 4 Tage, Ende = +1 Monat, Wochenende → Montag. Feiertage nicht berücksichtigt.
+ * Einspruchsfrist gegen Steuerbescheid: 1 Monat ab Bekanntgabe (§ 355 AO), Bekanntgabe am 4. Tag nach Aufgabe zur Post (§ 122 Abs. 2 AO),
+ * Fristende Wochenende/Feiertag → nächster Werktag (§ 108 Abs. 3 AO). Gleiche Logik wie der Fristrechner.
  */
 export function steuerfrist(documentDate: string): string | undefined {
   const d = parseDE(documentDate);
   if (!d) return undefined;
-  const bekanntgabe = new Date(d);
-  bekanntgabe.setDate(bekanntgabe.getDate() + 4);
-  const end = new Date(bekanntgabe);
-  end.setMonth(end.getMonth() + 1);
-  while (end.getDay() === 0 || end.getDay() === 6) end.setDate(end.getDate() + 1);
-  return fmtDE(end);
+  return fmtDE(berechneFrist({ art: "steuer", datum: d, zugang: "post" }).ende);
 }
+
+export { naechsterWerktag };
