@@ -3,6 +3,7 @@ import { useRouter } from "next/navigation";
 import { ScreenHead, Check } from "@/components/ui";
 import { SignaturePad } from "@/components/signature";
 import { useDraft } from "@/lib/store";
+import { track } from "@/lib/track";
 
 export default function UnterschriftScreen() {
   const { draft, update, ready } = useDraft();
@@ -38,10 +39,16 @@ export default function UnterschriftScreen() {
       </div>
 
       <div className="screen-foot">
-        <button className="btn btn-primary" onClick={() => router.push("/brief/versand")}>
+        <button
+          className="btn btn-primary"
+          onClick={() => {
+            track(draft.signature ? "signature_done" : "signature_skipped");
+            router.push("/brief/versand");
+          }}
+        >
           Vorschau &amp; Versandart
         </button>
-        <button className="btn btn-link" onClick={() => { update({ signature: undefined }); router.push("/brief/versand"); }}>
+        <button className="btn btn-link" onClick={() => { track("signature_skipped"); update({ signature: undefined }); router.push("/brief/versand"); }}>
           Ohne Unterschrift weiter
         </button>
       </div>

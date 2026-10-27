@@ -5,6 +5,7 @@ import { saveDraft, loadDraft } from "@/lib/store";
 import type { Extracted } from "@/lib/types";
 import { validateFile, prepareFile } from "@/lib/upload";
 import { Progress } from "@/components/progress";
+import { track } from "@/lib/track";
 
 /** Foto/PDF aufnehmen oder hochladen → /api/extract → Entwurf vorbefüllen → Schritt 2 */
 export function Uploader({ title = "Brief fotografieren", sub = "Bescheid, Rechnung, Vertrag – gerade von oben, bei gutem Licht" }: { title?: string; sub?: string } = {}) {
@@ -14,21 +15,29 @@ export function Uploader({ title = "Brief fotografieren", sub = "Bescheid, Rechn
   const [error, setError] = useState<string>();
   const router = useRouter();
 
-  async function onFile(raw: File) {
+  async function onFile(raw: File, source: "camera" | "picker") {
     setError(undefined);
     const problem = validateFile(raw);
     if (problem) {
       setError(problem);
       return;
     }
+    track("upload_started", { source });
     setBusy(true);
+    // genau ein Ergebnis-Ereignis je Upload: extract_ok oder extract_failed
+    let status = 500;
     try {
       const file = await prepareFile(raw);
       const fd = new FormData();
       fd.append("file", file);
       const res = await fetch("/api/extract", { method: "POST", body: fd });
-      if (!res.ok) throw new Error((await res.json()).error ?? "Erkennung fehlgeschlagen");
+      if (!res.ok) {
+        if (res.status === 413 || res.status === 415 || res.status === 422) status = res.status;
+        throw new Error((await res.json()).error ?? "Erkennung fehlgeschlagen");
+      }
       const x = (await res.json()) as Extracted;
+      track("extract_ok", { kind: x.kind ?? "unbekannt", confidence: x.confidence ?? "unbekannt" });
+      status = 0;
       const d = loadDraft();
       saveDraft({
         ...d,
@@ -45,6 +54,7 @@ export function Uploader({ title = "Brief fotografieren", sub = "Bescheid, Rechn
       });
       router.push(x.summary ? "/brief/verstehen" : "/brief/daten?from=photo");
     } catch (e) {
+      if (status) track("extract_failed", { status });
       setError(e instanceof Error ? e.message : "Erkennung fehlgeschlagen");
     } finally {
       setBusy(false);
@@ -64,7 +74,7 @@ export function Uploader({ title = "Brief fotografieren", sub = "Bescheid, Rechn
           onDrop={(e) => {
             e.preventDefault();
             const f = e.dataTransfer.files?.[0];
-            if (f) void onFile(f);
+            if (f) void onFile(f, "picker");
           }}
         >
           <span className="camera">
@@ -85,7 +95,7 @@ export function Uploader({ title = "Brief fotografieren", sub = "Bescheid, Rechn
         hidden
         onChange={(e) => {
           const f = e.target.files?.[0];
-          if (f) void onFile(f);
+          if (f) void onFile(f, "camera");
           e.target.value = "";
         }}
       />
@@ -96,7 +106,7 @@ export function Uploader({ title = "Brief fotografieren", sub = "Bescheid, Rechn
         hidden
         onChange={(e) => {
           const f = e.target.files?.[0];
-          if (f) void onFile(f);
+          if (f) void onFile(f, "picker");
           e.target.value = "";
         }}
       />

@@ -55,7 +55,7 @@ export function setAttribution(campaign: string) {
     storage()?.setItem(ATTR_KEY, JSON.stringify({ c: campaign.slice(0, 40), at: Date.now() }));
   } catch {}
 }
-function getAttribution(): string | undefined {
+export function getAttribution(): string | undefined {
   try {
     const raw = storage()?.getItem(ATTR_KEY);
     if (!raw) return undefined;

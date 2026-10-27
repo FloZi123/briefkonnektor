@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ScreenHead, Disclaimer } from "@/components/ui";
 import { useDictation, DictateButton, appendText } from "@/components/dictate";
@@ -9,6 +9,7 @@ import { useDraft } from "@/lib/store";
 import { subjectLine } from "@/lib/subject";
 import { findPlaceholders } from "@/lib/placeholders";
 import { formCheck, hasBody } from "@/lib/formcheck";
+import { track } from "@/lib/track";
 import type { ReviewPoint, FillSuggestion } from "@/lib/ai";
 
 const TAG: Record<ReviewPoint["kind"] | "form" | "rechtsbehelf" | "schriftform", string> = { fehlt: "fehlt", beleg: "Beleg", anlage: "Anlage", widerspruch: "prüfen", hinweis: "Hinweis", form: "Form", rechtsbehelf: "Rechtsbehelf", schriftform: "Schriftform" };
@@ -36,6 +37,7 @@ export default function EntwurfScreen() {
   const [adjustOpen, setAdjustOpen] = useState(false);
   // Textfeld bleibt, wenn der Text gelöscht wurde oder die Erstellung scheiterte – sonst gäbe es keinen Weg zurück
   const [edited, setEdited] = useState(false);
+  const editTracked = useRef(false); // draft_edited nur beim ersten Ändern (je Aufruf der Seite, ohne Browser-Speicher)
   const dictate = useDictation((t) => setWish((w) => appendText(w, t)));
   const router = useRouter();
 
@@ -47,6 +49,7 @@ export default function EntwurfScreen() {
       if (!res.ok) throw new Error((await res.json()).error ?? "Entwurf konnte nicht erstellt werden");
       const { body } = (await res.json()) as { body: string };
       update({ body });
+      if (!instruction) track("draft_ready", { kind: draft.kind });
       if (instruction) {
         setWish("");
         setAdjustOpen(false);
@@ -139,6 +142,10 @@ export default function EntwurfScreen() {
             value={draft.body}
             onChange={(e) => {
               setEdited(true);
+              if (!editTracked.current) {
+                editTracked.current = true;
+                track("draft_edited", { kind: draft.kind });
+              }
               update({ body: e.target.value });
             }}
             onBlur={() => void runReview(draft.body)}
@@ -181,7 +188,11 @@ export default function EntwurfScreen() {
             <div className="stack" style={{ gap: 10, paddingTop: 10 }}>
               <div className="row" style={{ gap: 8 }}>
                 {CHIPS.map((c) => (
-                  <button key={c.label} type="button" className="chip" onClick={() => generate(c.instruction)}>
+                  <button key={c.label} type="button" className="chip" onClick={() => {
+                      track("draft_instruction", { chip: c.label });
+                      void generate(c.instruction);
+                    }}
+                  >
                     {c.label}
                   </button>
                 ))}

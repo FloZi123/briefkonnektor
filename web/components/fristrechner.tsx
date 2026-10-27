@@ -1,8 +1,9 @@
 "use client";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { berechneFrist, FRIST_ARTEN, type FristArt, type Zugang } from "@/lib/frist";
 import { Fristbox } from "@/components/ui";
+import { track } from "@/lib/track";
 
 const fmt = (d: Date) => d.toLocaleDateString("de-DE", { weekday: "long", day: "2-digit", month: "2-digit", year: "numeric" });
 const iso = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
@@ -37,6 +38,19 @@ export function Fristrechner({ initialArt }: { initialArt?: FristArt }) {
     if (isNaN(d.getTime())) return undefined;
     return berechneFrist({ art, datum: d, zugang: zugangEff });
   }, [art, datum, zugangEff]);
+
+  // frist_calculated erst, wenn die Eingabe eine Sekunde steht – beim Tippen des Jahres entstehen sonst Zwischenwerte (0002, 0020 …)
+  const lastSent = useRef("");
+  useEffect(() => {
+    if (!result) return;
+    const key = `${art}|${zugangEff}|${datum}`;
+    const t = setTimeout(() => {
+      if (lastSent.current === key) return;
+      lastSent.current = key;
+      track("frist_calculated", { art, zugang: zugangEff });
+    }, 1000);
+    return () => clearTimeout(t);
+  }, [result, art, zugangEff, datum]);
 
   const heute = new Date();
   heute.setHours(0, 0, 0, 0);

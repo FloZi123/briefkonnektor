@@ -5,6 +5,7 @@ import { useDraft } from "@/lib/store";
 import { needsWrittenForm, missingDetails, hasBody } from "@/lib/formcheck";
 import { PRICES, euro, type Shipping } from "@/lib/types";
 import { subjectLine } from "@/lib/subject";
+import { track } from "@/lib/track";
 
 export default function VersandScreen() {
   const { draft, update, ready } = useDraft();
@@ -22,6 +23,7 @@ export default function VersandScreen() {
       setError(missing.text);
       return;
     }
+    track("checkout_click", { shipping: draft.shipping });
     setBusy(true);
     setError(undefined);
     try {
@@ -56,6 +58,7 @@ export default function VersandScreen() {
             className="btn btn-link"
             style={{ width: "auto", minHeight: 40, padding: "0 2px", fontSize: 14, justifyContent: "flex-start" }}
             onClick={async () => {
+              track("preview_opened");
               const res = await fetch("/api/letters/preview", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ draft }) });
               if (!res.ok) return setError("Vorschau konnte nicht erzeugt werden");
               const url = URL.createObjectURL(await res.blob());

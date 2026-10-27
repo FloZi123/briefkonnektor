@@ -3,6 +3,7 @@ import { Logo } from "@/components/ui";
 import { Footer } from "@/components/legal";
 import { ClearDraftOnDone } from "@/components/resume";
 import { LiveStatus } from "@/components/live-status";
+import { TrackOnce } from "@/components/track-once";
 import { getOrder } from "@/lib/orders";
 import { reconcileWithStripe, syncCarrierStatus } from "@/lib/finalize";
 import { PRICES } from "@/lib/types";
@@ -48,6 +49,7 @@ export default async function FertigScreen({ searchParams }: { searchParams: Pro
   return (
     <main className="screen">
       {paid && <ClearDraftOnDone />}
+      {paid && <TrackOnce name="order_paid" props={{ shipping: order.shipping }} />}
       <LiveStatus id={order.id} token={order.token} status={order.status} />
       <div className="screen-head"><Logo /></div>
       <div className="stack" style={{ paddingTop: 32, alignItems: "center", textAlign: "center", gap: 14 }}>

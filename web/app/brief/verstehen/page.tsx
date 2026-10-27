@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ScreenHead, Fristbox } from "@/components/ui";
 import { useDraft } from "@/lib/store";
+import { track } from "@/lib/track";
 import { LETTER_KINDS, type LetterKind } from "@/lib/types";
 import { widerspruchsfrist, einspruchsfrist, steuerfrist, daysUntil } from "@/lib/dates";
 
@@ -33,6 +34,7 @@ export default function VerstehenScreen() {
   const days = frist ? daysUntil(frist) : undefined;
 
   const choose = (k: LetterKind) => {
+    track("kind_chosen", { kind: k, suggested: suggested.includes(k) });
     update({ kind: k });
     router.push("/brief/daten?from=photo");
   };
