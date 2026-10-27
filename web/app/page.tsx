@@ -1,16 +1,10 @@
 import Link from "next/link";
 import { Logo } from "@/components/ui";
-import { LETTER_KINDS, PRICES, euro, type LetterKind } from "@/lib/types";
+import { PRICES, euro } from "@/lib/types";
 import { Uploader } from "@/components/uploader";
 import { Footer } from "@/components/legal";
 import { ResumeDraft } from "@/components/resume";
 import { GUIDES } from "@/lib/guides";
-
-const GROUPS: Array<{ title: string; kinds: LetterKind[] }> = [
-  { title: "Behörde und Amt", kinds: ["widerspruch", "einspruch", "steuer", "unterlagen", "fristverlaengerung", "nachfrage"] },
-  { title: "Wohnung", kinds: ["nebenkosten", "maengel"] },
-  { title: "Geld und Sonstiges", kinds: ["mahnung", "beschwerde", "frei"] },
-];
 
 const Tick = () => (
   <svg viewBox="0 0 24 24" fill="none" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -114,24 +108,23 @@ export default function Home() {
         </h1>
         <div className="hero-copy">
           <p className="lead">
-            Brief fotografieren. Flinkbrief erklärt in einfachen Worten, was drinsteht und bis wann Sie reagieren müssen, schreibt den Widerspruch nach Ihren
-            Angaben und schickt ihn per Post – unterschrieben mit dem Finger.
+            Brief fotografieren. Flinkbrief erklärt, was drinsteht und bis wann Sie reagieren müssen, schreibt die Antwort nach Ihren Angaben und schickt sie per Post.
           </p>
           <div className="hero-cta">
             <ResumeDraft />
             <Uploader />
+            <p className="alt-start">
+              Kein Foto zur Hand? <Link href="/brief/daten">Briefart wählen →</Link>
+            </p>
             <div className="trust">
               <span>
-                <Tick /> Verstehen ist kostenlos
+                <Tick /> Verstehen kostenlos
               </span>
               <span>
-                <Tick /> Kein Konto nötig
+                <Tick /> Kein Konto
               </span>
               <span>
-                <Tick /> Foto wird nach der Erkennung gelöscht
-              </span>
-              <span>
-                <Tick /> Ab {euro(PRICES.post.cents)} inkl. Porto
+                <Tick /> Foto wird gelöscht
               </span>
             </div>
           </div>
@@ -144,97 +137,49 @@ export default function Home() {
         <ol className="steps">
           <li>
             <strong>Fotografieren</strong>
-            <span>Behörde, Aktenzeichen, Frist und Betrag werden erkannt. Nichts abtippen.</span>
+            <span>Behörde, Aktenzeichen, Frist und Betrag werden erkannt.</span>
           </li>
           <li>
             <strong>Verstehen und entscheiden</strong>
-            <span>Kurze Erklärung, was der Brief bedeutet. Sie wählen: Widerspruch, Unterlagen nachreichen, Nachfrage oder mehr Zeit.</span>
+            <span>Sie lesen in einfachen Worten, was verlangt wird, und wählen Ihre Antwort.</span>
           </li>
           <li>
             <strong>Unterschreiben und abschicken</strong>
-            <span>Entwurf prüfen, mit dem Finger unterschreiben, als Brief oder Einschreiben versenden. Oder als PDF selbst einwerfen.</span>
+            <span>Mit dem Finger unterschreiben – wir drucken und verschicken.</span>
           </li>
         </ol>
-      </section>
-
-      <section className="kinds">
-        <h2>Ohne Foto anfangen</h2>
-        <p className="sub">Briefart wählen, dann tippen oder diktieren, worum es geht. Den Rest formuliert Flinkbrief.</p>
-        <div className="kind-groups">
-          {GROUPS.map((g) => (
-            <div className="kind-group" key={g.title}>
-              <h3>{g.title}</h3>
-              {g.kinds.map((k) => (
-                <Link key={k} href={`/brief/daten?kind=${k}`} className="kind">
-                  <span>{LETTER_KINDS[k].label}</span>
-                  {LETTER_KINDS[k].hint && <small>{LETTER_KINDS[k].hint}</small>}
-                </Link>
-              ))}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="prices">
-        <h2>Was es kostet</h2>
-        <p className="sub">Verstehen ist kostenlos. Sie zahlen erst, wenn Sie den Brief verschicken oder als PDF herunterladen.</p>
-        <p className="distinct">
-          <strong>Nicht nur ein PDF.</strong> Flinkbrief druckt, kuvertiert und verschickt den Brief – auf Wunsch als Einschreiben mit Zustellnachweis. Drucker, Umschlag und Gang zur Post entfallen. Wer lieber selbst unterschreibt, nimmt das PDF.
+        <p className="price-line">
+          Brief per Post <b>{euro(PRICES.post.cents)}</b> · Einschreiben mit Nachweis <b>{euro(PRICES.registered.cents)}</b> · Nur PDF <b>{euro(PRICES.download.cents)}</b> – inkl. MwSt. Verstehen ist kostenlos.
         </p>
-        <div className="price-list">
-        <div className="price hi">
-          <span className="amt">
-            {euro(PRICES.post.cents)}
-            <small>inkl. MwSt.</small>
-          </span>
-          <span className="nm">Brief per Post</span>
-          <span className="ds">Druck, Umschlag und Porto. An Werktagen bis 12 Uhr noch am selben Tag bei der Post.</span>
-        </div>
-        <div className="price">
-          <span className="amt">
-            {euro(PRICES.registered.cents)}
-            <small>inkl. MwSt.</small>
-          </span>
-          <span className="nm">Einschreiben Einwurf</span>
-          <span className="ds">Mit Zustellnachweis. Empfohlen, wenn eine Frist läuft.</span>
-        </div>
-        <div className="price">
-          <span className="amt">
-            {euro(PRICES.download.cents)}
-            <small>inkl. MwSt.</small>
-          </span>
-          <span className="nm">Nur PDF</span>
-          <span className="ds">Selbst drucken, unterschreiben und einwerfen. Nötig bei Miet- und Arbeitsvertrag.</span>
-        </div>
-        </div>
       </section>
 
-      <section className="kinds" aria-label="Ratgeber">
-        <h2>Erst verstehen, dann antworten</h2>
-        <p className="sub">Was im Schreiben steht, welche Frist läuft und was Sie tun können – je Bescheid-Typ kurz erklärt.</p>
-        <div className="guide-list">
+      <section className="guides-short">
+        <h2>Ratgeber</h2>
+        <ul className="guide-links">
           {GUIDES.map((g) => (
-            <Link key={g.slug} href={`/ratgeber/${g.slug}`} className="guide-card">
-              <strong>{g.title}</strong>
-              <small>{g.deadlineShort}</small>
-            </Link>
+            <li key={g.slug}>
+              <Link href={`/ratgeber/${g.slug}`}>{g.title}</Link>
+            </li>
           ))}
-        </div>
+          <li>
+            <Link href="/fristrechner">Fristrechner: letzten Tag der Frist ausrechnen</Link>
+          </li>
+        </ul>
       </section>
 
       <section className="honest">
         <h2>Was Sie wissen sollten</h2>
         <div>
           <b>Keine Rechtsberatung</b>
-          Flinkbrief formuliert nach Ihren Angaben und prüft die Form. Ob ein Widerspruch Erfolg hat, kann nur ein Anwalt beurteilen.
+          Wir formulieren nach Ihren Angaben und prüfen die Form, nicht die Erfolgsaussicht.
         </div>
         <div>
           <b>Fristen bleiben Ihre Sache</b>
-          Wir rechnen die Frist aus dem Bescheid aus und zeigen sie an. Verantwortlich für den rechtzeitigen Versand sind Sie.
+          Wir zeigen die Frist an, rechtzeitig abschicken müssen Sie.
         </div>
         <div>
           <b>Daten nur so lange wie nötig</b>
-          Das Foto wird nach der Erkennung gelöscht, Brief und Bestellung nach 30 Tagen. Kein Konto, kein Newsletter.
+          Foto gelöscht nach der Erkennung, Brief nach 30 Tagen. Kein Konto.
         </div>
       </section>
 
