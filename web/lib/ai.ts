@@ -120,6 +120,12 @@ function documentFacts(d: Draft): string[] {
   if (kf.length) out.push("Weitere Angaben aus dem Schreiben:\n" + kf.map((f) => `- ${f}`).join("\n"));
   if (d.understanding?.demand) out.push(`Was das Schreiben verlangt: ${d.understanding.demand}`);
   if (d.understanding?.deadlineHint) out.push(`Frist laut Schreiben: ${d.understanding.deadlineHint}`);
+  const checks = d.understanding?.checks ?? [];
+  if (checks.length)
+    out.push(
+      "Prüfpunkte, die aus dem Schreiben folgen (dem Absender bereits angezeigt – im Brief als konkrete Einwendungen oder Nachfragen mit Position und Betrag aufgreifen, sachlich, ohne Rechtsbewertung; nichts hinzufügen, was nicht aus dem Schreiben oder den Angaben des Absenders stammt):\n" +
+        checks.map((c) => `- ${c}`).join("\n"),
+    );
   return out;
 }
 
@@ -153,6 +159,7 @@ export async function draftLetter(d: Draft, instruction?: string): Promise<strin
     "Bei Nachfrage/Stellungnahme: Fragen nummeriert und konkret, Stellungnahme sachlich zu den Punkten des Schreibens, um schriftliche Antwort bitten; nichts einräumen, was der Absender nicht angegeben hat. " +
     "Bei Fristverlängerung: Bezug, bisherige Frist, Grund aus den Angaben, konkreter neuer Termin (sonst Platzhalter), Bitte um kurze Bestätigung; Zusicherung, bis dahin zu liefern. " +
     "Bei Widerspruch: Widerspruch einlegen, Begründung aus den Angaben, um Überprüfung, Akteneinsicht und schriftliche Begründung bitten, bis zur Entscheidung um Aussetzung der Vollziehung/Aufrechnung bitten. " +
+    "Bei Widerspruch gegen eine Nebenkosten-/Betriebskostenabrechnung: 'erhebe ich Einwendungen gegen die Abrechnung' (keine 'Aussetzung der Vollziehung'), die beanstandeten Positionen einzeln mit Bezeichnung und Betrag nennen und sagen, was daran zu prüfen ist; Einsicht in die Originalbelege und den Verteilerschlüssel verlangen; erklären, dass die Nachzahlung bis zur Belegeinsicht nur unter Vorbehalt geleistet bzw. zurückgehalten wird; um schriftliche Antwort bitten. " +
     "Bei Mängelanzeige: Mangel konkret, Frist zur Beseitigung von 14 Tagen ab Zugang setzen, Mietminderung vorbehalten. " +
     "Bei Mahnung: Forderung, Grund, Zahlungsfrist 14 Tage, Ankündigung weiterer Schritte ohne Drohung. " +
     "Die Angaben des Absenders können diktiert, umgangssprachlich oder ungeordnet sein (z. B. 'ich war da gar nicht, mein Chef kann das bestätigen'): Inhalt übernehmen, in sachliche Briefsprache übersetzen, Wichtiges zuerst, nichts weglassen. " +
