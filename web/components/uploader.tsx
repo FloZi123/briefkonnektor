@@ -7,8 +7,9 @@ import { validateFile, prepareFile } from "@/lib/upload";
 import { Progress } from "@/components/progress";
 
 /** Foto/PDF aufnehmen oder hochladen → /api/extract → Entwurf vorbefüllen → Schritt 2 */
-export function Uploader({ title = "Brief fotografieren", sub = "Bescheid, Rechnung, Vertrag – oder PDF hochladen" }: { title?: string; sub?: string } = {}) {
+export function Uploader({ title = "Brief fotografieren", sub = "Bescheid, Rechnung, Vertrag – gerade von oben, bei gutem Licht" }: { title?: string; sub?: string } = {}) {
   const input = useRef<HTMLInputElement>(null);
+  const picker = useRef<HTMLInputElement>(null); // ohne capture: Fotothek oder PDF – auf dem Handy öffnet capture sonst nur die Kamera
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string>();
   const router = useRouter();
@@ -88,6 +89,22 @@ export function Uploader({ title = "Brief fotografieren", sub = "Bescheid, Rechn
           e.target.value = "";
         }}
       />
+      <input
+        ref={picker}
+        type="file"
+        accept="image/*,.heic,.heif,application/pdf"
+        hidden
+        onChange={(e) => {
+          const f = e.target.files?.[0];
+          if (f) void onFile(f);
+          e.target.value = "";
+        }}
+      />
+      {!busy && (
+        <button type="button" className="btn btn-link pick" onClick={() => picker.current?.click()}>
+          Vorhandenes Foto oder PDF auswählen
+        </button>
+      )}
       {error && <div className="errorbox">{error}</div>}
     </div>
   );

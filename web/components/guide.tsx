@@ -24,7 +24,7 @@ function LandingHero({ slug }: { slug: string }) {
       <div className="landing-copy">
         <h1>{c.h1}</h1>
         <p className="lead">{c.lead}</p>
-        <Uploader title={c.upload} sub="Als Foto oder PDF – wird nach der Erkennung gelöscht" />
+        <Uploader title={c.upload} sub="Gerade von oben, bei gutem Licht – Angaben werden automatisch erkannt" />
         <div className="trust">
           <span>
             <Tick /> Verstehen ist kostenlos

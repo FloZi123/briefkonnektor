@@ -71,11 +71,12 @@ p { margin: 0; }
 .stepbar .meta { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; color: var(--ink-muted); }
 .stepbar .meta b { color: var(--ink); font-weight: 600; }
 
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 0 20px; border-radius: var(--radius-m); font: inherit; font-weight: 600; font-size: 16px; border: 1.5px solid transparent; cursor: pointer; text-decoration: none; width: 100%; transition: background-color .15s, border-color .15s, transform .08s; }
-.btn:active { transform: translateY(1px); }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 52px; padding: 0 20px; border-radius: var(--radius-m); font: inherit; font-weight: 600; font-size: 16px; border: 1.5px solid transparent; cursor: pointer; text-decoration: none; width: 100%; transition: background-color .15s, border-color .15s, transform .16s var(--ease-out); }
+.btn:active { transform: scale(0.98); }
 .btn:focus-visible, .input:focus-visible, .opt:focus-within, .tile:focus-visible, .chip:focus-visible, .kind:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .btn-primary { background: var(--flink); color: var(--flink-ink); }
 .btn-secondary { background: var(--paper-100); color: var(--ink); border-color: var(--line-strong); }
+.btn-link.pick { min-height: 36px; font-size: 14px; font-weight: 500; }
 .btn-link { background: transparent; color: var(--flink); min-height: 40px; text-decoration: underline; }
 .btn[disabled] { opacity: .5; cursor: not-allowed; }
 .btn-icon { width: 40px; min-height: 40px; height: 40px; padding: 0; border: 1px solid var(--line); border-radius: var(--radius-m); background: var(--paper-100); color: var(--ink); display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
@@ -113,8 +114,8 @@ textarea.input { min-height: 160px; line-height: 1.5; resize: vertical; }
 .chip { transition: transform .1s ease-out, border-color .15s; display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border-radius: var(--radius-pill); border: 1px solid var(--line-strong); background: var(--paper-100); font: inherit; font-size: 13px; font-weight: 500; color: var(--ink); cursor: pointer; }
 
 /* Kamera-Fläche: das eine große Ding */
-.dropzone { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; min-height: 176px; border: none; border-radius: var(--radius-l); background: var(--flink); color: var(--flink-ink); cursor: pointer; text-align: center; padding: 20px 16px; width: 100%; font: inherit; transition: background-color .15s, transform .08s; }
-.dropzone:active { transform: translateY(1px); }
+.dropzone { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; min-height: 176px; border: none; border-radius: var(--radius-l); background: var(--flink); color: var(--flink-ink); cursor: pointer; text-align: center; padding: 20px 16px; width: 100%; font: inherit; transition: background-color .15s, transform .16s var(--ease-out); }
+.dropzone:active { transform: scale(0.98); }
 .dropzone.busy { opacity: .7; }
 .dropzone .title { font-family: var(--font-display); font-weight: 700; font-size: 20px; letter-spacing: -0.01em; }
 .dropzone .sub { font-size: 15px; }
@@ -318,6 +319,8 @@ textarea.input { min-height: 160px; line-height: 1.5; resize: vertical; }
 .landing-copy .lead { font-size: 17px; line-height: 1.5; color: var(--ink); max-width: 52ch; }
 .landing-example { display: flex; flex-direction: column; gap: 12px; padding: 18px 20px; border-radius: var(--radius-l); background: var(--paper-100); border: 1px solid var(--line); box-shadow: var(--shadow-card); font-size: 15px; line-height: 1.5; }
 .landing-example p { margin: 0; }
+.landing-example { transition: opacity .26s var(--ease-out), transform .26s var(--ease-out); }
+@starting-style { .landing-example { opacity: 0; transform: translateY(6px); } }
 .guide-head .as-h1 { font-size: clamp(26px, 4vw, 34px); margin: 0; }
 .guide { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px 20px; }
 .guide-body { max-width: 720px; margin: 0 auto; padding-block: 16px 24px; display: flex; flex-direction: column; gap: 24px; }
