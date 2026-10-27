@@ -39,7 +39,10 @@ export default function Page() {
       <p>
         Zur Reichweitenmessung nutzen wir Vercel Web Analytics. Der Dienst arbeitet ohne Cookies und ohne geräteübergreifende Kennungen: Es werden
         aufgerufene Seite, Verweisquelle, Land, Browser- und Gerätetyp erfasst; aus der IP-Adresse wird ein kurzlebiger, nicht rückrechenbarer
-        Hashwert gebildet, der nach 24 Stunden verworfen wird. Eine Identifizierung einzelner Personen ist damit nicht möglich. Rechtsgrundlage ist
+        Hashwert gebildet, der nach 24 Stunden verworfen wird. Eine Identifizierung einzelner Personen ist damit nicht möglich. Zusätzlich zählen
+        wir einzelne Schritte im Bestellablauf als anonyme Ereignisse, etwa „Foto hochgeladen“, „Entwurf erstellt“ oder „Zur Zahlung gewechselt“.
+        Dabei übermitteln wir nur allgemeine Merkmale wie Briefart, Versandart oder das Schlagwort der Anzeigen-Seite, über die Sie gekommen sind
+        – keine Namen, Adressen, E-Mail-Adressen, Aktenzeichen oder Beträge. Auch hierfür werden keine Cookies gesetzt. Rechtsgrundlage ist
         unser berechtigtes Interesse, zu erfahren, welche Seiten genutzt werden (Art. 6 Abs. 1 lit. f DSGVO).
       </p>
 
