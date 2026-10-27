@@ -6,6 +6,14 @@ import { Uploader } from "@/components/uploader";
 import { LETTER_KINDS, PRICES, euro } from "@/lib/types";
 import { Attribution } from "@/components/attribution";
 
+/** Ratgeber → Voreinstellung im Fristrechner */
+const FRIST_ART: Record<string, string> = {
+  "einspruch-bussgeldbescheid": "bussgeld",
+  "einspruch-steuerbescheid": "steuer",
+  "mahnung-widersprechen": "mahnbescheid",
+  "widerspruch-nebenkostenabrechnung": "nebenkosten",
+};
+
 const base = () => (process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.flinkbrief.de").replace(/\/$/, "");
 
 
@@ -129,7 +137,10 @@ export function GuideArticle({ g, campaign }: { g: Guide; campaign?: string }) {
               <path d="M12 7v5l3 2" />
             </svg>
             <span>
-              <strong>Frist:</strong> {g.deadline}
+              <strong>Frist:</strong> {g.deadline}{" "}
+              <Link href={`/fristrechner?art=${FRIST_ART[g.slug] ?? "widerspruch"}`} className="frist-link">
+                Für Ihren Fall berechnen
+              </Link>
             </span>
           </div>
         </header>

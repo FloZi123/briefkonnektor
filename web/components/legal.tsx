@@ -6,6 +6,7 @@ import { LEGAL_UPDATED } from "@/lib/legal";
 export const Footer = () => (
   <footer className="footer">
     <Link href="/ratgeber">Ratgeber</Link>
+    <Link href="/fristrechner">Fristrechner</Link>
     <Link href="/impressum">Impressum</Link>
     <Link href="/datenschutz">Datenschutz</Link>
     <Link href="/agb">AGB</Link>
