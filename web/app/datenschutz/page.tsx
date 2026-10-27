@@ -5,7 +5,7 @@ export const metadata = { title: "Datenschutzerklärung", description: "Welche D
 
 export default function Page() {
   return (
-    <LegalPage title="Datenschutzerklärung">
+    <LegalPage title="Datenschutzerklärung" updated="27.10.2026">
       <p>
         {O.brand} verarbeitet nur die Daten, die für Ihren Brief nötig sind – und löscht sie nach {RETENTION_DAYS} Tagen. Keine Cookies, kein
         Tracking, keine Werbung. Im Einzelnen:
