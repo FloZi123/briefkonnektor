@@ -18,7 +18,7 @@ export async function extractFromDocument(bytes: Buffer, mime: string): Promise<
 
   const res = await client().messages.create({
     model: MODEL,
-    max_tokens: 1600,
+    max_tokens: 2200,
     system:
       "Du extrahierst Felder aus einem fotografierten deutschen Behörden- oder Geschäftsschreiben. Antworte ausschließlich mit einem JSON-Objekt, ohne Erklärung. " +
       "Felder: kind (eine der Briefarten: " + KINDS + " – die Briefart, die der Empfänger des Dokuments jetzt vermutlich schreiben will; bei Bescheiden mit Rechtsbehelfsbelehrung 'widerspruch'), " +
@@ -39,9 +39,77 @@ export async function extractFromDocument(bytes: Buffer, mime: string): Promise<
   });
   const text = res.content.find((c) => c.type === "text")?.text ?? "{}";
   const json = text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1);
-  const parsed = ExtractedSchema.safeParse(JSON.parse(json));
-  if (!parsed.success) throw new Error("Erkennung lieferte kein gültiges Ergebnis");
+  let raw: unknown;
+  try {
+    raw = parseLooseJson(json);
+  } catch (e) {
+    console.error("extract: JSON unlesbar", (e as Error).message, "stop=", res.stop_reason, "text=", json.slice(0, 1200));
+    throw e;
+  }
+  const parsed = ExtractedSchema.safeParse(raw);
+  if (!parsed.success) {
+    console.error("extract: Schema", parsed.error.issues.slice(0, 5));
+    throw new Error("Erkennung lieferte kein gültiges Ergebnis");
+  }
   return parsed.data;
+}
+
+/**
+ * JSON vom Modell tolerant lesen: erst strikt, dann mit Reparatur typischer Fehler –
+ * rohe Zeilenumbrüche in Strings, nachgestellte Kommas, abgeschnittenes Ende.
+ */
+function parseLooseJson(json: string): unknown {
+  try {
+    return JSON.parse(json);
+  } catch {
+    /* repariert unten */
+  }
+  let out = "";
+  let inStr = false;
+  for (let i = 0; i < json.length; i++) {
+    const ch = json[i];
+    if (inStr) {
+      if (ch === "\\") {
+        out += ch + (json[i + 1] ?? "");
+        i++;
+        continue;
+      }
+      if (ch === '"') inStr = false;
+      else if (ch === "\n") {
+        out += "\\n";
+        continue;
+      } else if (ch === "\r" || ch === "\t") {
+        out += " ";
+        continue;
+      }
+      out += ch;
+    } else {
+      if (ch === '"') inStr = true;
+      out += ch;
+    }
+  }
+  out = out.replace(/,\s*([}\]])/g, "$1");
+  try {
+    return JSON.parse(out);
+  } catch {
+    /* evtl. abgeschnitten: offene Strings/Klammern schließen */
+  }
+  let fixed = out;
+  if (inStr) fixed += '"';
+  const opens: string[] = [];
+  let str = false;
+  for (let i = 0; i < fixed.length; i++) {
+    const ch = fixed[i];
+    if (str) {
+      if (ch === "\\") i++;
+      else if (ch === '"') str = false;
+    } else if (ch === '"') str = true;
+    else if (ch === "{" || ch === "[") opens.push(ch);
+    else if (ch === "}" || ch === "]") opens.pop();
+  }
+  fixed = fixed.replace(/,\s*$/, "");
+  while (opens.length) fixed += opens.pop() === "{" ? "}" : "]";
+  return JSON.parse(fixed);
 }
 
 /** Fakten aus dem fotografierten Schreiben – damit Betrag, Zeitraum usw. im Brief und in den Vorschlägen ankommen. */
