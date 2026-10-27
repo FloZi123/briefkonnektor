@@ -86,8 +86,20 @@ export function GuideArticle({ g, campaign }: { g: Guide; campaign?: string }) {
       author: { "@type": "Organization", name: "Flinkbrief" },
       publisher: { "@type": "Organization", name: "Flinkbrief", url: base() },
       mainEntityOfPage: `${base()}/ratgeber/${g.slug}`,
+      datePublished: g.published,
+      dateModified: g.updated,
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Flinkbrief", item: base() },
+        { "@type": "ListItem", position: 2, name: "Ratgeber", item: `${base()}/ratgeber` },
+        { "@type": "ListItem", position: 3, name: g.title, item: `${base()}/ratgeber/${g.slug}` },
+      ],
     },
   ];
+  const stand = new Date(g.updated + "T12:00:00Z").toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" });
 
   return (
     <main className="guide">
@@ -106,7 +118,9 @@ export function GuideArticle({ g, campaign }: { g: Guide; campaign?: string }) {
 
       <article className="guide-body">
         <header className="guide-head">
-          <p className="eyebrow">Ratgeber</p>
+          <p className="eyebrow">
+            <Link href="/ratgeber" className="crumb">Ratgeber</Link> · Stand {stand}
+          </p>
           {campaign ? <h2 className="as-h1">{g.title}</h2> : <h1>{g.title}</h1>}
           <p className="lead">{g.description}</p>
           <div className="fristbox" role="note">

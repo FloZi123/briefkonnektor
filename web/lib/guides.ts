@@ -8,7 +8,9 @@ export interface Guide {
   slug: string;
   kind: LetterKind;
   title: string; // H1
-  metaTitle: string;
+  metaTitle: string; // ≤ 48 Zeichen – das Layout hängt „ – Flinkbrief“ an
+  published: string; // ISO-Datum
+  updated: string; // ISO-Datum, bei inhaltlichen Änderungen setzen
   description: string; // Meta + Intro
   deadline: string; // ein Satz, prominent
   deadlineShort: string; // für Karten
@@ -25,8 +27,10 @@ export const GUIDES: Guide[] = [
     slug: "einspruch-bussgeldbescheid",
     kind: "einspruch",
     title: "Einspruch gegen einen Bußgeldbescheid",
-    metaTitle: "Einspruch gegen Bußgeldbescheid: Frist, Form, Muster",
-    description: "Zwei Wochen Frist, schriftlich, an die Bußgeldstelle: Was im Bußgeldbescheid steht, wie der Einspruch aussehen muss und was danach passiert.",
+    metaTitle: "Einspruch Bußgeldbescheid: Frist, Form, Muster",
+    published: "2026-10-23",
+    updated: "2026-10-27",
+    description: "Zwei Wochen Frist, schriftlich an die Bußgeldstelle: Was im Bescheid steht, wie der Einspruch aussieht, was danach kommt. Fotografieren, per Post schicken.",
     deadlineShort: "Zwei Wochen ab Zustellung",
     deadline: "Zwei Wochen ab Zustellung. Der Einspruch muss in dieser Zeit bei der Behörde eingehen, nicht nur abgeschickt sein.",
     sections: [
@@ -67,6 +71,9 @@ export const GUIDES: Guide[] = [
       { q: "Was kostet ein Einspruch?", a: "Der Einspruch selbst ist bei der Behörde kostenlos. Geht der Fall vor das Amtsgericht und Sie verlieren, kommen Gerichtskosten hinzu. Nehmen Sie den Einspruch vorher zurück, bleibt es bei der Geldbuße und den Gebühren des Bescheids." },
       { q: "Reicht eine E-Mail?", a: "In den meisten Bundesländern nicht. Sicher ist der Brief mit Unterschrift oder die Niederschrift bei der Behörde. Für die Frist zählt der Eingang bei der Behörde." },
       { q: "Was ist der Unterschied zum Anhörungsbogen?", a: "Der Anhörungsbogen kommt vor dem Bescheid und ist noch kein Bußgeld. Dort können Sie sich äußern oder schweigen. Der Bußgeldbescheid kommt danach – erst gegen ihn gibt es den Einspruch." },
+      { q: "Einspruch per Einschreiben oder einfacher Brief?", a: "Beides ist zulässig – entscheidend ist der Zugang innerhalb der zwei Wochen. Ein Einwurf-Einschreiben belegt, wann der Brief in den Briefkasten der Behörde kam; bei knapper Frist ist das der sichere Weg. Alternativ zur Niederschrift persönlich bei der Behörde." },
+      { q: "Frist versäumt – geht noch etwas?", a: "Waren Sie ohne eigenes Verschulden verhindert (Krankenhaus, Zustellung an eine falsche Adresse), können Sie innerhalb von zwei Wochen nach Wegfall des Hindernisses Wiedereinsetzung in den vorigen Stand beantragen und den Einspruch nachholen (§ 52 OWiG, § 44 StPO). Urlaub allein reicht meist nicht." },
+      { q: "Wie beantrage ich Akteneinsicht?", a: "Schriftlich bei der Bußgeldstelle, mit Aktenzeichen: Einsicht in Messprotokoll, Eichschein, Schulungsnachweis und Fotos. Betroffene erhalten die Akte in der Regel als Kopie oder digital; Messrohdaten müssen teils gesondert angefordert werden." },
     ],
     elsewhere: [
       "Fahrverbot oder Punkte, die den Führerschein gefährden: Fachanwalt für Verkehrsrecht. Mit Verkehrsrechtsschutz kostet das meist nichts; es gibt auch Prüfdienste, die solche Fälle ohne Kosten für Sie übernehmen.",
@@ -80,8 +87,10 @@ export const GUIDES: Guide[] = [
     slug: "widerspruch-jobcenter-bescheid",
     kind: "widerspruch",
     title: "Widerspruch gegen einen Jobcenter-Bescheid",
-    metaTitle: "Widerspruch Jobcenter-Bescheid: Frist, Form, was reinschreiben",
-    description: "Ein Monat Frist, kostenlos, schriftlich: Wie Sie gegen Bürgergeld-Bescheide, Rückforderungen und Sanktionen Widerspruch einlegen und was danach passiert.",
+    metaTitle: "Widerspruch Jobcenter-Bescheid: Frist & Inhalt",
+    published: "2026-10-23",
+    updated: "2026-10-27",
+    description: "Ein Monat Frist, kostenlos, schriftlich: Widerspruch gegen Bürgergeld-Bescheid, Rückforderung oder Sanktion. Bescheid fotografieren, Brief per Post schicken.",
     deadlineShort: "Ein Monat ab Bekanntgabe",
     deadline: "Ein Monat ab Bekanntgabe. Ein Bescheid gilt am dritten Tag nach Aufgabe zur Post als bekannt gegeben – das Datum oben rechts plus drei Tage.",
     sections: [
@@ -122,6 +131,9 @@ export const GUIDES: Guide[] = [
       { q: "Muss ich während des Widerspruchs zurückzahlen?", a: "Bei Erstattungsbescheiden hat der Widerspruch aufschiebende Wirkung – die Rückforderung ruht, bis entschieden ist. Bei Aufrechnung mit laufenden Leistungen lohnt sich ein ausdrücklicher Hinweis darauf im Widerspruch." },
       { q: "Was, wenn die Frist vorbei ist?", a: "Dann bleibt der Überprüfungsantrag nach § 44 SGB X. Das Jobcenter muss den Bescheid erneut prüfen; Nachzahlungen gibt es aber höchstens für ein Jahr rückwirkend." },
       { q: "Kann ich den Widerspruch per E-Mail schicken?", a: "Eine einfache E-Mail genügt der Schriftform nicht. Sicher sind Brief, Niederschrift im Jobcenter oder der Upload mit Login bei jobcenter.digital." },
+      { q: "Rückforderung erhalten – was tun?", a: "Prüfen Sie, für welchen Zeitraum und aus welchem Grund zurückgefordert wird und ob der Bescheid die Berechnung aufschlüsselt. Fehlen Freibeträge oder wurde Einkommen doppelt angerechnet, gehört genau das in den Widerspruch. Ratenzahlung können Sie unabhängig davon beantragen." },
+      { q: "Widerspruch per Einschreiben schicken?", a: "Der Zugang zählt, nicht der Versand. Ein Einwurf-Einschreiben dokumentiert den Zugangstag; alternativ geben Sie den Widerspruch persönlich ab und lassen sich den Eingang auf einer Kopie bestätigen." },
+      { q: "Ich verstehe den Bescheid nicht – reicht eine Nachfrage?", a: "Eine Nachfrage stoppt die Frist nicht. Legen Sie fristwahrend Widerspruch ein und bitten Sie im selben Schreiben um Erläuterung oder Akteneinsicht – die Begründung können Sie nachreichen." },
     ],
     elsewhere: [
       "Leistungen wurden gekürzt oder gestrichen und Miete oder Essen sind gefährdet: Eilantrag beim Sozialgericht. Sozialberatungen von Caritas, Diakonie, AWO oder ein Fachanwalt für Sozialrecht helfen dabei; Beratungshilfe beim Amtsgericht kostet 15 €.",
@@ -135,8 +147,10 @@ export const GUIDES: Guide[] = [
     slug: "widerspruch-nebenkostenabrechnung",
     kind: "nebenkosten",
     title: "Widerspruch gegen die Nebenkostenabrechnung",
-    metaTitle: "Nebenkostenabrechnung widersprechen: Frist, Belegeinsicht, Muster",
-    description: "Zwölf Monate Zeit für Einwendungen, Recht auf Belegeinsicht, Zahlung unter Vorbehalt: Was Mieter bei einer fehlerhaften Nebenkostenabrechnung tun können.",
+    metaTitle: "Widerspruch Nebenkostenabrechnung: Frist, Muster",
+    published: "2026-10-23",
+    updated: "2026-10-27",
+    description: "Zwölf Monate für Einwendungen, Belegeinsicht, Zahlung unter Vorbehalt: Was Mieter bei einer falschen Abrechnung tun. Abrechnung fotografieren, Brief per Post.",
     deadlineShort: "Zwölf Monate ab Zugang",
     deadline: "Zwölf Monate ab Zugang der Abrechnung für Einwendungen (§ 556 Abs. 3 BGB). Eine Nachzahlung wird trotzdem meist nach 30 Tagen fällig – deshalb unter Vorbehalt zahlen.",
     sections: [
@@ -178,6 +192,9 @@ export const GUIDES: Guide[] = [
       { q: "Wie formuliere ich eine Einwendung?", a: "Konkret: Posten benennen, Betrag nennen, Grund angeben. „Ich widerspreche der Position Gartenpflege (312,40 €), weil Gartenpflege im Mietvertrag nicht als Betriebskosten vereinbart ist.“" },
       { q: "Darf der Vermieter Belege nur als Kopie schicken?", a: "Sie haben Anspruch auf Einsicht in die Originale beim Vermieter. Kopien kann er gegen Kostenerstattung schicken; verpflichtet ist er dazu nur, wenn die Einsicht vor Ort unzumutbar ist." },
       { q: "Was ist mit der Heizkostenabrechnung?", a: "Sie gehört zur Nebenkostenabrechnung, folgt aber der Heizkostenverordnung: 50 bis 70 Prozent nach Verbrauch, der Rest nach Fläche. Fehlt die Verbrauchserfassung, dürfen Sie 15 Prozent kürzen." },
+      { q: "Nebenkostenabrechnung zu hoch – was tun?", a: "Erst vergleichen: Vorjahr, Betriebskostenspiegel Ihrer Stadt, Wohnfläche laut Mietvertrag. Dann schriftlich Einwendungen erheben, Belegeinsicht verlangen und die Nachzahlung nur unter Vorbehalt oder erst nach der Belegprüfung zahlen. Dafür haben Sie zwölf Monate ab Zugang." },
+      { q: "Wo kann ich die Abrechnung prüfen lassen?", a: "Mieterverein (Beratung ist im Mitgliedsbeitrag enthalten), Verbraucherzentrale, Prüfdienste oder ein Fachanwalt für Mietrecht. Eine erste Einordnung der Posten liefert Flinkbrief nach dem Foto kostenlos; die fachliche Prüfung einzelner Positionen ersetzt das nicht." },
+      { q: "Welche Frist gilt für meinen Widerspruch?", a: "Zwölf Monate ab Zugang der Abrechnung (§ 556 Abs. 3 BGB). Danach sind Einwendungen ausgeschlossen, es sei denn, Sie haben die Verspätung nicht zu vertreten. Der Vermieter muss die Abrechnung seinerseits binnen zwölf Monaten nach Ende des Abrechnungszeitraums zustellen." },
     ],
     elsewhere: [
       "Sie wollen die Abrechnung Posten für Posten fachlich prüfen lassen: Mieterverein (Beratung ist im Mitgliedsbeitrag enthalten) oder ein Prüfdienst. Die Einwendung über Flinkbrief sichert bis dahin die Frist und die Belegeinsicht.",
@@ -191,8 +208,10 @@ export const GUIDES: Guide[] = [
     slug: "mahnung-widersprechen",
     kind: "mahnung",
     title: "Auf eine Mahnung oder Zahlungsaufforderung antworten",
-    metaTitle: "Mahnung widersprechen: Forderung prüfen, Inkasso, Mahnbescheid",
-    description: "Mahnung, Inkassoschreiben oder gerichtlicher Mahnbescheid – drei verschiedene Dinge mit verschiedenen Fristen. Was Sie prüfen und wie Sie schriftlich antworten.",
+    metaTitle: "Mahnung widersprechen: Inkasso, Mahnbescheid",
+    published: "2026-10-23",
+    updated: "2026-10-27",
+    description: "Mahnung, Inkasso oder gerichtlicher Mahnbescheid – drei Dinge, drei Fristen. Was Sie prüfen und wie Sie antworten. Mahnung fotografieren, Antwort per Post.",
     deadlineShort: "Mahnbescheid: zwei Wochen",
     deadline: "Bei einem gerichtlichen Mahnbescheid: zwei Wochen ab Zustellung für den Widerspruch. Bei einfachen Mahnungen und Inkasso gibt es keine gesetzliche Frist – aber je früher Sie antworten, desto weniger Kosten kommen dazu.",
     sections: [
@@ -233,6 +252,9 @@ export const GUIDES: Guide[] = [
       { q: "Darf Inkasso mich anrufen oder zuhause besuchen?", a: "Kontaktaufnahme ist erlaubt, Druck mit falschen Drohungen nicht. Sie können schriftlich verlangen, nur noch per Post kontaktiert zu werden." },
       { q: "Wie hoch dürfen Inkassokosten sein?", a: "Sie richten sich nach dem Rechtsanwaltsvergütungsgesetz und sind bei kleinen Forderungen gedeckelt – bei Forderungen bis 50 Euro maximal 30 Euro für die Inkassotätigkeit." },
       { q: "Was ist ein Vollstreckungsbescheid?", a: "Er folgt, wenn Sie dem Mahnbescheid nicht widersprechen. Auch dagegen gibt es noch zwei Wochen Einspruch – danach kann der Gerichtsvollzieher kommen." },
+      { q: "Mahnbescheid vom Gericht – welches Formular?", a: "Dem gerichtlichen Mahnbescheid liegt ein Widerspruchsformular bei. Sie können es nutzen, müssen aber nicht: Ein formloser schriftlicher Widerspruch mit Aktenzeichen an das Mahngericht genügt (§ 694 ZPO). Entscheidend ist der Eingang innerhalb von zwei Wochen ab Zustellung." },
+      { q: "Forderung bestreiten – wie formuliere ich das?", a: "Nennen Sie Rechnungs- oder Aktenzeichen, erklären Sie, dass Sie die Forderung bestreiten, und fordern Sie Nachweise: Vertrag, Rechnung, Zugang. Zahlen Sie nichts „zur Sicherheit“ – eine Teilzahlung kann als Anerkenntnis gewertet werden." },
+      { q: "Mahnung per Einschreiben beantworten?", a: "Nicht nötig, aber sinnvoll, wenn Inkasso oder Gläubiger später behaupten könnten, nichts erhalten zu haben. Ein Einwurf-Einschreiben belegt den Zugang." },
     ],
     elsewhere: [
       "Es ist ein gerichtlicher Mahnbescheid (gelber Umschlag vom Amtsgericht): Widerspruch innerhalb von zwei Wochen beim Mahngericht, am besten mit dem beiliegenden Formular. Bei Unsicherheit Verbraucherzentrale oder Anwalt.",
@@ -246,8 +268,10 @@ export const GUIDES: Guide[] = [
     slug: "widerspruch-rundfunkbeitrag",
     kind: "widerspruch",
     title: "Widerspruch gegen einen Rundfunkbeitrag-Bescheid",
-    metaTitle: "Rundfunkbeitrag Festsetzungsbescheid: Widerspruch, Befreiung, Frist",
-    description: "Ein Monat Frist gegen den Festsetzungsbescheid des Beitragsservice. Wann ein Widerspruch Aussicht hat, wer befreit werden kann und was bei Säumniszuschlägen gilt.",
+    metaTitle: "Rundfunkbeitrag: Widerspruch, Befreiung, Frist",
+    published: "2026-10-23",
+    updated: "2026-10-27",
+    description: "Ein Monat Frist gegen den Festsetzungsbescheid des Beitragsservice. Worauf sich ein Widerspruch stützen kann, wer befreit wird, was bei Säumniszuschlägen gilt.",
     deadlineShort: "Ein Monat ab Zugang",
     deadline: "Ein Monat ab Zugang des Festsetzungsbescheids. Der Widerspruch geht an die Landesrundfunkanstalt (zum Beispiel BR, WDR, NDR) – nicht an den Beitragsservice.",
     sections: [
@@ -287,6 +311,9 @@ export const GUIDES: Guide[] = [
       { q: "Was ist der Säumniszuschlag?", a: "Ein Prozent der rückständigen Beiträge, mindestens 8 Euro, pro Festsetzungsbescheid. Er entfällt, wenn der Bescheid aufgehoben wird." },
       { q: "An wen schicke ich den Widerspruch?", a: "An die in der Rechtsbehelfsbelehrung genannte Landesrundfunkanstalt. Der Beitragsservice in Köln ist nur die Verwaltungsstelle; dort eingegangene Widersprüche werden in der Regel weitergeleitet, sicher ist aber der direkte Weg." },
       { q: "Zählt eine Zweitwohnung?", a: "Für eine Nebenwohnung gibt es auf Antrag eine Befreiung, wenn für die Hauptwohnung bereits gezahlt wird." },
+      { q: "Befreiung bei Bürgergeld – wie beantrage ich sie?", a: "Mit dem aktuellen Leistungsbescheid beim Beitragsservice, online oder per Post. Die Befreiung gilt ab dem Monat der Antragstellung; rückwirkend nur begrenzt und wenn der Leistungsbescheid selbst rückwirkend gilt. Das ist ein Antrag, kein Widerspruch." },
+      { q: "Festsetzungsbescheid trotz Zahlung bekommen?", a: "Dann fehlt beim Beitragsservice vermutlich die Zuordnung Ihrer Zahlung. Legen Sie Widerspruch ein und fügen Sie Kontoauszug oder Zahlungsbeleg mit Beitragsnummer bei." },
+      { q: "Widerspruch per Einschreiben oder online?", a: "Der Beitragsservice nimmt den Widerspruch schriftlich per Post entgegen; ein Einwurf-Einschreiben belegt den Zugang innerhalb der Monatsfrist. Eine einfache E-Mail genügt der Schriftform nicht sicher." },
     ],
     elsewhere: [
       "Sie beziehen Bürgergeld, BAföG oder Grundsicherung: Befreiung mit Bescheid beim Beitragsservice beantragen – das ist ein Antrag, kein Widerspruch. Rückwirkend geht das nur begrenzt, also möglichst früh stellen.",
@@ -300,8 +327,10 @@ export const GUIDES: Guide[] = [
     slug: "einspruch-steuerbescheid",
     kind: "steuer",
     title: "Einspruch gegen den Steuerbescheid",
-    metaTitle: "Einspruch Steuerbescheid: Frist, Form, Aussetzung der Vollziehung",
-    description: "Ein Monat Frist, kostenlos, per Brief oder ELSTER: Wie Sie gegen einen Steuerbescheid Einspruch einlegen, was mit der Nachzahlung passiert und wann die schlichte Änderung reicht.",
+    metaTitle: "Einspruch Steuerbescheid: Frist, Form, Muster",
+    published: "2026-10-23",
+    updated: "2026-10-27",
+    description: "Ein Monat Frist, kostenlos, per Brief oder ELSTER: Einspruch einlegen, Aussetzung der Vollziehung beantragen. Steuerbescheid fotografieren, Einspruch per Post.",
     deadline: "Ein Monat ab Bekanntgabe. Ein Bescheid gilt am vierten Tag nach Aufgabe zur Post als bekannt gegeben – Bescheiddatum plus vier Tage, dann ein Monat.",
     deadlineShort: "Ein Monat ab Bekanntgabe",
     sections: [
@@ -349,6 +378,9 @@ export const GUIDES: Guide[] = [
       { q: "Kann der Bescheid durch den Einspruch schlechter werden?", a: "Grundsätzlich ja, das Finanzamt prüft alles neu. Es muss Sie vorher auf eine Verschlechterung hinweisen; dann können Sie den Einspruch zurücknehmen und es bleibt beim alten Bescheid." },
       { q: "Reicht eine E-Mail an das Finanzamt?", a: "Eine einfache E-Mail genügt in der Regel nicht. Sicher sind Brief, ELSTER oder die Niederschrift im Finanzamt. Für die Frist zählt der Eingang beim Finanzamt." },
       { q: "Was ist mit dem Vorläufigkeitsvermerk?", a: "Punkte mit Vorläufigkeitsvermerk bleiben automatisch offen, solange Musterverfahren laufen. Dafür brauchen Sie keinen eigenen Einspruch – nur für alles andere." },
+      { q: "Steuerbescheid prüfen – worauf achten?", a: "Vergleichen Sie Bescheid und Steuererklärung Punkt für Punkt: Werbungskosten, Sonderausgaben, außergewöhnliche Belastungen, Handwerker- und Haushaltsleistungen, Kinderfreibeträge. Abweichungen erklärt das Finanzamt in den „Erläuterungen“ am Ende des Bescheids – dort stehen die Ansatzpunkte für den Einspruch." },
+      { q: "Einspruch per Einschreiben oder ELSTER?", a: "Beides wahrt die Frist. Per ELSTER haben Sie sofort eine Eingangsbestätigung; per Brief belegt ein Einwurf-Einschreiben den Zugang. Eine einfache E-Mail reicht nur, wenn das Finanzamt dafür eine Adresse angibt." },
+      { q: "Nachzahlung nicht leistbar – was tun?", a: "Stundung oder Ratenzahlung beim Finanzamt beantragen, unabhängig vom Einspruch. Der Einspruch allein schiebt die Fälligkeit nicht auf – dafür ist der Antrag auf Aussetzung der Vollziehung nötig, der ernstliche Zweifel am Bescheid voraussetzt." },
     ],
     elsewhere: [
       "Betrieb, Vermietung, Kapitalerträge im Ausland oder hohe Nachzahlung: Steuerberater. Arbeitnehmer und Rentner bekommen beim Lohnsteuerhilfeverein Beratung inklusive Einspruch (Beitrag nach Einkommen).",
@@ -362,7 +394,9 @@ export const GUIDES: Guide[] = [
     slug: "widerspruch-krankenkasse",
     kind: "widerspruch",
     title: "Widerspruch gegen einen Bescheid der Krankenkasse",
-    metaTitle: "Widerspruch Krankenkasse: Ablehnung, Krankengeld, Hilfsmittel – Frist und Form",
+    metaTitle: "Widerspruch Krankenkasse: Ablehnung, Frist, Form",
+    published: "2026-10-23",
+    updated: "2026-10-27",
     description: "Ein Monat Frist, kostenlos, schriftlich: Was Sie tun können, wenn die Krankenkasse eine Leistung ablehnt, das Krankengeld beendet oder Geld zurückfordert.",
     deadline: "Ein Monat ab Bekanntgabe – Bescheiddatum plus drei Tage, dann ein Monat. Fehlt die Rechtsbehelfsbelehrung, verlängert sich die Frist auf ein Jahr.",
     deadlineShort: "Ein Monat ab Bekanntgabe",
@@ -404,6 +438,9 @@ export const GUIDES: Guide[] = [
       { q: "Muss ich das MD-Gutachten hinnehmen?", a: "Nein. Es ist eine Stellungnahme nach Aktenlage. Ein aktueller Befundbericht Ihres Arztes, der sich konkret mit dem Gutachten auseinandersetzt, ist das stärkste Mittel im Widerspruch." },
       { q: "Läuft das Krankengeld während des Widerspruchs weiter?", a: "Bei einer Ablehnung oder Beendigung in der Regel nicht. Umso wichtiger ist, schnell zu widersprechen und die Arbeitsunfähigkeit lückenlos zu belegen." },
       { q: "Was, wenn die Frist vorbei ist?", a: "Dann bleibt der Überprüfungsantrag nach § 44 SGB X. Die Kasse muss den Bescheid erneut prüfen; Leistungen gibt es aber höchstens vier Jahre rückwirkend." },
+      { q: "Reha abgelehnt – was gehört in den Widerspruch?", a: "Das Gutachten des Medizinischen Dienstes anfordern, Stellungnahmen der behandelnden Ärzte beilegen und konkret benennen, welche Befunde das Gutachten nicht berücksichtigt hat. Ob der Widerspruch Erfolg hat, hängt vom Einzelfall ab." },
+      { q: "Drei Wochen keine Antwort – gilt der Antrag als genehmigt?", a: "Entscheidet die Kasse nicht innerhalb von drei Wochen (fünf Wochen, wenn der Medizinische Dienst eingeschaltet ist) und teilt sie keinen Grund mit, gilt der Antrag als genehmigt (§ 13 Abs. 3a SGB V). Fordern Sie die Leistung dann schriftlich unter Hinweis auf die Genehmigungsfiktion ein." },
+      { q: "Widerspruch per Einschreiben?", a: "Der Zugang innerhalb eines Monats zählt. Ein Einwurf-Einschreiben belegt ihn; viele Kassen bestätigen den Eingang auch bei Abgabe in der Geschäftsstelle." },
     ],
     elsewhere: [
       "Reha, Hilfsmittel, Krankengeld oder Behandlung abgelehnt: Unabhängige Patientenberatung (UPD, kostenlos) oder Sozialverband VdK/SoVD, die den Widerspruch auch inhaltlich begründen und bis zum Sozialgericht begleiten.",
@@ -417,8 +454,10 @@ export const GUIDES: Guide[] = [
     slug: "widerspruch-rentenversicherung",
     kind: "widerspruch",
     title: "Widerspruch gegen einen Bescheid der Rentenversicherung",
-    metaTitle: "Widerspruch Rentenbescheid: Erwerbsminderung, Versicherungsverlauf, Frist",
-    description: "Ein Monat Frist gegen Rentenbescheid, Ablehnung der Erwerbsminderungsrente oder Reha. Was Sie prüfen sollten und wie der Widerspruch an die Deutsche Rentenversicherung aussieht.",
+    metaTitle: "Widerspruch Rentenbescheid: Frist, Form, Muster",
+    published: "2026-10-23",
+    updated: "2026-10-27",
+    description: "Ein Monat Frist gegen Rentenbescheid, abgelehnte Erwerbsminderungsrente oder Reha. Was Sie prüfen und wie der Widerspruch an die Rentenversicherung aussieht.",
     deadline: "Ein Monat ab Bekanntgabe – Bescheiddatum plus drei Tage, dann ein Monat. Danach wird der Rentenbescheid bestandskräftig.",
     deadlineShort: "Ein Monat ab Bekanntgabe",
     sections: [
@@ -459,6 +498,9 @@ export const GUIDES: Guide[] = [
       { q: "Wird die Rente während des Widerspruchs weitergezahlt?", a: "Eine bewilligte Rente läuft weiter. Bei einer Ablehnung gibt es bis zur Entscheidung nichts; bei Rückforderungen hat der Widerspruch aufschiebende Wirkung." },
       { q: "Kostet der Widerspruch etwas?", a: "Nein. Widerspruch und Klage beim Sozialgericht sind für Versicherte kostenlos. Kostenlos beraten die Auskunfts- und Beratungsstellen der Rentenversicherung und die Versichertenältesten." },
       { q: "Wie lange dauert das Widerspruchsverfahren?", a: "Bei Rentenbescheiden meist drei bis sechs Monate, bei Erwerbsminderung mit neuem Gutachten oft länger. Nach drei Monaten ohne Entscheidung ist eine Untätigkeitsklage möglich." },
+      { q: "Erwerbsminderungsrente abgelehnt – was gehört in den Widerspruch?", a: "Welche Befunde das Gutachten nicht berücksichtigt hat, aktuelle Atteste der behandelnden Ärzte, Ihr tatsächlicher Tagesablauf und bisherige Reha-Versuche. Fordern Sie das Gutachten und Akteneinsicht an; die Begründung können Sie nachreichen." },
+      { q: "Fehlende Zeiten im Versicherungsverlauf – Widerspruch nötig?", a: "Meist nicht: Beantragen Sie Kontenklärung und reichen Sie Nachweise (Ausbildung, Kindererziehung, Krankheit, Ausland) nach. Nur wenn die Rentenversicherung Zeiten ausdrücklich ablehnt, ist der Widerspruch der richtige Weg." },
+      { q: "Widerspruch per Einschreiben oder online?", a: "Schriftlich per Post (Einwurf-Einschreiben belegt den Zugang), zur Niederschrift in einer Beratungsstelle oder über das Online-Portal der Deutschen Rentenversicherung. Maßgeblich ist der Eingang innerhalb eines Monats." },
     ],
     elsewhere: [
       "Erwerbsminderungsrente oder Reha abgelehnt: Sozialverband VdK oder SoVD übernimmt für Mitglieder Widerspruch und Klage; alternativ Fachanwalt für Sozialrecht.",
