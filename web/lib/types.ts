@@ -41,6 +41,7 @@ export const ExtractedSchema = z.object({
   demand: z.string().optional().describe("Was konkret vom Empfänger verlangt wird, ein Satz; leer, wenn nichts verlangt wird"),
   options: z.array(z.enum(Object.keys(LETTER_KINDS) as [LetterKind, ...LetterKind[]])).optional().describe("Passende Briefarten, beste zuerst, max. 3"),
   keyFacts: z.array(z.string()).optional().describe("Wichtige Fakten aus dem Schreiben: Beträge, Zeiträume, Fristen, Leistungsart, Vertragsnummern – je ein kurzer Satz"),
+  checks: z.array(z.string()).optional().describe("Punkte, die der Empfänger anhand des Schreibens selbst nachprüfen sollte – neutrale Prüffragen, keine Bewertung"),
   amount: z.string().optional().describe("Betrag, falls genannt"),
   confidence: z.enum(["high", "medium", "low"]).optional(),
 });
@@ -60,7 +61,7 @@ export interface Draft {
   remedy?: Extracted["remedy"]; // aus der Rechtsbehelfsbelehrung des Fotos
   remedyText?: string;
   amount?: string; // Betrag laut Schreiben, falls genannt
-  understanding?: { documentType?: string; summary?: string; demand?: string; deadlineHint?: string; options?: LetterKind[]; keyFacts?: string[] };
+  understanding?: { documentType?: string; summary?: string; demand?: string; deadlineHint?: string; options?: LetterKind[]; keyFacts?: string[]; checks?: string[] };
   signature?: string; // data:image/png;base64
   shipping: Shipping;
   email: string;

@@ -471,15 +471,106 @@ export const GUIDES: Guide[] = [
 ];
 
 /** Einstiegsseiten für Anzeigen (/a/<kampagne>): gleicher Inhalt wie der Ratgeber, eigener Pfad je Kampagne – Aufrufe je Kampagne ohne Cookies zählbar. */
-export const CAMPAIGNS: Record<string, string> = {
-  steuer: "einspruch-steuerbescheid",
-  nebenkosten: "widerspruch-nebenkostenabrechnung",
-  mahnung: "mahnung-widersprechen",
-  bussgeld: "einspruch-bussgeldbescheid",
-  jobcenter: "widerspruch-jobcenter-bescheid",
-  krankenkasse: "widerspruch-krankenkasse",
-  rente: "widerspruch-rentenversicherung",
-  rundfunk: "widerspruch-rundfunkbeitrag",
+/** Anzeigen-Einstiegsseiten (/a/<slug>): Upload zuerst, Text passend zur Suchanfrage, darunter der Ratgeber. */
+export interface Campaign {
+  guide: string; // Ratgeber-Slug
+  h1: string;
+  lead: string;
+  /** Beschriftung der Foto-Fläche */
+  upload: string;
+  /** Beispiel, wie das Ergebnis nach dem Foto aussieht (fiktive, typische Werte) */
+  example: { summary: string; checks: string[]; deadline: string };
+}
+
+export const CAMPAIGNS: Record<string, Campaign> = {
+  steuer: {
+    upload: "Steuerbescheid fotografieren",
+    guide: "einspruch-steuerbescheid",
+    h1: "Steuerbescheid fotografieren – Abweichungen und Einspruchsfrist sofort sehen.",
+    lead: "Flinkbrief liest den Bescheid aus, zeigt in einfachen Worten, was das Finanzamt festgesetzt hat und bis wann Einspruch möglich ist. Kostenlos. Den Einspruch schicken wir auf Wunsch per Post, ab 4,99 €.",
+    example: {
+      summary: "Das Finanzamt hat die Einkommensteuer 2025 auf 2.140 € festgesetzt. Es ergibt sich eine Nachzahlung von 612 €, fällig bis 28.11.2026.",
+      checks: ["Werbungskosten wurden mit 1.230 € statt der erklärten 2.410 € angesetzt", "Fahrtkosten: 180 statt 220 Arbeitstage berücksichtigt", "Handwerkerleistungen (§ 35a EStG) fehlen in der Festsetzung"],
+      deadline: "Einspruch bis 24.11.2026 (1 Monat ab Bekanntgabe)",
+    },
+  },
+  nebenkosten: {
+    upload: "Abrechnung fotografieren",
+    guide: "widerspruch-nebenkostenabrechnung",
+    h1: "Nebenkostenabrechnung fotografieren – in zwei Minuten sehen, was auffällt.",
+    lead: "Flinkbrief liest die Abrechnung aus, zeigt Posten, Verteilerschlüssel und Frist in einfachen Worten und nennt, was Sie nachprüfen sollten. Kostenlos. Die Einwendung mit Bitte um Belegeinsicht schicken wir auf Wunsch per Post, ab 4,99 €.",
+    example: {
+      summary: "Die Hausverwaltung rechnet für 2025 Betriebskosten von 2.318 € ab. Nach Abzug der Vorauszahlungen bleibt eine Nachzahlung von 341,60 €, fällig in 30 Tagen.",
+      checks: ["Verwaltungskosten 180 € sind aufgeführt – bei Wohnraum in der Regel nicht umlagefähig", "Hausmeister 412 € nach Wohnfläche umgelegt – angesetzt sind 68 m², im Mietvertrag stehen 64 m²", "Abrechnung ging am 14.10.2026 zu – Einwendungen sind 12 Monate lang möglich"],
+      deadline: "Einwendungen bis 14.10.2027, Belegeinsicht jederzeit",
+    },
+  },
+  mahnung: {
+    upload: "Mahnung fotografieren",
+    guide: "mahnung-widersprechen",
+    h1: "Mahnung fotografieren – sehen, was gefordert wird und wie Sie antworten.",
+    lead: "Flinkbrief liest die Mahnung aus, zeigt Forderung, Absender und Frist in einfachen Worten. Kostenlos. Die Antwort – bestreiten, nachfragen oder Ratenzahlung – schicken wir auf Wunsch per Post, ab 4,99 €.",
+    example: {
+      summary: "Ein Inkassobüro fordert 94,00 € für eine angeblich offene Rechnung vom März 2025 zuzüglich 48,50 € Inkassokosten, zahlbar bis 04.11.2026.",
+      checks: ["Die Hauptforderung von 94,00 € wird keiner konkreten Rechnung zugeordnet", "Inkassokosten 48,50 € übersteigen die Hauptforderung um die Hälfte", "Keine Angabe, wann und wie die ursprüngliche Rechnung zugegangen sein soll"],
+      deadline: "Zahlungsfrist 04.11.2026 – eine Antwort vorher stoppt weitere Kosten nicht automatisch, dokumentiert aber Ihren Widerspruch",
+    },
+  },
+  bussgeld: {
+    upload: "Bußgeldbescheid fotografieren",
+    guide: "einspruch-bussgeldbescheid",
+    h1: "Bußgeldbescheid fotografieren – Frist, Betrag und Punkte sofort sehen.",
+    lead: "Flinkbrief liest den Bescheid aus und zeigt in einfachen Worten, was vorgeworfen wird und bis wann Einspruch möglich ist. Kostenlos. Den Einspruch schicken wir auf Wunsch per Post, ab 4,99 €.",
+    example: {
+      summary: "Die Bußgeldstelle wirft eine Geschwindigkeitsüberschreitung von 21 km/h innerorts vor. Geldbuße 115 € plus 28,50 € Gebühren, 1 Punkt in Flensburg.",
+      checks: ["Messung am 03.09.2026 um 17:42 Uhr, Toleranzabzug 3 km/h – Messprotokoll kann eingesehen werden", "Halter und Fahrer sind nicht identisch angegeben", "Zustellung laut Umschlag am 21.10.2026"],
+      deadline: "Einspruch bis 04.11.2026 (2 Wochen ab Zustellung)",
+    },
+  },
+  jobcenter: {
+    upload: "Bescheid fotografieren",
+    guide: "widerspruch-jobcenter-bescheid",
+    h1: "Jobcenter-Bescheid fotografieren – verstehen, was entschieden wurde.",
+    lead: "Flinkbrief liest den Bescheid aus und zeigt in einfachen Worten, was bewilligt, abgelehnt oder zurückgefordert wird und bis wann Widerspruch möglich ist. Kostenlos. Den Brief schicken wir auf Wunsch per Post, ab 4,99 €.",
+    example: {
+      summary: "Das Jobcenter fordert 486,20 € für Juli bis September 2026 zurück, weil Einkommen nachträglich angerechnet wurde.",
+      checks: ["Angerechnet wurde ein Bruttoeinkommen von 1.120 € – Freibeträge sind im Bescheid nicht ausgewiesen", "Der Rückforderungszeitraum endet am 30.09., der Bescheid nennt aber Zahlungen bis 15.10.", "Gefordert wird Rückzahlung in einer Summe bis 20.11.2026"],
+      deadline: "Widerspruch bis 23.11.2026 (1 Monat ab Bekanntgabe)",
+    },
+  },
+  krankenkasse: {
+    upload: "Bescheid fotografieren",
+    guide: "widerspruch-krankenkasse",
+    h1: "Bescheid der Krankenkasse fotografieren – Ablehnung und Frist sofort verstehen.",
+    lead: "Flinkbrief liest den Bescheid aus und zeigt in einfachen Worten, was abgelehnt wurde, womit die Kasse das begründet und bis wann Widerspruch möglich ist. Kostenlos. Den Widerspruch schicken wir auf Wunsch per Post, ab 4,99 €.",
+    example: {
+      summary: "Die Krankenkasse lehnt die beantragte Reha-Maßnahme ab und verweist auf ein Gutachten des Medizinischen Dienstes vom 02.10.2026.",
+      checks: ["Das Gutachten wurde nach Aktenlage erstellt – eine Untersuchung fand nicht statt", "Der Antrag ging am 28.08.2026 ein, die Entscheidung erst am 16.10.2026 (7 Wochen)", "Das Gutachten selbst liegt dem Bescheid nicht bei"],
+      deadline: "Widerspruch bis 19.11.2026 (1 Monat ab Bekanntgabe)",
+    },
+  },
+  rente: {
+    upload: "Bescheid fotografieren",
+    guide: "widerspruch-rentenversicherung",
+    h1: "Rentenbescheid fotografieren – Zeiten, Beträge und Frist sofort sehen.",
+    lead: "Flinkbrief liest den Bescheid aus und zeigt in einfachen Worten, was die Rentenversicherung festgestellt hat und bis wann Widerspruch möglich ist. Kostenlos. Den Widerspruch schicken wir auf Wunsch per Post, ab 4,99 €.",
+    example: {
+      summary: "Die Rentenversicherung lehnt die Rente wegen Erwerbsminderung ab: Nach dem Gutachten bestehe ein Leistungsvermögen von sechs Stunden täglich.",
+      checks: ["Das Gutachten stammt vom 09.09.2026, der behandelnde Arzt wurde laut Bescheid nicht befragt", "Die Wartezeit von 5 Jahren ist laut Versicherungsverlauf erfüllt", "Der Bescheid nennt keine Reha-Prüfung vor der Ablehnung"],
+      deadline: "Widerspruch bis 21.11.2026 (1 Monat ab Bekanntgabe)",
+    },
+  },
+  rundfunk: {
+    upload: "Bescheid fotografieren",
+    guide: "widerspruch-rundfunkbeitrag",
+    h1: "Festsetzungsbescheid fotografieren – Zeitraum, Betrag und Frist sofort sehen.",
+    lead: "Flinkbrief liest den Bescheid des Beitragsservice aus und zeigt in einfachen Worten, welcher Zeitraum berechnet wird und bis wann Widerspruch möglich ist. Kostenlos. Den Widerspruch schicken wir auf Wunsch per Post, ab 4,99 €.",
+    example: {
+      summary: "Der Beitragsservice setzt 220,32 € für Januar bis Dezember 2025 fest, zuzüglich 8,00 € Säumniszuschlag.",
+      checks: ["Für die Wohnung war bereits ein Mitbewohner angemeldet (Beitragsnummer im Schreiben genannt)", "Der Zeitraum beginnt am 01.01.2025, der Einzug war laut Meldebescheinigung am 01.04.2025", "Der Säumniszuschlag wird ohne vorherige Mahnung erhoben"],
+      deadline: "Widerspruch bis 25.11.2026 (1 Monat ab Bekanntgabe)",
+    },
+  },
 };
 
 export const guideBySlug = (slug: string) => GUIDES.find((g) => g.slug === slug);

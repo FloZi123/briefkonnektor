@@ -83,6 +83,31 @@ export default function VerstehenScreen() {
         </div>
       )}
 
+      {u.checks && u.checks.length > 0 && (
+        <div className="checks" style={{ marginTop: 12 }}>
+          <strong>Das lohnt sich nachzuprüfen</strong>
+          <ul>
+            {u.checks.slice(0, 5).map((c, i) => (
+              <li key={i}>{c}</li>
+            ))}
+          </ul>
+          <span className="muted" style={{ fontSize: 12 }}>Aus dem Schreiben abgeleitet, ohne Bewertung. Was davon zutrifft, wissen Sie am besten – es fließt in den Brief ein.</span>
+        </div>
+      )}
+
+      {u.keyFacts && u.keyFacts.length > 0 && (
+        <details className="facts" style={{ marginTop: 10 }}>
+          <summary className="muted" style={{ fontSize: 13, cursor: "pointer" }}>
+            Eckdaten aus dem Schreiben ({u.keyFacts.length})
+          </summary>
+          <ul>
+            {u.keyFacts.map((f, i) => (
+              <li key={i}>{f}</li>
+            ))}
+          </ul>
+        </details>
+      )}
+
       {draft.remedyText && (
         <p className="muted" style={{ fontSize: 12, marginTop: 8 }}>
           Rechtsbehelfsbelehrung: „{draft.remedyText}“{draft.remedy && REMEDY_LABEL[draft.remedy] ? ` → ${REMEDY_LABEL[draft.remedy]}` : ""}

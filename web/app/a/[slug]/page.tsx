@@ -11,14 +11,16 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
-  const g = guideBySlug(CAMPAIGNS[(await params).slug] ?? "");
+  const c = CAMPAIGNS[(await params).slug];
+  const g = c && guideBySlug(c.guide);
   if (!g) return {};
   return { title: g.metaTitle, description: g.description, robots: { index: false, follow: true }, alternates: { canonical: `${base()}/ratgeber/${g.slug}` } };
 }
 
 export default async function AdLanding({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const g = guideBySlug(CAMPAIGNS[slug] ?? "");
+  const c = CAMPAIGNS[slug];
+  const g = c && guideBySlug(c.guide);
   if (!g) notFound();
   return <GuideArticle g={g} campaign={slug} />;
 }

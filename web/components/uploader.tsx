@@ -7,7 +7,7 @@ import { validateFile, prepareFile } from "@/lib/upload";
 import { Progress } from "@/components/progress";
 
 /** Foto/PDF aufnehmen oder hochladen → /api/extract → Entwurf vorbefüllen → Schritt 2 */
-export function Uploader() {
+export function Uploader({ title = "Brief fotografieren", sub = "Bescheid, Rechnung, Vertrag – oder PDF hochladen" }: { title?: string; sub?: string } = {}) {
   const input = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string>();
@@ -40,7 +40,7 @@ export function Uploader() {
         remedy: x.remedy,
         remedyText: x.remedyText,
         amount: x.amount ?? d.amount,
-        understanding: { documentType: x.documentType, summary: x.summary, demand: x.demand, deadlineHint: x.deadlineHint, options: x.options, keyFacts: x.keyFacts },
+        understanding: { documentType: x.documentType, summary: x.summary, demand: x.demand, deadlineHint: x.deadlineHint, options: x.options, keyFacts: x.keyFacts, checks: x.checks },
       });
       router.push(x.summary ? "/brief/verstehen" : "/brief/daten?from=photo");
     } catch (e) {
@@ -72,8 +72,8 @@ export function Uploader() {
               <circle cx="12" cy="12.5" r="3.5" />
             </svg>
           </span>
-          <span className="title">Brief fotografieren</span>
-          <span className="sub">Bescheid, Rechnung, Vertrag – oder PDF hochladen</span>
+          <span className="title">{title}</span>
+          <span className="sub">{sub}</span>
         </button>
       )}
       <input

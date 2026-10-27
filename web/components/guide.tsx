@@ -1,11 +1,70 @@
 import Link from "next/link";
 import { Logo } from "@/components/ui";
 import { Footer } from "@/components/legal";
-import { GUIDES, type Guide } from "@/lib/guides";
+import { GUIDES, CAMPAIGNS, type Guide } from "@/lib/guides";
+import { Uploader } from "@/components/uploader";
 import { LETTER_KINDS, PRICES, euro } from "@/lib/types";
 import { Attribution } from "@/components/attribution";
 
 const base = () => (process.env.NEXT_PUBLIC_BASE_URL ?? "https://www.flinkbrief.de").replace(/\/$/, "");
+
+
+const Tick = () => (
+  <svg viewBox="0 0 24 24" fill="none" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <path d="M5 12l5 5L20 7" />
+  </svg>
+);
+
+/** Einstieg für Anzeigenbesucher: erst das Foto, dann der Artikel. Text passend zur Suchanfrage. */
+function LandingHero({ slug }: { slug: string }) {
+  const c = CAMPAIGNS[slug];
+  if (!c) return null;
+  return (
+    <section className="landing">
+      <div className="landing-copy">
+        <h1>{c.h1}</h1>
+        <p className="lead">{c.lead}</p>
+        <Uploader title={c.upload} sub="Als Foto oder PDF – wird nach der Erkennung gelöscht" />
+        <div className="trust">
+          <span>
+            <Tick /> Verstehen ist kostenlos
+          </span>
+          <span>
+            <Tick /> Kein Konto nötig
+          </span>
+          <span>
+            <Tick /> Foto wird nach der Erkennung gelöscht
+          </span>
+          <span>
+            <Tick /> Brief ab {euro(PRICES.post.cents)} inkl. Porto
+          </span>
+        </div>
+      </div>
+      <aside className="landing-example" aria-label="Beispielergebnis">
+        <span className="eyebrow">So sieht das Ergebnis aus · Beispiel</span>
+        <p>{c.example.summary}</p>
+        <div className="checks">
+          <strong>Das lohnt sich nachzuprüfen</strong>
+          <ul>
+            {c.example.checks.map((x) => (
+              <li key={x}>{x}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="fristbox" role="note">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 2" />
+          </svg>
+          <span>
+            <strong>Frist:</strong> {c.example.deadline}
+          </span>
+        </div>
+        <span className="muted" style={{ fontSize: 12 }}>Fiktives Beispiel. Ihr Ergebnis bezieht sich auf Ihr Schreiben.</span>
+      </aside>
+    </section>
+  );
+}
 
 /** Ratgeber-Artikel; campaign = Kennung einer Anzeigen-Einstiegsseite (/a/…), wird lokal gemerkt und an der Bestellung mitgeführt. */
 export function GuideArticle({ g, campaign }: { g: Guide; campaign?: string }) {
@@ -43,10 +102,12 @@ export function GuideArticle({ g, campaign }: { g: Guide; campaign?: string }) {
         </Link>
       </div>
 
+      {campaign && <LandingHero slug={campaign} />}
+
       <article className="guide-body">
         <header className="guide-head">
           <p className="eyebrow">Ratgeber</p>
-          <h1>{g.title}</h1>
+          {campaign ? <h2 className="as-h1">{g.title}</h2> : <h1>{g.title}</h1>}
           <p className="lead">{g.description}</p>
           <div className="fristbox" role="note">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
