@@ -143,7 +143,7 @@ export default function VerstehenScreen() {
       </div>
 
       <div className="screen-foot">
-        <span className="muted" style={{ fontSize: 11, textAlign: "center" }}>
+        <span className="muted" style={{ fontSize: 12, textAlign: "center" }}>
           Zusammenfassung durch KI aus Ihrem Foto – maßgeblich ist das Original. Keine Rechtsberatung; was zu tun ist, entscheiden Sie.
         </span>
       </div>

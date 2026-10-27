@@ -101,7 +101,7 @@ export default async function FertigScreen({ searchParams }: { searchParams: Pro
           </a>
         )}
         <Link href="/" className="btn btn-secondary">Weiteren Brief schreiben</Link>
-        <span className="muted" style={{ fontSize: 11, textAlign: "center" }}>{PRICES[order.shipping].label} · {order.priceLabel}</span>
+        <span className="muted" style={{ fontSize: 12, textAlign: "center" }}>{PRICES[order.shipping].label} · {order.priceLabel}</span>
       </div>
       <Footer />
     </main>

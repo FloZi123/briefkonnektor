@@ -49,7 +49,7 @@ export default function StatusPage() {
         <button className="btn btn-primary" disabled={busy || !id || !email} type="submit">
           {busy ? "Wird gesucht …" : "Status anzeigen"}
         </button>
-        <span className="muted" style={{ fontSize: 11, textAlign: "center" }}>
+        <span className="muted" style={{ fontSize: 12, textAlign: "center" }}>
           Bestellungen und PDFs werden 30 Tage nach der Bestellung automatisch gelöscht.
         </span>
       </form>

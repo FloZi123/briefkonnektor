@@ -91,7 +91,7 @@ export function Field({ label, id, children }: { label: string; id: string; chil
 }
 
 export const Disclaimer = () => (
-  <span className="muted" style={{ fontSize: 11, textAlign: "center" }}>
+  <span className="muted" style={{ fontSize: 12, textAlign: "center" }}>
     Formulierungshilfe nach Ihren Angaben, keine Rechtsberatung. Fristen liegen in Ihrer Verantwortung.
   </span>
 );

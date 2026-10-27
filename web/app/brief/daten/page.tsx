@@ -57,8 +57,7 @@ function DatenScreen() {
             {days !== undefined && days < 0 && " – Frist vermutlich abgelaufen; bitte prüfen."}
             {days === undefined && "."}
             {" "}
-            {draft.kind === "einspruch" ? "Gerechnet mit Zustellung drei Tage nach dem Bescheiddatum – maßgeblich ist das Datum auf dem gelben Umschlag." : "Gerechnet mit Bekanntgabe vier Tage nach dem Bescheiddatum; ging er Ihnen nachweislich später zu, zählt der tatsächliche Zugang."}{" "}
-            Maßgeblich ist die Rechtsbehelfsbelehrung auf dem Bescheid.{" "}
+            {draft.kind === "einspruch" ? "Angenommen: Zustellung 3 Tage nach Bescheiddatum – es zählt das Datum auf dem gelben Umschlag." : "Angenommen: Bekanntgabe 4 Tage nach Bescheiddatum – kam er später, zählt der Zugang."}{" "}
             <a href={`/fristrechner?art=${draft.kind === "einspruch" ? "bussgeld" : draft.kind === "steuer" ? "steuer" : "widerspruch"}`} target="_blank" rel="noopener" className="frist-link">
               Genau berechnen
             </a>

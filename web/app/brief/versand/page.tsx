@@ -54,7 +54,7 @@ export default function VersandScreen() {
           <button
             type="button"
             className="btn btn-link"
-            style={{ width: "auto", minHeight: 0, padding: 0, fontSize: 13, justifyContent: "flex-start" }}
+            style={{ width: "auto", minHeight: 40, padding: "0 2px", fontSize: 14, justifyContent: "flex-start" }}
             onClick={async () => {
               const res = await fetch("/api/letters/preview", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ draft }) });
               if (!res.ok) return setError("Vorschau konnte nicht erzeugt werden");
@@ -112,7 +112,7 @@ export default function VersandScreen() {
         <button className="btn btn-primary" disabled={!emailOk || busy || !!missing} onClick={pay}>
           {busy ? "Weiter zur Zahlung …" : `Jetzt bezahlen & ${draft.shipping === "download" ? "herunterladen" : "versenden"} · ${euro(price.cents)}`}
         </button>
-        <span className="muted" style={{ fontSize: 10.5, textAlign: "center", lineHeight: 1.4 }}>
+        <span className="muted" style={{ fontSize: 12, textAlign: "center", lineHeight: 1.4 }}>
           Preise inkl. MwSt. Zahlung per Karte, PayPal, Apple/Google Pay. Mit dem Kauf verlangen Sie ausdrücklich, dass wir sofort mit der Ausführung beginnen, und bestätigen, dass Ihr Widerrufsrecht mit vollständiger Ausführung erlischt (<a href="/widerruf">Widerrufsbelehrung</a>). Es gelten <a href="/agb">AGB</a> und <a href="/datenschutz">Datenschutzerklärung</a>.
         </span>
       </div>

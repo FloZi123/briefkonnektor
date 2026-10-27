@@ -113,7 +113,7 @@ textarea.input { min-height: 160px; line-height: 1.5; resize: vertical; }
 
 .pill { display: inline-flex; align-items: center; gap: 6px; min-height: 28px; padding: 0 10px; border-radius: var(--radius-pill); font-size: 14px; font-weight: 600; }
 .pill::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
-.chip { transition: transform .1s ease-out, border-color .15s; display: inline-flex; align-items: center; min-height: 36px; padding: 0 12px; border-radius: var(--radius-pill); border: 1px solid var(--line-strong); background: var(--paper-100); font: inherit; font-size: 13px; font-weight: 500; color: var(--ink); cursor: pointer; }
+.chip { transition: transform .1s ease-out, border-color .15s; display: inline-flex; align-items: center; min-height: 40px; padding: 0 12px; border-radius: var(--radius-pill); border: 1px solid var(--line-strong); background: var(--paper-100); font: inherit; font-size: 13px; font-weight: 500; color: var(--ink); cursor: pointer; }
 
 /* Kamera-Fläche: das eine große Ding */
 .dropzone { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; min-height: 176px; border: none; border-radius: var(--radius-l); background: var(--flink); color: var(--flink-ink); cursor: pointer; text-align: center; padding: 20px 16px; width: 100%; font: inherit; transition: background-color .15s, transform .16s var(--ease-out); }
@@ -170,7 +170,7 @@ textarea.input { min-height: 160px; line-height: 1.5; resize: vertical; }
 
 /* Diktat */
 .dictate { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 6px; }
-.dictate-btn { display: inline-flex; align-items: center; gap: 7px; min-height: 36px; padding: 0 12px; border-radius: var(--radius-pill); border: 1px solid var(--line-strong); background: var(--paper-100); font: inherit; font-size: 13px; font-weight: 500; color: var(--ink); cursor: pointer; }
+.dictate-btn { display: inline-flex; align-items: center; gap: 7px; min-height: 40px; padding: 0 12px; border-radius: var(--radius-pill); border: 1px solid var(--line-strong); background: var(--paper-100); font: inherit; font-size: 13px; font-weight: 500; color: var(--ink); cursor: pointer; }
 .dictate-btn.is-on { border-color: var(--fehler); color: var(--fehler); background: var(--fehler-soft); animation: dictate-pulse 1.2s ease-in-out infinite; }
 .dictate-interim { font-size: 13px; color: var(--ink-muted); font-style: italic; }
 @keyframes dictate-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(180, 35, 24, 0.25); } 50% { box-shadow: 0 0 0 6px rgba(180, 35, 24, 0); } }
