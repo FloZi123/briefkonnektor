@@ -17,7 +17,7 @@ Kosten je Bestellung (CPO) = Ads-Kosten der Gruppe ÷ bezahlte Bestellungen mit 
 select date_trunc('day', created_at) as tag,
        coalesce(draft->>'attribution', 'organisch') as kampagne,
        count(*) as bestellungen,
-       sum(amount_cents) / 100.0 as umsatz_eur
+       sum(price_cents) / 100.0 as umsatz_eur
 from orders
 where status in ('paid','queued','sent','delivered')
   and created_at >= '2026-10-26'
