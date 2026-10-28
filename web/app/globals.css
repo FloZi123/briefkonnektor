@@ -310,8 +310,9 @@ textarea.input { min-height: 160px; line-height: 1.5; resize: vertical; }
 .landing { display: grid; gap: 28px; padding-block: 12px 36px; align-items: start; max-width: 1080px; margin: 0 auto; }
 @media (min-width: 900px) { .landing { grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); gap: 48px; padding-block: 24px 56px; } }
 .landing-copy { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
-.landing-copy h1 { font-size: clamp(28px, 5vw, 44px); line-height: 1.05; }
 .landing-copy .lead { font-size: 17px; line-height: 1.5; color: var(--ink); max-width: 52ch; }
+.landing-copy h1 { font-size: clamp(26px, 4.6vw, 40px); line-height: 1.08; }
+.landing-frist { font-size: 15px; max-width: 60ch; }
 .landing-example { display: flex; flex-direction: column; gap: 12px; padding: 18px 20px; border-radius: var(--radius-l); background: var(--paper-100); border: 1px solid var(--line); box-shadow: var(--shadow-card); font-size: 15px; line-height: 1.5; }
 .landing-example p { margin: 0; }
 .landing-example { transition: opacity .26s var(--ease-out), transform .26s var(--ease-out); }

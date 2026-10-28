@@ -528,8 +528,8 @@ export const CAMPAIGNS: Record<string, Campaign> = {
   steuer: {
     upload: "Steuerbescheid fotografieren",
     guide: "einspruch-steuerbescheid",
-    h1: "Steuerbescheid fotografieren – Abweichungen und Einspruchsfrist sofort sehen.",
-    lead: "Flinkbrief liest den Bescheid aus, zeigt in einfachen Worten, was das Finanzamt festgesetzt hat und bis wann Einspruch möglich ist. Kostenlos. Den Einspruch schicken wir auf Wunsch per Post, ab 4,99 €.",
+    h1: "Einspruch gegen den Steuerbescheid: ein Monat Zeit – so nutzen Sie sie.",
+    lead: "Fotografieren Sie den Bescheid: Flinkbrief zeigt in einfachen Worten, was das Finanzamt festgesetzt hat, welche Abweichungen auffallen und bis wann der Einspruch eingehen muss. Verstehen ist kostenlos. Den Einspruch schicken wir auf Wunsch per Post, ab 4,99 €.",
     example: {
       summary: "Das Finanzamt hat die Einkommensteuer 2025 auf 2.140 € festgesetzt. Es ergibt sich eine Nachzahlung von 612 €, fällig bis 28.11.2026.",
       checks: ["Werbungskosten wurden mit 1.230 € statt der erklärten 2.410 € angesetzt", "Fahrtkosten: 180 statt 220 Arbeitstage berücksichtigt", "Handwerkerleistungen (§ 35a EStG) fehlen in der Festsetzung"],
@@ -539,8 +539,8 @@ export const CAMPAIGNS: Record<string, Campaign> = {
   nebenkosten: {
     upload: "Abrechnung fotografieren",
     guide: "widerspruch-nebenkostenabrechnung",
-    h1: "Nebenkostenabrechnung fotografieren – in zwei Minuten sehen, was auffällt.",
-    lead: "Flinkbrief liest die Abrechnung aus, zeigt Posten, Verteilerschlüssel und Frist in einfachen Worten und nennt, was Sie nachprüfen sollten. Kostenlos. Die Einwendung mit Bitte um Belegeinsicht schicken wir auf Wunsch per Post, ab 4,99 €.",
+    h1: "Nebenkostenabrechnung prüfen: zwölf Monate Zeit für Einwendungen – die Nachzahlung nur unter Vorbehalt.",
+    lead: "Fotografieren Sie die Abrechnung oder laden Sie das PDF hoch: Flinkbrief zeigt in einfachen Worten, welche Posten Sie nachprüfen sollten – Verwaltungskosten, Verteilerschlüssel, fehlende Belege. Verstehen ist kostenlos. Die Einwendung mit Bitte um Belegeinsicht schicken wir auf Wunsch per Post, ab 4,99 €.",
     example: {
       summary: "Die Hausverwaltung rechnet für 2025 Betriebskosten von 2.318 € ab. Nach Abzug der Vorauszahlungen bleibt eine Nachzahlung von 341,60 €, fällig in 30 Tagen.",
       checks: ["Verwaltungskosten 180 € sind aufgeführt – bei Wohnraum in der Regel nicht umlagefähig", "Hausmeister 412 € nach Wohnfläche umgelegt – angesetzt sind 68 m², im Mietvertrag stehen 64 m²", "Abrechnung ging am 14.10.2026 zu – Einwendungen sind 12 Monate lang möglich"],

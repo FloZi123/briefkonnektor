@@ -5,6 +5,7 @@ import { GUIDES, CAMPAIGNS, type Guide } from "@/lib/guides";
 import { Uploader } from "@/components/uploader";
 import { LETTER_KINDS, PRICES, euro } from "@/lib/types";
 import { Attribution } from "@/components/attribution";
+import { ScrollDepth } from "@/components/scroll-depth";
 
 /** Ratgeber → Voreinstellung im Fristrechner */
 const FRIST_ART: Record<string, string> = {
@@ -24,15 +25,32 @@ const Tick = () => (
 );
 
 /** Einstieg für Anzeigenbesucher: erst das Foto, dann der Artikel. Text passend zur Suchanfrage. */
+/**
+ * Kopf der Anzeigen-Einstiegsseite. Reihenfolge nach Suchabsicht: erst die Antwort auf die Frage (Frist, aus dem Ratgeber),
+ * dann die Handlung (Foto/PDF), dann das Beispiel. Die Frist-Sätze stammen aus guides.ts – hier nichts erfinden.
+ */
 function LandingHero({ slug }: { slug: string }) {
   const c = CAMPAIGNS[slug];
-  if (!c) return null;
+  const g = c && GUIDES.find((x) => x.slug === c.guide);
+  if (!c || !g) return null;
   return (
     <section className="landing">
       <div className="landing-copy">
         <h1>{c.h1}</h1>
+        <div className="fristbox landing-frist" role="note">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" />
+            <path d="M12 7v5l3 2" />
+          </svg>
+          <span>
+            <strong>Frist:</strong> {g.deadline}{" "}
+            <Link href={`/fristrechner?art=${FRIST_ART[g.slug] ?? "widerspruch"}`} className="frist-link">
+              Für Ihren Fall berechnen
+            </Link>
+          </span>
+        </div>
         <p className="lead">{c.lead}</p>
-        <Uploader title={c.upload} sub="Gerade von oben, bei gutem Licht – Angaben werden automatisch erkannt" />
+        <Uploader title={c.upload} sub="Foto oder PDF – Absender, Posten und Frist werden automatisch erkannt" />
         <div className="trust">
           <span>
             <Tick /> Verstehen ist kostenlos
@@ -113,6 +131,7 @@ export function GuideArticle({ g, campaign }: { g: Guide; campaign?: string }) {
     <main className="guide">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       {campaign && <Attribution campaign={campaign} />}
+      {campaign && <ScrollDepth page={campaign} />}
       <div className="home-head">
         <Link href="/" aria-label="Zur Startseite" style={{ display: "inline-flex" }}>
           <Logo height={24} />
