@@ -152,7 +152,7 @@ export const GUIDES: Guide[] = [
     updated: "2026-10-27",
     description: "Zwölf Monate für Einwendungen, Belegeinsicht, Zahlung unter Vorbehalt: Was Mieter bei einer falschen Abrechnung tun. Abrechnung fotografieren, Brief per Post.",
     deadlineShort: "Zwölf Monate ab Zugang",
-    deadline: "Zwölf Monate ab Zugang der Abrechnung für Einwendungen (§ 556 Abs. 3 BGB). Eine Nachzahlung wird trotzdem meist nach 30 Tagen fällig – deshalb unter Vorbehalt zahlen.",
+    deadline: "Zwölf Monate ab Zugang der Abrechnung für Einwendungen (§ 556 Abs. 3 BGB). Eine Nachzahlung wird trotzdem meist nach 30 Tagen fällig – deshalb unter Vorbehalt zahlen.",
     sections: [
       {
         h: "Was in der Abrechnung stehen muss",
@@ -528,8 +528,8 @@ export const CAMPAIGNS: Record<string, Campaign> = {
   steuer: {
     upload: "Steuerbescheid fotografieren",
     guide: "einspruch-steuerbescheid",
-    h1: "Einspruch gegen den Steuerbescheid: ein Monat Zeit – so nutzen Sie sie.",
-    lead: "Fotografieren Sie den Bescheid: Flinkbrief zeigt in einfachen Worten, was das Finanzamt festgesetzt hat, welche Abweichungen auffallen und bis wann der Einspruch eingehen muss. Verstehen ist kostenlos. Den Einspruch schicken wir auf Wunsch per Post, ab 4,99 €.",
+    h1: "Einspruch gegen den Steuerbescheid: ein Monat Zeit.",
+    lead: "Bescheid fotografieren oder PDF hochladen – Flinkbrief zeigt, was das Finanzamt festgesetzt hat und welche Abweichungen auffallen. Verstehen ist kostenlos, der Einspruch per Post ab 4,99 €.",
     example: {
       summary: "Das Finanzamt hat die Einkommensteuer 2025 auf 2.140 € festgesetzt. Es ergibt sich eine Nachzahlung von 612 €, fällig bis 28.11.2026.",
       checks: ["Werbungskosten wurden mit 1.230 € statt der erklärten 2.410 € angesetzt", "Fahrtkosten: 180 statt 220 Arbeitstage berücksichtigt", "Handwerkerleistungen (§ 35a EStG) fehlen in der Festsetzung"],
@@ -539,8 +539,8 @@ export const CAMPAIGNS: Record<string, Campaign> = {
   nebenkosten: {
     upload: "Abrechnung fotografieren",
     guide: "widerspruch-nebenkostenabrechnung",
-    h1: "Nebenkostenabrechnung prüfen: zwölf Monate Zeit für Einwendungen – die Nachzahlung nur unter Vorbehalt.",
-    lead: "Fotografieren Sie die Abrechnung oder laden Sie das PDF hoch: Flinkbrief zeigt in einfachen Worten, welche Posten Sie nachprüfen sollten – Verwaltungskosten, Verteilerschlüssel, fehlende Belege. Verstehen ist kostenlos. Die Einwendung mit Bitte um Belegeinsicht schicken wir auf Wunsch per Post, ab 4,99 €.",
+    h1: "Nebenkostenabrechnung prüfen: zwölf Monate Zeit für Einwendungen.",
+    lead: "Abrechnung fotografieren oder PDF hochladen – Flinkbrief zeigt, welche Posten Sie nachprüfen sollten: Verwaltungskosten, Verteilerschlüssel, fehlende Belege. Verstehen ist kostenlos, die Einwendung per Post ab 4,99 €.",
     example: {
       summary: "Die Hausverwaltung rechnet für 2025 Betriebskosten von 2.318 € ab. Nach Abzug der Vorauszahlungen bleibt eine Nachzahlung von 341,60 €, fällig in 30 Tagen.",
       checks: ["Verwaltungskosten 180 € sind aufgeführt – bei Wohnraum in der Regel nicht umlagefähig", "Hausmeister 412 € nach Wohnfläche umgelegt – angesetzt sind 68 m², im Mietvertrag stehen 64 m²", "Abrechnung ging am 14.10.2026 zu – Einwendungen sind 12 Monate lang möglich"],
