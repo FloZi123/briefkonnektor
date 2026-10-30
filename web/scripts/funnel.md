@@ -38,6 +38,8 @@ Nie in Properties: E-Mail, Name, Adresse, Aktenzeichen, Betrag, Freitext.
 | Ereignis | Wo | Wann | Properties |
 |---|---|---|---|
 | `landing_view` | `components/attribution.tsx` | Aufruf einer Anzeigen-Seite `/a/<kampagne>`, einmal je Aufruf | `campaign` |
+| `scroll_depth` | `components/scroll-depth.tsx` | Scrolltiefe auf `/a/<kampagne>`, je Marke einmal (25/50/75/100 %) – lesen die Leute oder gehen sie sofort? | `depth`, `page` |
+| `upload_click` | `components/uploader.tsx` | Klick auf Foto-Fläche bzw. „Vorhandenes Foto oder PDF auswählen“, *vor* der Dateiauswahl – Differenz zu `upload_started` = abgebrochene Dialoge | `source`: `camera` \| `picker` |
 | `upload_started` | `components/uploader.tsx` | Datei gewählt und Formatprüfung bestanden (falsches Format → kein Ereignis) | `source`: `camera` \| `picker` (Ziehen/Ablegen zählt als `picker`) |
 | `extract_ok` | `components/uploader.tsx` | Erkennung erfolgreich | `kind`, `confidence` (`high`\|`medium`\|`low`\|`unbekannt`) |
 | `extract_failed` | `components/uploader.tsx` | Erkennung fehlgeschlagen, genau eins je Upload | `status`: `413` \| `415` \| `422` \| `500` (alle anderen Fehler inkl. Netzwerk → `500`) |

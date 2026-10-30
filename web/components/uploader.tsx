@@ -69,7 +69,10 @@ export function Uploader({ title = "Brief fotografieren", sub = "Bescheid, Rechn
         <button
           type="button"
           className="dropzone"
-          onClick={() => input.current?.click()}
+          onClick={() => {
+            track("upload_click", { source: "camera" }); // Klick vor der Dateiauswahl – zeigt abgebrochene Kamera-Dialoge
+            input.current?.click();
+          }}
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => {
             e.preventDefault();
@@ -111,7 +114,14 @@ export function Uploader({ title = "Brief fotografieren", sub = "Bescheid, Rechn
         }}
       />
       {!busy && (
-        <button type="button" className="btn btn-link pick" onClick={() => picker.current?.click()}>
+        <button
+          type="button"
+          className="btn btn-link pick"
+          onClick={() => {
+            track("upload_click", { source: "picker" });
+            picker.current?.click();
+          }}
+        >
           Vorhandenes Foto oder PDF auswählen
         </button>
       )}
