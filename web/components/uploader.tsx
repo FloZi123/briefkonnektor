@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { saveDraft, loadDraft } from "@/lib/store";
 import type { Extracted } from "@/lib/types";
-import { validateFile, prepareFile } from "@/lib/upload";
+import { validateFile, validatePrepared, prepareFile } from "@/lib/upload";
 import { Progress } from "@/components/progress";
 import { track } from "@/lib/track";
 
@@ -28,12 +28,22 @@ export function Uploader({ title = "Brief fotografieren", sub = "Bescheid, Rechn
     let status = 500;
     try {
       const file = await prepareFile(raw);
+      const tooBig = validatePrepared(file);
+      if (tooBig) {
+        status = 413;
+        throw new Error(tooBig);
+      }
       const fd = new FormData();
       fd.append("file", file);
       const res = await fetch("/api/extract", { method: "POST", body: fd });
       if (!res.ok) {
         if (res.status === 413 || res.status === 415 || res.status === 422) status = res.status;
-        throw new Error((await res.json()).error ?? "Erkennung fehlgeschlagen");
+        // Vercel antwortet bei zu großen Anfragen mit Text statt JSON („FUNCTION_PAYLOAD_TOO_LARGE“) – nie als Fehlermeldung anzeigen
+        const msg = await res
+          .json()
+          .then((j: { error?: string }) => j.error)
+          .catch(() => undefined);
+        throw new Error(msg ?? (res.status === 413 ? "Die Datei ist zu groß – möglich sind 4 MB. Bitte die Seiten mit dem Handy fotografieren." : "Erkennung fehlgeschlagen. Bitte noch einmal versuchen."));
       }
       const x = (await res.json()) as Extracted;
       track("extract_ok", { kind: x.kind ?? "unbekannt", confidence: x.confidence ?? "unbekannt" });
