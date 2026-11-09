@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { sendMail } from "@/lib/mail";
 
 export const runtime = "nodejs";
 
@@ -34,5 +35,8 @@ export async function POST(req: Request) {
     console.error("interesse: insert fehlgeschlagen", error.message);
     return NextResponse.json({ error: "Speichern hat nicht geklappt. Bitte später noch einmal versuchen." }, { status: 500 });
   }
+  // Concierge: jede Anfrage sofort ins Postfach, damit die 2-Werktage-Zusage gehalten wird (Fehler hier blockieren nicht)
+  const text = `Neue Prüfanfrage (${anlass})\n\nE-Mail: ${email}\nPLZ: ${plz || "–"}\nKampagne: ${campaign ?? "–"}\n\nAntwort innerhalb von zwei Werktagen zugesagt.`;
+  sendMail("info@flinkbrief.de", `Prüfanfrage ${anlass}${plz ? " · PLZ " + plz : ""}`, `<pre style="font:14px/1.5 sans-serif">${text}</pre>`, text).catch((e) => console.warn("interesse: Benachrichtigung fehlgeschlagen", e));
   return NextResponse.json({ ok: true });
 }
