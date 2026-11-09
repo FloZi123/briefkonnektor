@@ -6,7 +6,7 @@ import { track } from "@/lib/track";
 
 /**
  * Interessenten-Formular für „prüfen lassen“ (Vermittlungs-Test).
- * Ehrlich: Es gibt noch keinen Partner. Wir sammeln E-Mail + PLZ und melden uns, sobald einer steht.
+ * Concierge: E-Mail + PLZ, Antwort von Hand innerhalb von zwei Werktagen mit passendem Partner, Preis und Ablauf.
  */
 export function InterestForm({ anlass }: { anlass: string }) {
   const [email, setEmail] = useState("");
@@ -40,9 +40,9 @@ export function InterestForm({ anlass }: { anlass: string }) {
   if (done) {
     return (
       <div className="reviewbox ok" role="status">
-        <strong>Danke – wir melden uns.</strong>
+        <strong>Danke – Sie hören innerhalb von zwei Werktagen von uns.</strong>
         <br />
-        Sie bekommen eine E-Mail, sobald ein Partner in Ihrer Region prüfen kann, mit Preis und Ablauf. Erst dann entscheiden Sie.
+        Per E-Mail, mit Partner in Ihrer Region, Preis und Ablauf. Erst dann entscheiden Sie.
       </div>
     );
   }
@@ -63,7 +63,7 @@ export function InterestForm({ anlass }: { anlass: string }) {
       </label>
       {error && <div className="errorbox">{error}</div>}
       <button className="btn btn-primary" type="submit" disabled={busy || !email || !consent}>
-        {busy ? "Wird gespeichert …" : "Prüfung anfragen – unverbindlich"}
+        {busy ? "Wird gesendet …" : "Prüfung anfragen"}
       </button>
       <span className="muted" style={{ fontSize: 12, textAlign: "center" }}>
         Kostenlos und unverbindlich. Preis und Ablauf nennen wir Ihnen vorher.

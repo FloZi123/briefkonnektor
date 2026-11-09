@@ -12,26 +12,26 @@ export const metadata: Metadata = {
 
 /**
  * Test der Vermittlungsidee: Wer eine inhaltliche Prüfung will (nicht nur einen Brief), hinterlässt seine E-Mail.
- * Es gibt noch keinen Partner – das steht hier auch so. Gemessen wird, wie viele das wollen.
+ * Concierge-Variante: Anfragen werden von Hand an einen passenden Partner (Prüfdienst/Mieterverein) vermittelt, Antwort in 2 Werktagen.
  */
 const COPY: Record<string, { h1: string; was: string; partner: string; selbst: { label: string; href: string } }> = {
   nebenkosten: {
     h1: "Nebenkostenabrechnung prüfen lassen",
     was: "Ob Hausmeister, Verwaltung oder Verteilerschlüssel zu Recht so abgerechnet wurden, kann nur jemand beurteilen, der Belege einsehen und bewerten darf.",
-    partner: "registrierte Prüfdienste und Mietervereine",
+    partner: "einen registrierten Prüfdienst oder den Mieterverein",
     selbst: { label: "Lieber selbst Einwendungen schicken? Abrechnung fotografieren", href: "/a/nebenkosten" },
   },
   steuer: {
     h1: "Steuerbescheid prüfen lassen",
     was: "Ob das Finanzamt richtig gerechnet hat und welche Posten sich anfechten lassen, kann nur jemand beurteilen, der Steuerberatung leisten darf.",
-    partner: "Steuerberater und Lohnsteuerhilfevereine",
+    partner: "einen Steuerberater oder Lohnsteuerhilfeverein",
     selbst: { label: "Lieber selbst Einspruch einlegen? Bescheid fotografieren", href: "/a/steuer" },
   },
 };
 const FALLBACK = {
   h1: "Schreiben prüfen lassen",
   was: "Ob ein Bescheid inhaltlich richtig ist, kann nur jemand beurteilen, der rechtlich beraten darf.",
-  partner: "zugelassene Beratungsstellen und Kanzleien",
+  partner: "eine zugelassene Beratungsstelle oder Kanzlei",
   selbst: { label: "Lieber selbst antworten? Schreiben fotografieren", href: "/" },
 };
 
@@ -46,13 +46,13 @@ export default async function PruefenLassen({ searchParams }: { searchParams: Pr
         <Logo />
       </div>
       <div className="stack" style={{ gap: 10, paddingTop: 16 }}>
-        <span className="eyebrow">Im Aufbau · unverbindlich</span>
+        <span className="eyebrow">Unverbindlich · Antwort in 2 Werktagen</span>
         <h1 style={{ fontSize: 26 }}>{c.h1}</h1>
         <p style={{ fontSize: 15, lineHeight: 1.55 }}>
           Flinkbrief prüft Ihr Schreiben auf Form, Frist und Vollständigkeit – <strong>keine inhaltliche Bewertung</strong>. {c.was}
         </p>
         <p style={{ fontSize: 15, lineHeight: 1.55 }}>
-          Dafür bauen wir gerade eine Vermittlung an {c.partner} auf. Noch ist kein Partner angebunden. Wenn Sie das möchten, hinterlassen Sie Ihre E-Mail – wir melden uns, sobald es losgeht, und nennen vorher Preis und Ablauf.
+          Wir vermitteln Sie an {c.partner} in Ihrer Region und melden uns innerhalb von zwei Werktagen mit Name, Preis und Ablauf. Sie entscheiden dann.
         </p>
       </div>
 
@@ -63,7 +63,7 @@ export default async function PruefenLassen({ searchParams }: { searchParams: Pr
         </li>
         <li>
           <strong>Wir melden uns</strong>
-          <span>Mit Partner in Ihrer Region, Preis und Ablauf.</span>
+          <span>Innerhalb von zwei Werktagen: Partner in Ihrer Region, Preis und Ablauf.</span>
         </li>
         <li>
           <strong>Sie entscheiden</strong>
