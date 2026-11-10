@@ -6,6 +6,7 @@ import { Uploader } from "@/components/uploader";
 import { LETTER_KINDS, PRICES, euro } from "@/lib/types";
 import { Attribution } from "@/components/attribution";
 import { ScrollDepth } from "@/components/scroll-depth";
+import { CheckLink } from "@/components/check-link";
 
 /** Ratgeber → Voreinstellung im Fristrechner */
 const FRIST_ART: Record<string, string> = {
@@ -51,6 +52,7 @@ function LandingHero({ slug }: { slug: string }) {
         </div>
         <p className="lead">{c.lead}</p>
         <Uploader title={c.upload} sub="Foto oder PDF – Absender, Posten und Frist werden automatisch erkannt" />
+        {c.check && <CheckLink anlass={slug} label={c.check} />}
         <div className="trust">
           <span>
             <Tick /> Verstehen ist kostenlos

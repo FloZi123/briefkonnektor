@@ -522,6 +522,8 @@ export interface Campaign {
   upload: string;
   /** Beispiel, wie das Ergebnis nach dem Foto aussieht (fiktive, typische Werte) */
   example: { summary: string; checks: string[]; deadline: string };
+  /** Zweiter Weg unter dem Upload: „prüfen lassen“ (Vermittlungs-Test, Seite /pruefen-lassen). Nur wo gesetzt. */
+  check?: string;
 }
 
 export const CAMPAIGNS: Record<string, Campaign> = {
@@ -540,6 +542,7 @@ export const CAMPAIGNS: Record<string, Campaign> = {
     upload: "Abrechnung fotografieren",
     guide: "widerspruch-nebenkostenabrechnung",
     h1: "Nebenkostenabrechnung prüfen: zwölf Monate Zeit für Einwendungen.",
+    check: "Lieber prüfen lassen? Abrechnung inhaltlich prüfen – durch einen Partner",
     lead: "Abrechnung fotografieren oder PDF hochladen – Flinkbrief zeigt, welche Posten Sie nachprüfen sollten: Verwaltungskosten, Verteilerschlüssel, fehlende Belege. Verstehen ist kostenlos, die Einwendung per Post ab 4,99 €.",
     example: {
       summary: "Die Hausverwaltung rechnet für 2025 Betriebskosten von 2.318 € ab. Nach Abzug der Vorauszahlungen bleibt eine Nachzahlung von 341,60 €, fällig in 30 Tagen.",
